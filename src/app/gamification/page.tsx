@@ -2,16 +2,37 @@
 
 import { motion } from "framer-motion"
 import { Trophy, Star, Medal, Target, Flame, Lock } from "lucide-react"
+import { useTransactions } from "@/hooks/useTransactions"
+import { useGoals } from "@/hooks/useGoals"
 
 export default function GamificationPage() {
+  const { transactions } = useTransactions()
+  const { goals } = useGoals()
+
+  // Calculate real stats
+  const totalTransactions = transactions.length
+  const completedGoals = goals.filter(g => g.saved >= g.target).length
+  const totalBalance = transactions.reduce((sum, t) => t.type === "income" ? sum + t.amount : sum - t.amount, 0)
+
+  // Dynamic XP based on activity
+  const xp = (totalTransactions * 50) + (completedGoals * 200) + (goals.length * 100)
+  const level = Math.floor(xp / 500) + 1
+  const xpInLevel = xp % 500
+  const xpPercent = Math.min(Math.round((xpInLevel / 500) * 100), 100)
+
+  const levelNames = ["Người mới", "Tập sự", "Mầm non", "Chiến binh", "Chuyên gia", "Bậc thầy", "Huyền thoại"]
+  const levelName = levelNames[Math.min(level - 1, levelNames.length - 1)]
+
   const badges = [
-    { id: 1, name: "Khởi đầu hoàn hảo", desc: "Tạo mục tiêu tiết kiệm đầu tiên", icon: Target, unlocked: true, color: "text-blue-500", bg: "bg-blue-50" },
-    { id: 2, name: "Kiên trì 7 ngày", desc: "Ghi chép chi tiêu 7 ngày liên tiếp", icon: Flame, unlocked: true, color: "text-orange-500", bg: "bg-orange-50" },
-    { id: 3, name: "Cột mốc 10 triệu", desc: "Tổng số dư đạt 10.000.000 ₫", icon: Star, unlocked: true, color: "text-amber-500", bg: "bg-amber-50" },
-    { id: 4, name: "Chuyên gia tiết kiệm", desc: "Hoàn thành 3 mục tiêu", icon: Medal, unlocked: false, color: "text-gray-400", bg: "bg-gray-100" },
-    { id: 5, name: "Kiên trì 30 ngày", desc: "Ghi chép chi tiêu 30 ngày liên tiếp", icon: Flame, unlocked: false, color: "text-gray-400", bg: "bg-gray-100" },
-    { id: 6, name: "Đại gia", desc: "Tổng số dư đạt 100.000.000 ₫", icon: Trophy, unlocked: false, color: "text-gray-400", bg: "bg-gray-100" },
+    { id: 1, name: "Khởi đầu hoàn hảo", desc: "Tạo mục tiêu tiết kiệm đầu tiên", icon: Target, unlocked: goals.length >= 1, color: "text-blue-500", bg: "bg-blue-50" },
+    { id: 2, name: "Ghi chép đầu tiên", desc: "Ghi chép giao dịch đầu tiên", icon: Flame, unlocked: totalTransactions >= 1, color: "text-orange-500", bg: "bg-orange-50" },
+    { id: 3, name: "Siêng năng", desc: "Ghi chép 10 giao dịch", icon: Star, unlocked: totalTransactions >= 10, color: "text-amber-500", bg: "bg-amber-50" },
+    { id: 4, name: "Chuyên gia tiết kiệm", desc: "Hoàn thành 1 mục tiêu", icon: Medal, unlocked: completedGoals >= 1, color: "text-emerald-500", bg: "bg-emerald-50" },
+    { id: 5, name: "Chiến binh tài chính", desc: "Ghi chép 50 giao dịch", icon: Flame, unlocked: totalTransactions >= 50, color: "text-purple-500", bg: "bg-purple-50" },
+    { id: 6, name: "Đại gia", desc: "Hoàn thành 5 mục tiêu", icon: Trophy, unlocked: completedGoals >= 5, color: "text-yellow-500", bg: "bg-yellow-50" },
   ]
+
+  const unlockedCount = badges.filter(b => b.unlocked).length
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -23,45 +44,31 @@ export default function GamificationPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Streak Card */}
+        {/* Stats Card */}
         <div className="rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 p-8 shadow-sm text-white relative overflow-hidden group">
           <div className="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform duration-500">
             <Flame size={200} />
           </div>
-          <div className="relative z-10 flex items-start justify-between">
-            <div>
-              <div className="flex items-center gap-2 font-medium text-white/90 mb-2">
-                <Flame size={20} /> Chuỗi ngày ghi chép
-              </div>
-              <div className="text-6xl font-bold mb-2">5 <span className="text-2xl font-semibold opacity-80">ngày</span></div>
-              <p className="text-white/80">Chỉ còn 2 ngày nữa để nhận huy hiệu &quot;Kiên trì 7 ngày&quot;!</p>
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 font-medium text-white/90 mb-2">
+              <Flame size={20} /> Hoạt động của bạn
             </div>
+            <div className="text-6xl font-bold mb-2">{totalTransactions} <span className="text-2xl font-semibold opacity-80">giao dịch</span></div>
+            <p className="text-white/80">{goals.length} mục tiêu đã tạo &bull; {completedGoals} đã hoàn thành</p>
           </div>
           
-          <div className="relative z-10 mt-8">
-            <div className="flex justify-between mb-2 text-sm font-medium text-white/90">
-              <span>Thứ 2</span>
-              <span>Thứ 3</span>
-              <span>Thứ 4</span>
-              <span>Thứ 5</span>
-              <span>Hôm nay</span>
-              <span className="opacity-50">Thứ 7</span>
-              <span className="opacity-50">CN</span>
+          <div className="relative z-10 mt-8 grid grid-cols-3 gap-4">
+            <div className="bg-white/20 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold">{unlockedCount}</div>
+              <div className="text-xs text-white/80">Huy hiệu</div>
             </div>
-            <div className="flex gap-2">
-              {[1, 2, 3, 4, 5, 6, 7].map((day) => (
-                <div key={day} className="flex-1 relative group/tooltip">
-                  <div 
-                    className={`h-10 w-full rounded-lg flex items-center justify-center transition-all ${
-                      day <= 5 
-                        ? "bg-white text-orange-500 shadow-md transform hover:-translate-y-1" 
-                        : "bg-white/20 text-white/50 border border-white/20"
-                    }`}
-                  >
-                    {day <= 5 ? <Flame size={18} /> : <Lock size={14} />}
-                  </div>
-                </div>
-              ))}
+            <div className="bg-white/20 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold">{xp}</div>
+              <div className="text-xs text-white/80">Tổng XP</div>
+            </div>
+            <div className="bg-white/20 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold">Lv.{level}</div>
+              <div className="text-xs text-white/80">Cấp độ</div>
             </div>
           </div>
         </div>
@@ -75,25 +82,28 @@ export default function GamificationPage() {
                   <Star size={24} />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900">Cấp độ 3: Mầm non</h2>
-                  <p className="text-sm text-gray-500">1,250 / 2,000 XP</p>
+                  <h2 className="text-xl font-bold text-gray-900">Cấp {level}: {levelName}</h2>
+                  <p className="text-sm text-gray-500">{xpInLevel} / 500 XP</p>
                 </div>
               </div>
             </div>
             <p className="text-gray-600 text-sm mb-6">
-              Bạn đang làm rất tốt! Ghi chép chi tiêu hôm nay để nhận thêm 50 XP và sớm thăng cấp nhé.
+              {totalTransactions === 0 
+                ? "Hãy bắt đầu ghi chép giao dịch để nhận XP và thăng cấp nhé!" 
+                : `Bạn đang làm rất tốt! Tiếp tục ghi chép để sớm đạt cấp ${level + 1}.`
+              }
             </p>
           </div>
           
           <div>
             <div className="flex justify-between text-sm font-semibold mb-2">
-              <span className="text-blue-600">62% hoàn thành</span>
-              <span className="text-gray-400">Cấp 4</span>
+              <span className="text-blue-600">{xpPercent}% hoàn thành</span>
+              <span className="text-gray-400">Cấp {level + 1}</span>
             </div>
             <div className="h-3 w-full rounded-full bg-gray-100 overflow-hidden relative">
               <motion.div 
                 initial={{ width: 0 }}
-                animate={{ width: "62%" }}
+                animate={{ width: `${xpPercent}%` }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
                 className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"
               />
@@ -117,7 +127,7 @@ export default function GamificationPage() {
                   : "bg-gray-50 border border-gray-100 opacity-70 grayscale"
               }`}
             >
-              <div className={`h-16 w-16 rounded-full flex items-center justify-center mb-4 ${badge.bg} ${badge.color} relative`}>
+              <div className={`h-16 w-16 rounded-full flex items-center justify-center mb-4 ${badge.unlocked ? badge.bg : "bg-gray-100"} ${badge.unlocked ? badge.color : "text-gray-400"} relative`}>
                 {!badge.unlocked && (
                   <div className="absolute -top-1 -right-1 bg-gray-200 rounded-full p-1 border-2 border-white text-gray-500">
                     <Lock size={12} />

@@ -9,18 +9,43 @@ import {
   YAxis,
   CartesianGrid
 } from "recharts"
+import { FileText } from "lucide-react"
+import { Transaction } from "@/hooks/useTransactions"
 
-const data = [
-  { date: "01/06", expense: 150000, income: 0 },
-  { date: "02/06", expense: 200000, income: 1000000 },
-  { date: "03/06", expense: 50000, income: 0 },
-  { date: "04/06", expense: 300000, income: 0 },
-  { date: "05/06", expense: 120000, income: 0 },
-  { date: "06/06", expense: 400000, income: 500000 },
-  { date: "07/06", expense: 80000, income: 0 },
-]
+type Props = {
+  transactions: Transaction[]
+}
 
-export function DashboardCharts() {
+export function DashboardCharts({ transactions }: Props) {
+  if (transactions.length === 0) {
+    return (
+      <div className="h-[300px] w-full mt-4 flex flex-col items-center justify-center text-center">
+        <div className="h-14 w-14 rounded-full bg-gray-50 flex items-center justify-center text-gray-300 mb-4">
+          <FileText size={28} />
+        </div>
+        <p className="text-gray-400 text-sm mb-1">Chưa có dữ liệu</p>
+        <p className="text-gray-400 text-xs">Hãy ghi chép giao dịch đầu tiên để xem biểu đồ.</p>
+      </div>
+    )
+  }
+
+  // Group transactions by date and sum amounts
+  const dateMap = new Map<string, { income: number; expense: number }>()
+  transactions.forEach(t => {
+    const existing = dateMap.get(t.date) || { income: 0, expense: 0 }
+    if (t.type === "income") {
+      existing.income += t.amount
+    } else {
+      existing.expense += t.amount
+    }
+    dateMap.set(t.date, existing)
+  })
+
+  const data = Array.from(dateMap.entries())
+    .map(([date, values]) => ({ date, ...values }))
+    .reverse()
+    .slice(-7) // Show last 7 dates
+
   return (
     <div className="h-[300px] w-full mt-4">
       <ResponsiveContainer width="100%" height="100%">
@@ -42,9 +67,7 @@ export function DashboardCharts() {
             tick={{ fontSize: 12, fill: '#9ca3af' }} 
             dy={10}
           />
-          <YAxis 
-            hide 
-          />
+          <YAxis hide />
           <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#f3f4f6" />
           <Tooltip 
             contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
