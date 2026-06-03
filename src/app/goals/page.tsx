@@ -29,7 +29,7 @@ export default function GoalsPage() {
   // Add/Edit goal form
   const [goalName, setGoalName] = useState("")
   const [goalTarget, setGoalTarget] = useState("")
-  const [goalColor, setGoalColor] = useState("bg-blue-500")
+  const [goalColor, setGoalColor] = useState("bg-amber-500")
   const [goalDeadline, setGoalDeadline] = useState("")
   const [submitting, setSubmitting] = useState(false)
 
@@ -39,7 +39,7 @@ export default function GoalsPage() {
   const resetForm = () => {
     setGoalName("")
     setGoalTarget("")
-    setGoalColor("bg-blue-500")
+    setGoalColor("bg-amber-500")
     setGoalDeadline("")
     setEditingGoal(null)
   }

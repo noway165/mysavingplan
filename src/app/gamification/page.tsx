@@ -24,7 +24,7 @@ export default function GamificationPage() {
   const levelName = levelNames[Math.min(level - 1, levelNames.length - 1)]
 
   const badges = [
-    { id: 1, name: "Khởi đầu hoàn hảo", desc: "Tạo mục tiêu tiết kiệm đầu tiên", icon: Target, unlocked: goals.length >= 1, color: "text-blue-500", bg: "bg-blue-50" },
+    { id: 1, name: "Khởi đầu hoàn hảo", desc: "Tạo mục tiêu tiết kiệm đầu tiên", icon: Target, unlocked: goals.length >= 1, color: "text-amber-500", bg: "bg-amber-50" },
     { id: 2, name: "Ghi chép đầu tiên", desc: "Ghi chép giao dịch đầu tiên", icon: Flame, unlocked: totalTransactions >= 1, color: "text-orange-500", bg: "bg-orange-50" },
     { id: 3, name: "Siêng năng", desc: "Ghi chép 10 giao dịch", icon: Star, unlocked: totalTransactions >= 10, color: "text-amber-500", bg: "bg-amber-50" },
     { id: 4, name: "Chuyên gia tiết kiệm", desc: "Hoàn thành 1 mục tiêu", icon: Medal, unlocked: completedGoals >= 1, color: "text-emerald-500", bg: "bg-emerald-50" },
@@ -78,7 +78,7 @@ export default function GamificationPage() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 border-4 border-blue-50">
+                <div className="h-14 w-14 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 border-4 border-amber-50">
                   <Star size={24} />
                 </div>
                 <div>
@@ -97,7 +97,7 @@ export default function GamificationPage() {
           
           <div>
             <div className="flex justify-between text-sm font-semibold mb-2">
-              <span className="text-blue-600">{xpPercent}% hoàn thành</span>
+              <span className="text-amber-600">{xpPercent}% hoàn thành</span>
               <span className="text-gray-400">Cấp {level + 1}</span>
             </div>
             <div className="h-3 w-full rounded-full bg-gray-100 overflow-hidden relative">
@@ -105,7 +105,7 @@ export default function GamificationPage() {
                 initial={{ width: 0 }}
                 animate={{ width: `${xpPercent}%` }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
-                className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"
+                className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-500"
               />
             </div>
           </div>

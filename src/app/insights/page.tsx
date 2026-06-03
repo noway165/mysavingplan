@@ -54,7 +54,7 @@ export default function AIInsightsPage() {
         <div className="md:col-span-1 space-y-6 overflow-y-auto pr-2">
           <div className="rounded-2xl bg-white p-5 shadow-sm border border-gray-100">
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+              <div className="h-10 w-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
                 <TrendingDown size={20} />
               </div>
               <h3 className="font-semibold text-gray-900">Cơ hội tiết kiệm</h3>
@@ -62,7 +62,7 @@ export default function AIInsightsPage() {
             <p className="text-sm text-gray-600 mb-3">
               Bạn chi tiêu ít hơn 15% vào ăn uống so với tuần trước. Hãy chuyển số tiền dư này vào Quỹ dự phòng nhé!
             </p>
-            <button className="text-sm font-semibold text-blue-600 flex items-center gap-1 hover:gap-2 transition-all">
+            <button className="text-sm font-semibold text-amber-600 flex items-center gap-1 hover:gap-2 transition-all">
               Thực hiện ngay <ArrowRight size={16} />
             </button>
           </div>
@@ -97,16 +97,16 @@ export default function AIInsightsPage() {
 
         {/* Chat Area */}
         <div className="md:col-span-2 rounded-2xl bg-white shadow-sm border border-gray-100 flex flex-col overflow-hidden h-full">
-          <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-sm">
+          <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-amber-50 to-orange-50 flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center text-white shadow-sm">
               <Sparkles size={20} />
             </div>
             <div>
               <h2 className="font-semibold text-gray-900">Trợ lý AI</h2>
-              <div className="text-xs font-medium text-blue-600 flex items-center gap-1">
+              <div className="text-xs font-medium text-amber-600 flex items-center gap-1">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                 </span>
                 Đang trực tuyến
               </div>
@@ -117,13 +117,13 @@ export default function AIInsightsPage() {
             {messages.map((msg, i) => (
               <div key={i} className={`flex gap-4 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
                 {msg.role === "ai" && (
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shrink-0 mt-1">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center text-white shrink-0 mt-1">
                     <Sparkles size={14} />
                   </div>
                 )}
                 <div className={`p-4 rounded-2xl max-w-[80%] text-sm leading-relaxed ${
                   msg.role === "user" 
-                    ? "bg-blue-600 text-white rounded-tr-none" 
+                    ? "bg-amber-600 text-white rounded-tr-none" 
                     : "bg-gray-100 text-gray-800 rounded-tl-none"
                 }`}>
                   {msg.content}
@@ -133,7 +133,7 @@ export default function AIInsightsPage() {
             
             {isTyping && (
               <div className="flex gap-4">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shrink-0 mt-1">
+                <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center text-white shrink-0 mt-1">
                   <Sparkles size={14} />
                 </div>
                 <div className="p-4 rounded-2xl bg-gray-100 text-gray-800 rounded-tl-none flex items-center gap-1.5 w-16">
@@ -153,12 +153,12 @@ export default function AIInsightsPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Hỏi AI về cách tối ưu chi tiêu..." 
-                className="w-full pl-4 pr-12 py-3.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
+                className="w-full pl-4 pr-12 py-3.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-gray-50"
               />
               <button 
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-amber-600 text-white hover:bg-amber-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send size={16} />
               </button>
