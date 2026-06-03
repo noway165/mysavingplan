@@ -11,27 +11,43 @@ import {
 } from "recharts"
 import { FileText } from "lucide-react"
 import { Transaction } from "@/hooks/useTransactions"
+import { useSettings } from "@/context/SettingsContext"
 
 type Props = {
   transactions: Transaction[]
 }
 
 export function DashboardCharts({ transactions }: Props) {
+  const { t, formatCurrency, theme } = useSettings()
+
   if (transactions.length === 0) {
     return (
       <div className="h-[300px] w-full mt-4 flex flex-col items-center justify-center text-center">
-        <div className="h-14 w-14 rounded-full bg-gray-50 flex items-center justify-center text-gray-300 mb-4">
+        <div className="h-14 w-14 rounded-full bg-muted flex items-center justify-center text-muted-foreground opacity-50 mb-4">
           <FileText size={28} />
         </div>
-        <p className="text-gray-400 text-sm mb-1">Chưa có dữ liệu</p>
-        <p className="text-gray-400 text-xs">Hãy ghi chép giao dịch đầu tiên để xem biểu đồ.</p>
+        <p className="text-muted-foreground text-sm mb-1">{t('no_data')}</p>
       </div>
     )
   }
 
   // Group transactions by date and sum amounts
   const dateMap = new Map<string, { income: number; expense: number }>()
-  transactions.forEach(t => {
+  
+  // Sort transactions by date ascending before processing to ensure chronological order
+  const sortedTx = [...transactions].sort((a, b) => {
+    try {
+      const partsA = a.date.split('/')
+      const partsB = b.date.split('/')
+      const dateA = new Date(`${partsA[2]}-${partsA[1]}-${partsA[0]}`).getTime()
+      const dateB = new Date(`${partsB[2]}-${partsB[1]}-${partsB[0]}`).getTime()
+      return dateA - dateB
+    } catch {
+      return 0
+    }
+  })
+
+  sortedTx.forEach(t => {
     const existing = dateMap.get(t.date) || { income: 0, expense: 0 }
     if (t.type === "income") {
       existing.income += t.amount
@@ -42,9 +58,15 @@ export function DashboardCharts({ transactions }: Props) {
   })
 
   const data = Array.from(dateMap.entries())
-    .map(([date, values]) => ({ date, ...values }))
-    .reverse()
+    .map(([date, values]) => {
+      // Shorten date for display (e.g. 15/06/2026 -> 15/06)
+      const shortDate = date.split('/').slice(0, 2).join('/')
+      return { date: shortDate, ...values }
+    })
     .slice(-7) // Show last 7 dates
+
+  const gridColor = theme === 'dark' ? '#374151' : '#f3f4f6'
+  const textColor = theme === 'dark' ? '#9ca3af' : '#9ca3af'
 
   return (
     <div className="h-[300px] w-full mt-4">
@@ -64,15 +86,21 @@ export function DashboardCharts({ transactions }: Props) {
             dataKey="date" 
             axisLine={false} 
             tickLine={false} 
-            tick={{ fontSize: 12, fill: '#9ca3af' }} 
+            tick={{ fontSize: 12, fill: textColor }} 
             dy={10}
           />
           <YAxis hide />
-          <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#f3f4f6" />
+          <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={gridColor} />
           <Tooltip 
-            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+            contentStyle={{ 
+              borderRadius: '12px', 
+              border: '1px solid var(--border)', 
+              background: 'var(--card)',
+              color: 'var(--foreground)',
+              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' 
+            }}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            formatter={(value: any) => [`${Number(value).toLocaleString()} ₫`, 'Số tiền']}
+            formatter={(value: any) => [formatCurrency(Number(value)), '']}
           />
           <Area 
             type="monotone" 

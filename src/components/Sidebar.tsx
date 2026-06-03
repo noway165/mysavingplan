@@ -2,24 +2,34 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Target, PieChart, Sparkles, Trophy } from "lucide-react"
+import { Home, Target, PieChart, Sparkles, Trophy, Settings, User as UserIcon, LogOut, Wallet } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-const navigation = [
-  { name: "Dashboard", href: "/", icon: Home },
-  { name: "Mục tiêu", href: "/goals", icon: Target },
-  { name: "Thu chi", href: "/transactions", icon: PieChart },
-  { name: "AI Insights", href: "/insights", icon: Sparkles },
-  { name: "Thành tựu", href: "/gamification", icon: Trophy },
-]
+import { useSettings } from "@/context/SettingsContext"
+import { useAuth } from "@/components/AuthProvider"
 
 export function Sidebar() {
   const pathname = usePathname()
+  const { t } = useSettings()
+  const { user, signOut } = useAuth()
+
+  const navigation = [
+    { name: t('dashboard'), href: "/", icon: Home },
+    { name: t('transactions'), href: "/transactions", icon: PieChart },
+    { name: t('goals'), href: "/goals", icon: Target },
+    { name: t('budget'), href: "/budget", icon: Wallet },
+    { name: t('gamification'), href: "/gamification", icon: Trophy },
+    { name: t('ai_insights'), href: "/insights", icon: Sparkles },
+  ]
+
+  const bottomNavigation = [
+    { name: t('profile'), href: "/profile", icon: UserIcon },
+    { name: t('settings'), href: "/settings", icon: Settings },
+  ]
 
   return (
-    <div className="flex h-full w-64 flex-col bg-white border-r border-gray-100 shadow-sm">
-      <div className="flex h-16 items-center px-6 border-b border-gray-100">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-blue-600">
+    <div className="flex h-full w-64 flex-col bg-card border-r border-border shadow-sm text-foreground">
+      <div className="flex h-16 items-center px-6 border-b border-border">
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary">
           <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white">
             <Sparkles size={18} />
           </div>
@@ -27,56 +37,86 @@ export function Sidebar() {
         </Link>
       </div>
       
-      <nav className="flex-1 space-y-1 px-4 py-6">
+      <nav className="flex-1 space-y-1 px-4 py-6 overflow-y-auto">
         {navigation.map((item) => {
           const isActive = pathname === item.href
           
           return (
             <Link
-              key={item.name}
+              key={item.href}
               href={item.href}
               className={cn(
                 "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive 
-                  ? "bg-blue-50 text-blue-700" 
-                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-primary/10 text-primary" 
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
               <item.icon 
                 className={cn(
                   "h-5 w-5 shrink-0 transition-colors duration-200",
-                  isActive ? "text-blue-600" : "text-gray-400 group-hover:text-gray-500"
+                  isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
                 )} 
               />
               {item.name}
             </Link>
           )
         })}
-      </nav>
-      
-      <div className="p-4 mt-auto">
-        <div className="rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 p-4 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="flex items-center gap-2 text-sm font-semibold text-indigo-900 mb-1 relative z-10">
-            <Trophy className="h-4 w-4 text-amber-500" />
-            Chuỗi ngày
-          </div>
-          <p className="text-xs text-indigo-600/80 mb-3 relative z-10">Bạn đã ghi chép 5 ngày liên tiếp!</p>
-          <div className="flex gap-1 relative z-10">
-            {[1, 2, 3, 4, 5, 6, 7].map((day) => (
-              <div 
-                key={day} 
+
+        <div className="pt-6 mt-6 border-t border-border">
+          <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+            Hệ thống
+          </p>
+          {bottomNavigation.map((item) => {
+            const isActive = pathname === item.href
+            
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
                 className={cn(
-                  "h-6 w-full rounded-md flex items-center justify-center text-[10px] font-medium transition-transform hover:scale-110",
-                  day <= 5 
-                    ? "bg-gradient-to-tr from-amber-400 to-orange-400 text-white shadow-sm" 
-                    : "bg-white text-gray-400 border border-indigo-100"
+                  "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                  isActive 
+                    ? "bg-primary/10 text-primary" 
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
-                {day}
-              </div>
-            ))}
+                <item.icon 
+                  className={cn(
+                    "h-5 w-5 shrink-0 transition-colors duration-200",
+                    isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                  )} 
+                />
+                {item.name}
+              </Link>
+            )
+          })}
+        </div>
+      </nav>
+      
+      {/* User profile & logout */}
+      <div className="p-4 border-t border-border">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">
+              {user?.displayName ? user.displayName.charAt(0).toUpperCase() : <UserIcon size={18} />}
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-sm font-medium text-foreground truncate">
+                {user?.displayName || "Người dùng"}
+              </p>
+              <p className="text-xs text-muted-foreground truncate">
+                {user?.email}
+              </p>
+            </div>
           </div>
+          <button 
+            onClick={signOut}
+            className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors shrink-0"
+            title={t('logout')}
+          >
+            <LogOut size={18} />
+          </button>
         </div>
       </div>
     </div>

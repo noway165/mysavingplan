@@ -2,69 +2,133 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Target, Plus, Search, Trash2, X, Coins } from "lucide-react"
-import { useGoals } from "@/hooks/useGoals"
+import { Target, Plus, Trash2, X, Coins, Edit2, Calendar, History, ArrowDownToLine, ArrowUpFromLine } from "lucide-react"
+import { useGoals, useGoalHistory, Goal, GoalHistoryEntry } from "@/hooks/useGoals"
+import { useSettings } from "@/context/SettingsContext"
 
 const COLORS = [
-  { name: "Xanh dương", value: "bg-blue-500" },
-  { name: "Cam", value: "bg-orange-500" },
-  { name: "Xanh lá", value: "bg-emerald-500" },
-  { name: "Tím", value: "bg-purple-500" },
-  { name: "Hồng", value: "bg-pink-500" },
-  { name: "Vàng", value: "bg-amber-500" },
+  { name: "Blue", value: "bg-blue-500" },
+  { name: "Orange", value: "bg-orange-500" },
+  { name: "Emerald", value: "bg-emerald-500" },
+  { name: "Purple", value: "bg-purple-500" },
+  { name: "Pink", value: "bg-pink-500" },
+  { name: "Amber", value: "bg-amber-500" },
 ]
 
 export default function GoalsPage() {
-  const { goals, loading, addGoal, updateGoalSavedAmount, deleteGoal } = useGoals()
+  const { t, formatCurrency } = useSettings()
+  const { goals, loading, addGoal, updateGoal, updateGoalSavedAmount, withdrawFromGoal, deleteGoal, addGoalHistory } = useGoals()
+  
+  // Modals state
   const [showAddModal, setShowAddModal] = useState(false)
   const [showDepositModal, setShowDepositModal] = useState<string | null>(null)
+  const [showWithdrawModal, setShowWithdrawModal] = useState<string | null>(null)
+  const [showHistoryModal, setShowHistoryModal] = useState<string | null>(null)
+  const [editingGoal, setEditingGoal] = useState<Goal | null>(null)
 
-  // Add goal form
+  // Add/Edit goal form
   const [goalName, setGoalName] = useState("")
   const [goalTarget, setGoalTarget] = useState("")
   const [goalColor, setGoalColor] = useState("bg-blue-500")
+  const [goalDeadline, setGoalDeadline] = useState("")
   const [submitting, setSubmitting] = useState(false)
 
-  // Deposit form
-  const [depositAmount, setDepositAmount] = useState("")
+  // Transaction form
+  const [amount, setAmount] = useState("")
 
-  const resetAddForm = () => {
+  const resetForm = () => {
     setGoalName("")
     setGoalTarget("")
     setGoalColor("bg-blue-500")
+    setGoalDeadline("")
+    setEditingGoal(null)
   }
 
-  const handleAddGoal = async (e: React.FormEvent) => {
+  const openAddModal = () => {
+    resetForm()
+    setShowAddModal(true)
+  }
+
+  const openEditModal = (goal: Goal) => {
+    setEditingGoal(goal)
+    setGoalName(goal.name)
+    setGoalTarget(goal.target.toString())
+    setGoalColor(goal.color)
+    setGoalDeadline(goal.deadline || "")
+    setShowAddModal(true)
+  }
+
+  const handleSaveGoal = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!goalName.trim() || !goalTarget) return
     setSubmitting(true)
-    await addGoal({
-      name: goalName.trim(),
-      target: Number(goalTarget),
-      saved: 0,
-      color: goalColor
-    })
+    
+    if (editingGoal) {
+      await updateGoal(editingGoal.id, {
+        name: goalName.trim(),
+        target: Number(goalTarget),
+        color: goalColor,
+        deadline: goalDeadline || undefined
+      })
+    } else {
+      await addGoal({
+        name: goalName.trim(),
+        target: Number(goalTarget),
+        saved: 0,
+        color: goalColor,
+        deadline: goalDeadline || undefined
+      })
+    }
+    
     setSubmitting(false)
     setShowAddModal(false)
-    resetAddForm()
+    resetForm()
   }
 
-  const handleDeposit = async (e: React.FormEvent) => {
+  const handleTransaction = async (e: React.FormEvent, type: 'deposit' | 'withdraw') => {
     e.preventDefault()
-    if (!showDepositModal || !depositAmount) return
-    const goal = goals.find(g => g.id === showDepositModal)
+    const goalId = type === 'deposit' ? showDepositModal : showWithdrawModal
+    if (!goalId || !amount) return
+    
+    const goal = goals.find(g => g.id === goalId)
     if (!goal) return
+    
     setSubmitting(true)
-    await updateGoalSavedAmount(showDepositModal, goal.saved + Number(depositAmount))
+    const numAmount = Number(amount)
+    
+    if (type === 'deposit') {
+      await updateGoalSavedAmount(goalId, goal.saved + numAmount)
+    } else {
+      await withdrawFromGoal(goalId, numAmount, goal.saved)
+    }
+    
+    // Add history
+    const now = new Date()
+    await addGoalHistory(goalId, {
+      type,
+      amount: numAmount,
+      date: now.toLocaleDateString('vi-VN') + " " + now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})
+    })
+    
     setSubmitting(false)
     setShowDepositModal(null)
-    setDepositAmount("")
+    setShowWithdrawModal(null)
+    setAmount("")
+  }
+
+  const getDaysLeft = (deadline?: string) => {
+    if (!deadline) return null
+    const end = new Date(deadline)
+    const now = new Date()
+    end.setHours(23, 59, 59)
+    const diff = end.getTime() - now.getTime()
+    return Math.ceil(diff / (1000 * 3600 * 24))
   }
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -73,14 +137,14 @@ export default function GoalsPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Mục tiêu tiết kiệm</h1>
-          <p className="text-gray-500 mt-1">Đặt mục tiêu và theo dõi tiến trình tiết kiệm.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('goals_title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('goals_desc')}</p>
         </div>
         <button 
-          onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors whitespace-nowrap"
+          onClick={openAddModal}
+          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap"
         >
-          <Plus size={16} /> Thêm mới
+          <Plus size={16} /> {t('create_goal')}
         </button>
       </div>
 
@@ -88,13 +152,15 @@ export default function GoalsPage() {
         {goals.map((goal, index) => {
           const percent = goal.target > 0 ? Math.min(Math.round((goal.saved / goal.target) * 100), 100) : 0
           const isComplete = percent >= 100
+          const daysLeft = getDaysLeft(goal.deadline)
+
           return (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               key={goal.id}
-              className={`rounded-2xl bg-white p-6 shadow-sm border transition-all hover:shadow-md ${isComplete ? "border-emerald-200 bg-emerald-50/30" : "border-gray-100"}`}
+              className={`rounded-2xl bg-card p-6 shadow-sm border transition-all hover:shadow-md ${isComplete ? "border-emerald-200 dark:border-emerald-500/30 bg-emerald-50/30 dark:bg-emerald-500/5" : "border-border"}`}
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -102,40 +168,79 @@ export default function GoalsPage() {
                     <Target size={20} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{goal.name}</h3>
-                    <p className="text-xs text-gray-500">{isComplete ? "✅ Hoàn thành!" : `Còn ${(goal.target - goal.saved).toLocaleString()} ₫`}</p>
+                    <h3 className="font-semibold text-foreground line-clamp-1" title={goal.name}>{goal.name}</h3>
+                    {daysLeft !== null && !isComplete && (
+                      <p className={`text-xs flex items-center gap-1 mt-0.5 ${daysLeft < 0 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                        <Calendar size={12} />
+                        {daysLeft < 0 ? t('overdue') : `${daysLeft} ${t('days_left')}`}
+                      </p>
+                    )}
+                    {isComplete && (
+                      <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">✅ {t('completed')}</p>
+                    )}
                   </div>
                 </div>
-                <button 
-                  onClick={() => deleteGoal(goal.id)}
-                  className="p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all"
-                >
-                  <Trash2 size={16} />
-                </button>
+                <div className="flex gap-1">
+                  <button 
+                    onClick={() => setShowHistoryModal(goal.id)}
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all"
+                    title={t('history')}
+                  >
+                    <History size={16} />
+                  </button>
+                  <button 
+                    onClick={() => openEditModal(goal)}
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all"
+                    title={t('edit')}
+                  >
+                    <Edit2 size={16} />
+                  </button>
+                  <button 
+                    onClick={() => deleteGoal(goal.id)}
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all"
+                    title={t('delete')}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
 
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-500">{goal.saved.toLocaleString()} ₫</span>
-                <span className="font-semibold text-gray-900">{goal.target.toLocaleString()} ₫</span>
+                <span className="text-muted-foreground">{formatCurrency(goal.saved)}</span>
+                <span className="font-semibold text-foreground">{formatCurrency(goal.target)}</span>
               </div>
-              <div className="h-2.5 w-full rounded-full bg-gray-100 overflow-hidden mb-4">
+              <div className="h-2.5 w-full rounded-full bg-muted overflow-hidden mb-4">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${percent}%` }}
                   transition={{ duration: 1, ease: "easeOut" }}
-                  className={`h-full rounded-full ${isComplete ? "bg-emerald-500" : "bg-gradient-to-r from-blue-500 to-indigo-500"}`}
+                  className={`h-full rounded-full ${isComplete ? "bg-emerald-500" : goal.color}`}
                 />
               </div>
-              <div className="flex justify-between items-center">
-                <span className={`text-sm font-bold ${isComplete ? "text-emerald-600" : "text-blue-600"}`}>{percent}%</span>
-                {!isComplete && (
-                  <button
-                    onClick={() => setShowDepositModal(goal.id)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-                  >
-                    <Coins size={14} /> Nạp tiền
-                  </button>
-                )}
+              
+              <div className="flex justify-between items-center mt-4">
+                <span className={`text-sm font-bold ${isComplete ? "text-emerald-600 dark:text-emerald-400" : "text-primary"}`}>{percent}%</span>
+                
+                <div className="flex gap-2">
+                  {!isComplete && (
+                    <button
+                      onClick={() => setShowDepositModal(goal.id)}
+                      className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
+                      title={t('deposit')}
+                    >
+                      <ArrowDownToLine size={14} /> {t('deposit')}
+                    </button>
+                  )}
+                  {goal.saved > 0 && (
+                    <button
+                      onClick={() => setShowWithdrawModal(goal.id)}
+                      className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-muted-foreground bg-muted rounded-lg hover:bg-muted/80 transition-colors"
+                      title={t('withdraw')}
+                    >
+                      <ArrowUpFromLine size={14} /> {t('withdraw')}
+                    </button>
+                  )}
+                </div>
               </div>
             </motion.div>
           )
@@ -143,42 +248,42 @@ export default function GoalsPage() {
 
         {/* Add new goal card */}
         <div 
-          onClick={() => setShowAddModal(true)}
-          className="rounded-2xl bg-gray-50/50 border-2 border-dashed border-gray-200 p-6 flex flex-col items-center justify-center text-gray-500 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/50 transition-all cursor-pointer min-h-[220px]"
+          onClick={openAddModal}
+          className="rounded-2xl bg-card border-2 border-dashed border-border p-6 flex flex-col items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer min-h-[220px]"
         >
-          <div className="h-12 w-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-3">
+          <div className="h-12 w-12 rounded-full bg-background shadow-sm flex items-center justify-center mb-3">
             <Plus size={24} />
           </div>
-          <span className="font-semibold text-sm">Tạo mục tiêu mới</span>
+          <span className="font-semibold text-sm">{t('create_goal')}</span>
         </div>
       </div>
 
-      {/* Modal thêm mục tiêu */}
+      {/* Add/Edit Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowAddModal(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900">Tạo mục tiêu mới</h2>
-              <button onClick={() => setShowAddModal(false)} className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors">
+          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-md animate-in fade-in zoom-in-95 duration-200 border border-border" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-6 border-b border-border">
+              <h2 className="text-xl font-bold text-foreground">{editingGoal ? t('edit') : t('create')}</h2>
+              <button onClick={() => setShowAddModal(false)} className="p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors">
                 <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleAddGoal} className="p-6 space-y-5">
+            <form onSubmit={handleSaveGoal} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Tên mục tiêu</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('goal_name')}</label>
                 <input
                   type="text"
                   value={goalName}
                   onChange={e => setGoalName(e.target.value)}
-                  placeholder="VD: Mua iPhone, Du lịch Đà Lạt..."
+                  placeholder="VD: Mua xe, Du lịch..."
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Số tiền cần đạt (₫)</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('target_amount')}</label>
                 <input
                   type="number"
                   value={goalTarget}
@@ -186,19 +291,30 @@ export default function GoalsPage() {
                   placeholder="VD: 10000000"
                   required
                   min={1}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Màu sắc</label>
-                <div className="flex gap-3">
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('deadline')} (Tùy chọn)</label>
+                <input
+                  type="date"
+                  value={goalDeadline}
+                  onChange={e => setGoalDeadline(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('color')}</label>
+                <div className="flex gap-3 flex-wrap">
                   {COLORS.map(c => (
                     <button
                       type="button"
                       key={c.value}
                       onClick={() => setGoalColor(c.value)}
-                      className={`h-9 w-9 rounded-full ${c.value} transition-all ${goalColor === c.value ? "ring-2 ring-offset-2 ring-blue-500 scale-110" : "hover:scale-105"}`}
+                      className={`h-9 w-9 rounded-full ${c.value} transition-all ${goalColor === c.value ? "ring-2 ring-offset-2 ring-background ring-offset-primary scale-110" : "hover:scale-105"}`}
                       title={c.name}
                     />
                   ))}
@@ -208,52 +324,105 @@ export default function GoalsPage() {
               <button
                 type="submit"
                 disabled={submitting || !goalName || !goalTarget}
-                className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {submitting ? "Đang tạo..." : "Tạo mục tiêu"}
+                {submitting ? t('saving') : t('save')}
               </button>
             </form>
           </div>
         </div>
       )}
 
-      {/* Modal nạp tiền */}
-      {showDepositModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowDepositModal(null)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900">Nạp tiền tiết kiệm</h2>
-              <button onClick={() => setShowDepositModal(null)} className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors">
+      {/* Deposit / Withdraw Modal */}
+      {(showDepositModal || showWithdrawModal) && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => {setShowDepositModal(null); setShowWithdrawModal(null); setAmount("")}}>
+          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-sm animate-in fade-in zoom-in-95 duration-200 border border-border" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-6 border-b border-border">
+              <h2 className="text-xl font-bold text-foreground">
+                {showDepositModal ? t('deposit_money') : t('withdraw_money')}
+              </h2>
+              <button onClick={() => {setShowDepositModal(null); setShowWithdrawModal(null); setAmount("")}} className="p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors">
                 <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleDeposit} className="p-6 space-y-5">
+            <form onSubmit={(e) => handleTransaction(e, showDepositModal ? 'deposit' : 'withdraw')} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Số tiền nạp (₫)</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('amount')}</label>
                 <input
                   type="number"
-                  value={depositAmount}
-                  onChange={e => setDepositAmount(e.target.value)}
+                  value={amount}
+                  onChange={e => setAmount(e.target.value)}
                   placeholder="VD: 500000"
                   required
                   min={1}
+                  max={showWithdrawModal ? goals.find(g => g.id === showWithdrawModal)?.saved : undefined}
                   autoFocus
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
               <button
                 type="submit"
-                disabled={submitting || !depositAmount}
-                className="w-full py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={submitting || !amount}
+                className={`w-full py-3 rounded-xl text-white font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${showDepositModal ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-destructive hover:bg-destructive/90'}`}
               >
-                {submitting ? "Đang nạp..." : "Xác nhận nạp tiền"}
+                {submitting ? t('saving') : (showDepositModal ? t('confirm_deposit') : t('confirm_withdraw'))}
               </button>
             </form>
           </div>
         </div>
       )}
+
+      {/* History Modal */}
+      {showHistoryModal && <HistoryModal goalId={showHistoryModal} onClose={() => setShowHistoryModal(null)} />}
+    </div>
+  )
+}
+
+function HistoryModal({ goalId, onClose }: { goalId: string, onClose: () => void }) {
+  const { history, loading } = useGoalHistory(goalId)
+  const { t, formatCurrency } = useSettings()
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-card rounded-2xl shadow-2xl w-full max-w-md max-h-[80vh] flex flex-col animate-in fade-in zoom-in-95 duration-200 border border-border" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between p-6 border-b border-border">
+          <h2 className="text-xl font-bold text-foreground">{t('history')}</h2>
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors">
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="p-6 overflow-y-auto flex-1">
+          {loading ? (
+             <div className="flex justify-center p-4">
+               <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+             </div>
+          ) : history.length === 0 ? (
+            <p className="text-center text-muted-foreground py-8">{t('no_data')}</p>
+          ) : (
+            <div className="space-y-4">
+              {history.map(item => (
+                <div key={item.id} className="flex justify-between items-center p-3 rounded-xl border border-border bg-background">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${item.type === 'deposit' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-destructive/10 text-destructive'}`}>
+                      {item.type === 'deposit' ? <ArrowDownToLine size={16} /> : <ArrowUpFromLine size={16} />}
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground">{item.type === 'deposit' ? t('deposited') : t('withdrawn')}</p>
+                      <p className="text-xs text-muted-foreground">{item.date}</p>
+                    </div>
+                  </div>
+                  <span className={`font-semibold ${item.type === 'deposit' ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}>
+                    {item.type === 'deposit' ? '+' : '-'}{formatCurrency(item.amount)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

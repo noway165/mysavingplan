@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react"
 import { db } from "@/lib/firebase"
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc } from "firebase/firestore"
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { useAuth } from "@/components/AuthProvider"
 
 export type Transaction = {
@@ -56,8 +56,23 @@ export function useTransactions() {
 
   const deleteTransaction = async (id: string) => {
     if (!user) return
-    await deleteDoc(doc(db, "users", user.uid, "transactions", id))
+    try {
+      const txRef = doc(db, 'users', user.uid, 'transactions', id)
+      await deleteDoc(txRef)
+    } catch (error) {
+      console.error("Error deleting transaction:", error)
+    }
   }
 
-  return { transactions, loading, addTransaction, deleteTransaction }
+  const updateTransaction = async (id: string, data: Partial<Omit<Transaction, 'id' | 'createdAt'>>) => {
+    if (!user) return
+    try {
+      const txRef = doc(db, 'users', user.uid, 'transactions', id)
+      await updateDoc(txRef, data)
+    } catch (error) {
+      console.error("Error updating transaction:", error)
+    }
+  }
+
+  return { transactions, loading, addTransaction, deleteTransaction, updateTransaction }
 }

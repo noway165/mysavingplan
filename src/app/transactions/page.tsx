@@ -1,62 +1,150 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
-import { ArrowDownRight, ArrowUpRight, Search, Plus, Calendar, Filter, FileText, X, Trash2 } from "lucide-react"
-import { useTransactions } from "@/hooks/useTransactions"
+import { ArrowDownRight, ArrowUpRight, Search, Plus, Calendar, Filter, FileText, X, Trash2, Edit2 } from "lucide-react"
+import { useTransactions, Transaction } from "@/hooks/useTransactions"
+import { useSettings } from "@/context/SettingsContext"
 
 const CATEGORIES_EXPENSE = ["Ăn uống", "Mua sắm", "Di chuyển", "Hóa đơn", "Giải trí", "Sức khỏe", "Giáo dục", "Khác"]
 const CATEGORIES_INCOME = ["Lương", "Thưởng", "Thu nhập phụ", "Đầu tư", "Khác"]
 
+type FilterPeriod = "all" | "week" | "month" | "custom"
+
 export default function TransactionsPage() {
-  const { transactions, loading, addTransaction, deleteTransaction } = useTransactions()
+  const { t, formatCurrency } = useSettings()
+  const { transactions, loading, addTransaction, deleteTransaction, updateTransaction } = useTransactions()
   const [activeTab, setActiveTab] = useState<"all" | "income" | "expense">("all")
   const [showModal, setShowModal] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [filterPeriod, setFilterPeriod] = useState<FilterPeriod>("all")
+  
+  // Custom date filter
+  const [customStartDate, setCustomStartDate] = useState("")
+  const [customEndDate, setCustomEndDate] = useState("")
 
   // Form state
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [formType, setFormType] = useState<"income" | "expense">("expense")
   const [formTitle, setFormTitle] = useState("")
   const [formAmount, setFormAmount] = useState("")
   const [formCategory, setFormCategory] = useState("")
+  const [formDate, setFormDate] = useState("")
+  const [formTime, setFormTime] = useState("")
   const [formSubmitting, setFormSubmitting] = useState(false)
 
   const resetForm = () => {
+    setEditingId(null)
     setFormTitle("")
     setFormAmount("")
     setFormCategory("")
     setFormType("expense")
+    
+    // Default to current date/time
+    const now = new Date()
+    setFormDate(now.toISOString().split('T')[0])
+    setFormTime(now.toTimeString().substring(0, 5))
+  }
+
+  const openAddModal = () => {
+    resetForm()
+    setShowModal(true)
+  }
+
+  const openEditModal = (tx: Transaction) => {
+    setEditingId(tx.id)
+    setFormType(tx.type)
+    setFormTitle(tx.title)
+    setFormAmount(tx.amount.toString())
+    setFormCategory(tx.category)
+    
+    // Parse DD/MM/YYYY back to YYYY-MM-DD for input
+    try {
+      const parts = tx.date.split('/')
+      if (parts.length === 3) {
+        setFormDate(`${parts[2]}-${parts[1]}-${parts[0]}`)
+      }
+    } catch {
+      setFormDate(new Date().toISOString().split('T')[0])
+    }
+    
+    setFormTime(tx.time || "00:00")
+    setShowModal(true)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formTitle.trim() || !formAmount || !formCategory) return
+    if (!formTitle.trim() || !formAmount || !formCategory || !formDate) return
 
     setFormSubmitting(true)
-    await addTransaction({
+    
+    // Format YYYY-MM-DD to DD/MM/YYYY
+    const dateObj = new Date(formDate)
+    const formattedDate = dateObj.toLocaleDateString("vi-VN")
+    
+    const txData = {
       title: formTitle.trim(),
       amount: Number(formAmount),
       type: formType,
       category: formCategory,
-      date: new Date().toLocaleDateString("vi-VN"),
-      time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })
-    })
+      date: formattedDate,
+      time: formTime
+    }
+
+    if (editingId) {
+      await updateTransaction(editingId, txData)
+    } else {
+      await addTransaction(txData)
+    }
+    
     setFormSubmitting(false)
     setShowModal(false)
     resetForm()
   }
 
-  const filteredTransactions = transactions
-    .filter(t => {
+  const filteredTransactions = useMemo(() => {
+    const now = new Date()
+    const currentWeekStart = new Date(now)
+    currentWeekStart.setDate(now.getDate() - now.getDay())
+    
+    return transactions.filter(t => {
+      // Type filter
       if (activeTab !== "all" && t.type !== activeTab) return false
+      
+      // Search filter
       if (searchQuery && !t.title.toLowerCase().includes(searchQuery.toLowerCase())) return false
+      
+      // Date filter
+      if (filterPeriod !== "all") {
+        try {
+          const parts = t.date.split('/')
+          if (parts.length === 3) {
+            const txDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`)
+            
+            if (filterPeriod === "week") {
+              if (txDate < currentWeekStart) return false
+            } else if (filterPeriod === "month") {
+              if (txDate.getMonth() !== now.getMonth() || txDate.getFullYear() !== now.getFullYear()) return false
+            } else if (filterPeriod === "custom" && customStartDate && customEndDate) {
+              const start = new Date(customStartDate)
+              const end = new Date(customEndDate)
+              end.setHours(23, 59, 59)
+              if (txDate < start || txDate > end) return false
+            }
+          }
+        } catch {
+          // If date parsing fails, keep it
+        }
+      }
+      
       return true
     })
+  }, [transactions, activeTab, searchQuery, filterPeriod, customStartDate, customEndDate])
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -65,55 +153,92 @@ export default function TransactionsPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Quản lý Thu / Chi</h1>
-          <p className="text-gray-500 mt-1">Ghi chép và theo dõi dòng tiền của bạn chi tiết.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('tx_title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('tx_desc')}</p>
         </div>
         <button 
-          onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors whitespace-nowrap self-start sm:self-auto"
+          onClick={openAddModal}
+          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap self-start sm:self-auto"
         >
-          <Plus size={16} /> Thêm giao dịch
+          <Plus size={16} /> {t('add_new')}
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex gap-2 bg-gray-50 p-1 rounded-xl w-full sm:w-auto">
-            <button 
-              onClick={() => setActiveTab("all")}
-              className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-lg transition-colors ${activeTab === "all" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              Tất cả
-            </button>
-            <button 
-              onClick={() => setActiveTab("income")}
-              className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-lg transition-colors ${activeTab === "income" ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              Thu nhập
-            </button>
-            <button 
-              onClick={() => setActiveTab("expense")}
-              className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-lg transition-colors ${activeTab === "expense" ? "bg-white text-red-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              Chi tiêu
-            </button>
-          </div>
-          
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <div className="relative flex-1 sm:flex-none">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-              <input 
-                type="text" 
-                placeholder="Tìm giao dịch..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-48"
-              />
+      <div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+        <div className="p-4 border-b border-border space-y-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex gap-2 bg-muted p-1 rounded-xl w-full md:w-auto">
+              <button 
+                onClick={() => setActiveTab("all")}
+                className={`flex-1 md:flex-none px-4 py-1.5 text-sm font-medium rounded-lg transition-colors ${activeTab === "all" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {t('filter_all')}
+              </button>
+              <button 
+                onClick={() => setActiveTab("income")}
+                className={`flex-1 md:flex-none px-4 py-1.5 text-sm font-medium rounded-lg transition-colors ${activeTab === "income" ? "bg-background text-emerald-600 shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {t('filter_income')}
+              </button>
+              <button 
+                onClick={() => setActiveTab("expense")}
+                className={`flex-1 md:flex-none px-4 py-1.5 text-sm font-medium rounded-lg transition-colors ${activeTab === "expense" ? "bg-background text-destructive shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {t('filter_expense')}
+              </button>
             </div>
+            
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <div className="relative flex-1 md:flex-none">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+                <input 
+                  type="text" 
+                  placeholder={t('search')} 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 pr-4 py-2 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full md:w-48 text-foreground"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-medium text-muted-foreground mr-2"><Filter size={14} className="inline mr-1" /> Lọc thời gian:</span>
+            {(["all", "week", "month", "custom"] as FilterPeriod[]).map(period => (
+              <button
+                key={period}
+                onClick={() => setFilterPeriod(period)}
+                className={`px-3 py-1 text-xs font-medium rounded-full border transition-colors ${
+                  filterPeriod === period 
+                    ? "bg-primary/10 border-primary/20 text-primary" 
+                    : "bg-background border-border text-muted-foreground hover:bg-muted"
+                }`}
+              >
+                {period === "all" ? t('filter_all') : period === "week" ? t('this_week') : period === "month" ? t('this_month') : t('custom')}
+              </button>
+            ))}
+
+            {filterPeriod === "custom" && (
+              <div className="flex items-center gap-2 ml-2">
+                <input 
+                  type="date" 
+                  value={customStartDate}
+                  onChange={e => setCustomStartDate(e.target.value)}
+                  className="px-2 py-1 text-xs rounded border border-border bg-background text-foreground"
+                />
+                <span className="text-muted-foreground">-</span>
+                <input 
+                  type="date" 
+                  value={customEndDate}
+                  onChange={e => setCustomEndDate(e.target.value)}
+                  className="px-2 py-1 text-xs rounded border border-border bg-background text-foreground"
+                />
+              </div>
+            )}
           </div>
         </div>
         
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-border">
           {filteredTransactions.length > 0 ? (
             filteredTransactions.map((tx, index) => (
               <motion.div 
@@ -121,93 +246,124 @@ export default function TransactionsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
                 key={tx.id} 
-                className="p-4 flex items-center justify-between hover:bg-gray-50/50 transition-colors group"
+                className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors group"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`h-12 w-12 rounded-2xl flex items-center justify-center ${tx.type === "income" ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"} shadow-sm`}>
+                  <div className={`h-12 w-12 rounded-2xl flex items-center justify-center ${tx.type === "income" ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" : "bg-destructive/10 text-destructive"} shadow-sm`}>
                     {tx.type === "income" ? <ArrowDownRight size={20} /> : <ArrowUpRight size={20} />}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{tx.title}</h3>
+                    <h3 className="font-semibold text-foreground">{tx.title}</h3>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-600">
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-muted text-muted-foreground">
                         {tx.category}
                       </span>
-                      <span className="text-xs text-gray-400 flex items-center gap-1">
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Calendar size={12} /> {tx.date} • {tx.time}
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className={`font-bold ${tx.type === "income" ? "text-emerald-600" : "text-gray-900"}`}>
-                    {tx.type === "income" ? "+" : "-"}{tx.amount.toLocaleString()} ₫
+                  <div className={`font-bold ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}>
+                    {tx.type === "income" ? "+" : "-"}{formatCurrency(tx.amount)}
                   </div>
-                  <button 
-                    onClick={() => deleteTransaction(tx.id)}
-                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                  <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
+                    <button 
+                      onClick={() => openEditModal(tx)}
+                      className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                      title={t('edit')}
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                    <button 
+                      onClick={() => deleteTransaction(tx.id)}
+                      className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                      title={t('delete')}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             ))
           ) : (
-            <div className="p-12 flex flex-col items-center justify-center text-gray-400">
-              <FileText size={48} className="mb-4 text-gray-300" />
-              <p className="font-medium">Chưa có giao dịch nào</p>
-              <p className="text-sm mt-1">Bấm &quot;Thêm giao dịch&quot; để bắt đầu ghi chép.</p>
+            <div className="p-12 flex flex-col items-center justify-center text-muted-foreground">
+              <FileText size={48} className="mb-4 opacity-20" />
+              <p className="font-medium">{t('no_transactions')}</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Modal thêm giao dịch */}
+      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900">Thêm giao dịch mới</h2>
-              <button onClick={() => setShowModal(false)} className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors">
+          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-md animate-in fade-in zoom-in-95 duration-200 border border-border" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-6 border-b border-border">
+              <h2 className="text-xl font-bold text-foreground">
+                {editingId ? t('edit') : t('add_new')}
+              </h2>
+              <button onClick={() => setShowModal(false)} className="p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors">
                 <X size={20} />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
-              {/* Loại giao dịch */}
-              <div className="flex gap-2 bg-gray-50 p-1 rounded-xl">
+              <div className="flex gap-2 bg-muted p-1 rounded-xl">
                 <button
                   type="button"
                   onClick={() => { setFormType("expense"); setFormCategory("") }}
-                  className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-colors ${formType === "expense" ? "bg-white text-red-600 shadow-sm" : "text-gray-500"}`}
+                  className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-colors ${formType === "expense" ? "bg-background text-destructive shadow-sm" : "text-muted-foreground"}`}
                 >
-                  Chi tiêu
+                  {t('filter_expense')}
                 </button>
                 <button
                   type="button"
                   onClick={() => { setFormType("income"); setFormCategory("") }}
-                  className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-colors ${formType === "income" ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500"}`}
+                  className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-colors ${formType === "income" ? "bg-background text-emerald-600 shadow-sm" : "text-muted-foreground"}`}
                 >
-                  Thu nhập
+                  {t('filter_income')}
                 </button>
               </div>
 
-              {/* Tên giao dịch */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Mô tả</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('tx_title')}</label>
                 <input
                   type="text"
                   value={formTitle}
                   onChange={e => setFormTitle(e.target.value)}
-                  placeholder="VD: Ăn trưa, Lương tháng 6..."
+                  placeholder="VD: Ăn trưa, Lương..."
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
-              {/* Số tiền */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">{t('date')}</label>
+                  <input
+                    type="date"
+                    value={formDate}
+                    onChange={e => setFormDate(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">{t('time')}</label>
+                  <input
+                    type="time"
+                    value={formTime}
+                    onChange={e => setFormTime(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Số tiền (₫)</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('amount')}</label>
                 <input
                   type="number"
                   value={formAmount}
@@ -215,13 +371,12 @@ export default function TransactionsPage() {
                   placeholder="VD: 150000"
                   required
                   min={1}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
-              {/* Danh mục */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Danh mục</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('category')}</label>
                 <div className="flex flex-wrap gap-2">
                   {(formType === "expense" ? CATEGORIES_EXPENSE : CATEGORIES_INCOME).map(cat => (
                     <button
@@ -230,8 +385,8 @@ export default function TransactionsPage() {
                       onClick={() => setFormCategory(cat)}
                       className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
                         formCategory === cat 
-                          ? (formType === "expense" ? "bg-red-50 border-red-200 text-red-600" : "bg-emerald-50 border-emerald-200 text-emerald-600")
-                          : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                          ? (formType === "expense" ? "bg-destructive/10 border-destructive/20 text-destructive" : "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400")
+                          : "bg-background border-border text-muted-foreground hover:bg-muted"
                       }`}
                     >
                       {cat}
@@ -240,13 +395,12 @@ export default function TransactionsPage() {
                 </div>
               </div>
 
-              {/* Nút lưu */}
               <button
                 type="submit"
-                disabled={formSubmitting || !formTitle || !formAmount || !formCategory}
-                className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={formSubmitting || !formTitle || !formAmount || !formCategory || !formDate}
+                className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {formSubmitting ? "Đang lưu..." : "Lưu giao dịch"}
+                {formSubmitting ? t('saving') : t('save')}
               </button>
             </form>
           </div>
