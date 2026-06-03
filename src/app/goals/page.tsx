@@ -63,20 +63,25 @@ export default function GoalsPage() {
     if (!goalName.trim() || !goalTarget) return
     setSubmitting(true)
     
+    const goalData: Partial<Omit<Goal, "id" | "createdAt" | "saved">> = {
+      name: goalName.trim(),
+      target: Number(goalTarget),
+      color: goalColor,
+    }
+    
+    if (goalDeadline) {
+      goalData.deadline = goalDeadline
+    }
+    
     if (editingGoal) {
-      await updateGoal(editingGoal.id, {
-        name: goalName.trim(),
-        target: Number(goalTarget),
-        color: goalColor,
-        deadline: goalDeadline || undefined
-      })
+      await updateGoal(editingGoal.id, goalData)
     } else {
       await addGoal({
-        name: goalName.trim(),
-        target: Number(goalTarget),
+        name: goalData.name!,
+        target: goalData.target!,
+        color: goalData.color!,
+        deadline: goalData.deadline,
         saved: 0,
-        color: goalColor,
-        deadline: goalDeadline || undefined
       })
     }
     
