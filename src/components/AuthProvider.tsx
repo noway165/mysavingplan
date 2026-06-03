@@ -5,24 +5,25 @@ import { auth } from "@/lib/firebase"
 import {
   User,
   onAuthStateChanged,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
-  signOut as firebaseSignOut
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  updateProfile
 } from "firebase/auth"
 
 type AuthContextType = {
   user: User | null
   loading: boolean
-  signInWithGoogle: () => Promise<void>
+  signIn: (email: string, password: string) => Promise<{ error?: string }>
+  signUp: (email: string, password: string, name: string) => Promise<{ error?: string }>
   signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  signInWithGoogle: async () => {},
+  signIn: async () => ({}),
+  signUp: async () => ({}),
   signOut: async () => {},
 })
 
@@ -31,11 +32,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check for redirect result first
-    getRedirectResult(auth).catch((error) => {
-      console.error("Redirect result error:", error)
-    })
-
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser)
       setLoading(false)
@@ -43,24 +39,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribe()
   }, [])
 
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider()
+  const signIn = async (email: string, password: string) => {
     try {
-      // Try popup first (works on desktop browsers)
-      await signInWithPopup(auth, provider)
+      await signInWithEmailAndPassword(auth, email, password)
+      return {}
     } catch (error: unknown) {
-      const firebaseError = error as { code?: string }
-      // If popup blocked or failed, fallback to redirect
-      if (
-        firebaseError.code === "auth/popup-blocked" ||
-        firebaseError.code === "auth/popup-closed-by-user" ||
-        firebaseError.code === "auth/cancelled-popup-request" ||
-        firebaseError.code === "auth/internal-error"
-      ) {
-        await signInWithRedirect(auth, provider)
-      } else {
-        console.error("Lỗi đăng nhập Google:", error)
+      const e = error as { code?: string }
+      if (e.code === "auth/invalid-credential" || e.code === "auth/wrong-password" || e.code === "auth/user-not-found") {
+        return { error: "Email hoặc mật khẩu không đúng." }
       }
+      if (e.code === "auth/too-many-requests") {
+        return { error: "Quá nhiều lần thử. Vui lòng đợi một lát." }
+      }
+      return { error: "Đã có lỗi xảy ra. Vui lòng thử lại." }
+    }
+  }
+
+  const signUp = async (email: string, password: string, name: string) => {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password)
+      await updateProfile(result.user, { displayName: name })
+      return {}
+    } catch (error: unknown) {
+      const e = error as { code?: string }
+      if (e.code === "auth/email-already-in-use") {
+        return { error: "Email này đã được sử dụng." }
+      }
+      if (e.code === "auth/weak-password") {
+        return { error: "Mật khẩu phải có ít nhất 6 ký tự." }
+      }
+      if (e.code === "auth/invalid-email") {
+        return { error: "Email không hợp lệ." }
+      }
+      return { error: "Đã có lỗi xảy ra. Vui lòng thử lại." }
     }
   }
 
@@ -73,7 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   )
