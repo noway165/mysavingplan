@@ -4,6 +4,7 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { Target, Plus, Trash2, X, Coins, Edit2, Calendar, History, ArrowDownToLine, ArrowUpFromLine } from "lucide-react"
 import { useGoals, useGoalHistory, Goal, GoalHistoryEntry } from "@/hooks/useGoals"
+import { useTransactions } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
 
 const COLORS = [
@@ -18,6 +19,7 @@ const COLORS = [
 export default function GoalsPage() {
   const { t, formatCurrency } = useSettings()
   const { goals, loading, addGoal, updateGoal, updateGoalSavedAmount, withdrawFromGoal, deleteGoal, addGoalHistory } = useGoals()
+  const { addTransaction } = useTransactions()
   
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false)
@@ -101,18 +103,37 @@ export default function GoalsPage() {
     setSubmitting(true)
     const numAmount = Number(amount)
     
+    const now = new Date()
+    const dateStr = now.toLocaleDateString('vi-VN')
+    const timeStr = now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})
+    
     if (type === 'deposit') {
       await updateGoalSavedAmount(goalId, goal.saved + numAmount)
+      await addTransaction({
+        title: `Nạp tiền: ${goal.name}`,
+        amount: numAmount,
+        type: 'expense',
+        category: 'Khác',
+        date: dateStr,
+        time: timeStr
+      })
     } else {
       await withdrawFromGoal(goalId, numAmount, goal.saved)
+      await addTransaction({
+        title: `Rút tiền: ${goal.name}`,
+        amount: numAmount,
+        type: 'income',
+        category: 'Khác',
+        date: dateStr,
+        time: timeStr
+      })
     }
     
     // Add history
-    const now = new Date()
     await addGoalHistory(goalId, {
       type,
       amount: numAmount,
-      date: now.toLocaleDateString('vi-VN') + " " + now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})
+      date: dateStr + " " + timeStr
     })
     
     setSubmitting(false)
