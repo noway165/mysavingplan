@@ -84,7 +84,3 @@
   }
 }
 
-body {
-  background-color: var(--background, theme('colors.gray.50'));
-  color: var(--foreground, theme('colors.gray.900'));
-}
