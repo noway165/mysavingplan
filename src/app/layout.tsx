@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
@@ -10,6 +10,13 @@ const inter = Inter({ subsets: ["latin", "vietnamese"] });
 export const metadata: Metadata = {
   title: "MySavingsPlan",
   description: "Quản lý tài chính cá nhân thông minh",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

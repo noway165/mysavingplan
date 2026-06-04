@@ -66,24 +66,24 @@ export default function Home() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('overview')}</h1>
-          <p className="text-muted-foreground mt-1">Chào mừng trở lại! Dưới đây là tình hình tài chính của bạn.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">{t('overview')}</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Chào mừng trở lại! Dưới đây là tình hình tài chính của bạn.</p>
         </div>
-        <div className="flex gap-3">
-          <Link href="/goals" className="flex items-center gap-2 rounded-xl bg-card px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm ring-1 ring-inset ring-border hover:bg-muted transition-colors">
-            <Plus size={16} /> {t('create_goal')}
+        <div className="flex gap-2 sm:gap-3">
+          <Link href="/goals" className="flex items-center gap-1.5 sm:gap-2 rounded-xl bg-card px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-foreground shadow-sm ring-1 ring-inset ring-border hover:bg-muted transition-colors">
+            <Plus size={14} /> {t('create_goal')}
           </Link>
-          <Link href="/transactions" className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors">
-            <Plus size={16} /> {t('add_record')}
+          <Link href="/transactions" className="flex items-center gap-1.5 sm:gap-2 rounded-xl bg-primary px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors">
+            <Plus size={14} /> {t('add_record')}
           </Link>
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-3">
         {/* Số dư */}
-        <div className="rounded-2xl bg-card p-6 shadow-sm border border-border relative overflow-hidden">
+        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border relative overflow-hidden">
           <div className="absolute top-0 right-0 p-6 opacity-5">
             <Wallet size={64} />
           </div>
@@ -93,7 +93,7 @@ export default function Home() {
             </div>
             {t('balance')}
           </div>
-          <div className={`text-3xl font-bold ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>{formatCurrency(balance)}</div>
+          <div className={`text-2xl sm:text-3xl font-bold ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>{formatCurrency(balance)}</div>
           <div className="mt-4 flex items-center text-sm">
             <span className="flex items-center text-primary font-medium">
               <TrendingUp size={16} className="mr-1" />
@@ -103,28 +103,28 @@ export default function Home() {
         </div>
 
         {/* Thu nhập */}
-        <div className="rounded-2xl bg-card p-6 shadow-sm border border-border">
+        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border">
           <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-3">
             <div className="h-8 w-8 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
               <ArrowUpRight size={16} />
             </div>
             {t('income')}
           </div>
-          <div className="text-3xl font-bold text-foreground">{formatCurrency(totalIncome)}</div>
+          <div className="text-2xl sm:text-3xl font-bold text-foreground">{formatCurrency(totalIncome)}</div>
           <div className="mt-4 flex items-center text-sm">
             <span className="text-muted-foreground">{transactions.filter(t => t.type === "income").length} {t('transactions_count')}</span>
           </div>
         </div>
 
         {/* Chi tiêu */}
-        <div className="rounded-2xl bg-card p-6 shadow-sm border border-border">
+        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border">
           <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-3">
             <div className="h-8 w-8 rounded-full bg-destructive/10 flex items-center justify-center text-destructive">
               <ArrowDownRight size={16} />
             </div>
             {t('expense')}
           </div>
-          <div className="text-3xl font-bold text-foreground">{formatCurrency(totalExpense)}</div>
+          <div className="text-2xl sm:text-3xl font-bold text-foreground">{formatCurrency(totalExpense)}</div>
           <div className="mt-4 flex items-center text-sm">
             {lastMonthExpense > 0 ? (
               <span className={`flex items-center font-medium ${expenseChange > 0 ? "text-destructive" : "text-emerald-600 dark:text-emerald-400"}`}>
@@ -138,27 +138,27 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        <div className="md:col-span-2 rounded-2xl bg-card p-6 shadow-sm border border-border">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
+        <div className="md:col-span-2 rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-foreground">Biểu đồ Thu / Chi</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-foreground">Biểu đồ Thu / Chi</h2>
           </div>
           <DashboardCharts transactions={transactions} />
         </div>
 
-        <div className="rounded-2xl bg-card p-6 shadow-sm border border-border">
+        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-foreground">{t('category_chart')}</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-foreground">{t('category_chart')}</h2>
           </div>
           <CategoryPieChart transactions={transactions} />
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
         {/* Recent Transactions */}
-        <div className="rounded-2xl bg-card p-6 shadow-sm border border-border flex flex-col">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-foreground">{t('recent_transactions')}</h2>
+        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border flex flex-col">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 className="text-base sm:text-lg font-semibold text-foreground">{t('recent_transactions')}</h2>
             <Link href="/transactions" className="text-sm text-primary font-medium hover:underline">
               Xem tất cả
             </Link>
@@ -194,9 +194,9 @@ export default function Home() {
         </div>
 
         {/* Goals */}
-        <div className="rounded-2xl bg-card p-6 shadow-sm border border-border flex flex-col">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-foreground">{t('savings_goals')}</h2>
+        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border flex flex-col">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 className="text-base sm:text-lg font-semibold text-foreground">{t('savings_goals')}</h2>
             <Link href="/goals" className="text-sm text-primary font-medium hover:underline">
               Xem tất cả
             </Link>
