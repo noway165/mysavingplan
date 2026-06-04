@@ -1,8 +1,8 @@
 "use client"
 
 import {
-  Bar,
-  BarChart,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -78,7 +78,7 @@ export function DashboardCharts({ transactions }: Props) {
   return (
     <div className="h-[320px] sm:h-[350px] w-full mt-4">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 20, right: 10, left: 0, bottom: 0 }} barGap={4} barCategoryGap="20%">
+        <LineChart data={data} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={gridColor} />
           <XAxis 
             dataKey="date" 
@@ -111,11 +111,13 @@ export function DashboardCharts({ transactions }: Props) {
             wrapperStyle={{ fontSize: '12px', paddingTop: '8px' }}
             formatter={(value: string) => value === 'income' ? 'Thu nhập' : 'Chi tiêu'}
           />
-          <Bar 
+          <Line 
+            type="monotone"
             dataKey="income" 
-            fill="#22c55e" 
-            radius={[6, 6, 0, 0]}
-            maxBarSize={40}
+            stroke="#22c55e" 
+            strokeWidth={3}
+            dot={{ r: 4, strokeWidth: 2 }}
+            activeDot={{ r: 6 }}
           >
             <LabelList 
               dataKey="income" 
@@ -124,22 +126,24 @@ export function DashboardCharts({ transactions }: Props) {
               formatter={(value: any) => Number(value) > 0 ? shortenCurrency(Number(value)) : ''} 
               style={{ fontSize: 10, fill: '#22c55e', fontWeight: 600 }}
             />
-          </Bar>
-          <Bar 
+          </Line>
+          <Line 
+            type="monotone"
             dataKey="expense" 
-            fill="#ef4444" 
-            radius={[6, 6, 0, 0]}
-            maxBarSize={40}
+            stroke="#ef4444" 
+            strokeWidth={3}
+            dot={{ r: 4, strokeWidth: 2 }}
+            activeDot={{ r: 6 }}
           >
             <LabelList 
               dataKey="expense" 
-              position="top" 
+              position="bottom" 
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               formatter={(value: any) => Number(value) > 0 ? shortenCurrency(Number(value)) : ''} 
               style={{ fontSize: 10, fill: '#ef4444', fontWeight: 600 }}
             />
-          </Bar>
-        </BarChart>
+          </Line>
+        </LineChart>
       </ResponsiveContainer>
     </div>
   )

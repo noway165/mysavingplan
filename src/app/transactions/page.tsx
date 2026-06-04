@@ -203,21 +203,12 @@ export default function TransactionsPage() {
           <p className="text-muted-foreground mt-1">{t('tx_desc')}</p>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-card rounded-xl border border-border shadow-sm">
-            <Clock size={16} className="text-primary" />
-            <div className="text-sm font-bold tabular-nums text-foreground">
-              {realTime.toLocaleTimeString('vi-VN')}
-            </div>
-          </div>
-
-          <button 
-            onClick={openAddModal}
-            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap self-start sm:self-auto"
-          >
-            <Plus size={16} /> {t('add_new')}
-          </button>
-        </div>
+        <button 
+          onClick={openAddModal}
+          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap self-start sm:self-auto"
+        >
+          <Plus size={16} /> {t('add_new')}
+        </button>
       </div>
 
       {/* AI Assistant Bar */}
