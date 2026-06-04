@@ -54,23 +54,25 @@ export default function SettingsPage() {
               <p className="text-muted-foreground text-sm">Chọn tông màu yêu thích của bạn.</p>
             </div>
           </div>
-          <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 sm:pb-0">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full mt-4 sm:mt-0">
             {([
-              { id: 'default', color: 'bg-amber-500' },
-              { id: 'peachpuff', color: 'bg-[#FFDAB9]' },
-              { id: 'slate', color: 'bg-slate-500' },
-              { id: 'limegreen', color: 'bg-[#32CD32]' },
-              { id: 'orangered', color: 'bg-[#FF4500]' },
-              { id: 'whitesmoke', color: 'bg-[#F5F5F5] border-gray-300' },
-              { id: 'amethyst', color: 'bg-[#9966CC]' },
+              { id: 'default', name: 'Hổ phách', color: 'bg-amber-500' },
+              { id: 'peachpuff', name: 'Hồng đào', color: 'bg-[#FFDAB9]' },
+              { id: 'slate', name: 'Xám đá', color: 'bg-slate-500' },
+              { id: 'limegreen', name: 'Xanh chanh', color: 'bg-[#32CD32]' },
+              { id: 'orangered', name: 'Cam đỏ', color: 'bg-[#FF4500]' },
+              { id: 'whitesmoke', name: 'Trắng khói', color: 'bg-[#F5F5F5] border border-gray-300' },
+              { id: 'amethyst', name: 'Tím ngọc', color: 'bg-[#9966CC]' },
             ] as const).map(t => (
               <button
                 key={t.id}
                 onClick={() => setColorTheme(t.id)}
-                className={`w-10 h-10 rounded-full flex-shrink-0 border-2 transition-all ${colorTheme === t.id ? 'border-primary scale-110 shadow-neon' : 'border-transparent hover:scale-105'} ${t.color}`}
-                title={t.id}
-                aria-label={`Theme ${t.id}`}
-              />
+                className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${colorTheme === t.id ? 'border-primary bg-primary/10 shadow-neon scale-[1.02]' : 'border-border bg-card hover:bg-muted'}`}
+                title={t.name}
+              >
+                <div className={`w-6 h-6 rounded-full flex-shrink-0 shadow-sm ${t.color}`} />
+                <span className="text-sm font-medium text-foreground whitespace-nowrap">{t.name}</span>
+              </button>
             ))}
           </div>
         </div>
