@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { motion } from "framer-motion"
-import { ArrowDownRight, ArrowUpRight, Search, Plus, Calendar, Filter, FileText, X, Trash2, Edit2, Sparkles, AlertCircle } from "lucide-react"
+import { ArrowDownRight, ArrowUpRight, Search, Plus, Calendar, Filter, FileText, X, Trash2, Edit2, Sparkles, AlertCircle, Clock } from "lucide-react"
 import { useTransactions, Transaction } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
 
@@ -66,7 +66,7 @@ export default function TransactionsPage() {
     setEditingId(tx.id)
     setFormType(tx.type)
     setFormTitle(tx.title)
-    setFormAmount(tx.amount.toString())
+    setFormAmount(tx.amount.toLocaleString('en-US'))
     setFormCategory(tx.category)
     setFormDate(tx.date)
     setFormTime(tx.time || "00:00")
@@ -75,13 +75,14 @@ export default function TransactionsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formTitle.trim() || !formAmount || !formCategory) return
+    const amountNum = Number(formAmount.replace(/,/g, ''))
+    if (!formTitle.trim() || !amountNum || !formCategory) return
 
     setFormSubmitting(true)
     
     const txData = {
       title: formTitle.trim(),
-      amount: Number(formAmount),
+      amount: amountNum,
       type: formType,
       category: formCategory,
       date: editingId ? formDate : realTime.toLocaleDateString("vi-VN"),
@@ -201,12 +202,22 @@ export default function TransactionsPage() {
           <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('tx_title')}</h1>
           <p className="text-muted-foreground mt-1">{t('tx_desc')}</p>
         </div>
-        <button 
-          onClick={openAddModal}
-          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap self-start sm:self-auto"
-        >
-          <Plus size={16} /> {t('add_new')}
-        </button>
+        
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-card rounded-xl border border-border shadow-sm">
+            <Clock size={16} className="text-primary" />
+            <div className="text-sm font-bold tabular-nums text-foreground">
+              {realTime.toLocaleTimeString('vi-VN')}
+            </div>
+          </div>
+
+          <button 
+            onClick={openAddModal}
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap self-start sm:self-auto"
+          >
+            <Plus size={16} /> {t('add_new')}
+          </button>
+        </div>
       </div>
 
       {/* AI Assistant Bar */}
@@ -414,28 +425,23 @@ export default function TransactionsPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-center p-4 bg-muted/30 rounded-xl border border-border/50">
-                <div className="text-center">
-                  <div className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold">Thời gian thực</div>
-                  <div className="text-3xl font-bold text-primary tabular-nums tracking-tight">
-                    {realTime.toLocaleTimeString('vi-VN')}
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1 font-medium">
-                    {realTime.toLocaleDateString('vi-VN')}
-                  </div>
-                </div>
-              </div>
-
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">{t('amount')}</label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   value={formAmount}
-                  onChange={e => setFormAmount(e.target.value)}
-                  placeholder="VD: 150000"
+                  onChange={e => {
+                    const rawValue = e.target.value.replace(/\D/g, '')
+                    if (!rawValue) {
+                      setFormAmount("")
+                    } else {
+                      setFormAmount(Number(rawValue).toLocaleString('en-US'))
+                    }
+                  }}
+                  placeholder="VD: 150,000"
                   required
-                  min={1}
-                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-medium"
                 />
               </div>
 
