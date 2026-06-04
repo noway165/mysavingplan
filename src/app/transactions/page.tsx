@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion } from "framer-motion"
 import { ArrowDownRight, ArrowUpRight, Search, Plus, Calendar, Filter, FileText, X, Trash2, Edit2, Sparkles, AlertCircle } from "lucide-react"
 import { useTransactions, Transaction } from "@/hooks/useTransactions"
@@ -21,6 +21,13 @@ export default function TransactionsPage() {
   
   const [customStartDate, setCustomStartDate] = useState("")
   const [customEndDate, setCustomEndDate] = useState("")
+
+  const [realTime, setRealTime] = useState(new Date())
+
+  useEffect(() => {
+    const timer = setInterval(() => setRealTime(new Date()), 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   // AI Form state
   const [aiText, setAiText] = useState("")
@@ -61,38 +68,24 @@ export default function TransactionsPage() {
     setFormTitle(tx.title)
     setFormAmount(tx.amount.toString())
     setFormCategory(tx.category)
-    
-    // Parse DD/MM/YYYY back to YYYY-MM-DD for input
-    try {
-      const parts = tx.date.split('/')
-      if (parts.length === 3) {
-        setFormDate(`${parts[2]}-${parts[1]}-${parts[0]}`)
-      }
-    } catch {
-      setFormDate(new Date().toISOString().split('T')[0])
-    }
-    
+    setFormDate(tx.date)
     setFormTime(tx.time || "00:00")
     setShowModal(true)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formTitle.trim() || !formAmount || !formCategory || !formDate) return
+    if (!formTitle.trim() || !formAmount || !formCategory) return
 
     setFormSubmitting(true)
-    
-    // Format YYYY-MM-DD to DD/MM/YYYY
-    const dateObj = new Date(formDate)
-    const formattedDate = dateObj.toLocaleDateString("vi-VN")
     
     const txData = {
       title: formTitle.trim(),
       amount: Number(formAmount),
       type: formType,
       category: formCategory,
-      date: formattedDate,
-      time: formTime
+      date: editingId ? formDate : realTime.toLocaleDateString("vi-VN"),
+      time: editingId ? formTime : realTime.toTimeString().substring(0, 5)
     }
 
     if (editingId) {
@@ -421,26 +414,15 @@ export default function TransactionsPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-1.5">{t('date')}</label>
-                  <input
-                    type="date"
-                    value={formDate}
-                    onChange={e => setFormDate(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-1.5">{t('time')}</label>
-                  <input
-                    type="time"
-                    value={formTime}
-                    onChange={e => setFormTime(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
+              <div className="flex items-center justify-center p-4 bg-muted/30 rounded-xl border border-border/50">
+                <div className="text-center">
+                  <div className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold">Thời gian thực</div>
+                  <div className="text-3xl font-bold text-primary tabular-nums tracking-tight">
+                    {realTime.toLocaleTimeString('vi-VN')}
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1 font-medium">
+                    {realTime.toLocaleDateString('vi-VN')}
+                  </div>
                 </div>
               </div>
 
@@ -479,7 +461,7 @@ export default function TransactionsPage() {
 
               <button
                 type="submit"
-                disabled={formSubmitting || !formTitle || !formAmount || !formCategory || !formDate}
+                disabled={formSubmitting || !formTitle || !formAmount || !formCategory}
                 className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {formSubmitting ? t('saving') : t('save')}
