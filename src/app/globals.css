@@ -83,24 +83,24 @@
     --ring: 38 92.4% 50.2%;
   }
 
-  /* PeachPuff Theme */
-  .theme-peachpuff {
-    --primary: 28 86% 65%;
-    --primary-foreground: 28 90% 15%;
-    --ring: 28 86% 65%;
-    --background: 28 50% 98%;
-    --card: 28 40% 100%;
-    --muted: 28 40% 92%;
-    --border: 28 30% 85%;
+  /* Pastel Pink Theme */
+  .theme-pastelpink {
+    --primary: 340 85% 75%;
+    --primary-foreground: 340 90% 15%;
+    --ring: 340 85% 75%;
+    --background: 340 50% 98%;
+    --card: 340 40% 100%;
+    --muted: 340 40% 94%;
+    --border: 340 30% 88%;
   }
-  .dark.theme-peachpuff {
-    --primary: 28 86% 75%;
-    --primary-foreground: 28 90% 15%;
-    --ring: 28 86% 75%;
-    --background: 28 30% 8%;
-    --card: 28 30% 12%;
-    --muted: 28 30% 16%;
-    --border: 28 30% 20%;
+  .dark.theme-pastelpink {
+    --primary: 340 85% 80%;
+    --primary-foreground: 340 90% 15%;
+    --ring: 340 85% 80%;
+    --background: 340 30% 8%;
+    --card: 340 30% 12%;
+    --muted: 340 30% 16%;
+    --border: 340 30% 20%;
   }
 
   /* Slate Theme */

@@ -8,7 +8,7 @@ import { Locale, TranslationKeys, t as i18n_t } from "@/lib/i18n"
 import { doc as firestoreDoc, getDoc as firestoreGetDoc, setDoc as firestoreSetDoc } from "firebase/firestore"
 
 export type Theme = "light" | "dark"
-export type ColorTheme = "default" | "peachpuff" | "slate" | "limegreen" | "orangered" | "whitesmoke" | "amethyst"
+export type ColorTheme = "default" | "pastelpink" | "slate" | "limegreen" | "orangered" | "whitesmoke" | "amethyst"
 export type Currency = "VND" | "USD" | "EUR"
 
 type SettingsContextType = {
@@ -39,7 +39,7 @@ const SettingsContext = createContext<SettingsContextType>({
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
-  const [theme, setThemeState] = useState<Theme>("light")
+  const [theme, setThemeState] = useState<Theme>("dark") // Always default to dark
   const [colorTheme, setColorThemeState] = useState<ColorTheme>("default")
   const [locale, setLocaleState] = useState<Locale>("vi")
   const [currency, setCurrencyState] = useState<Currency>("VND")
@@ -57,8 +57,11 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         const docSnap = await firestoreGetDoc(docRef)
         if (docSnap.exists()) {
           const data = docSnap.data()
-          if (data.theme) setThemeState(data.theme as Theme)
-          if (data.colorTheme) setColorThemeState(data.colorTheme as ColorTheme)
+          if (data.theme) setThemeState("dark") // Force dark
+          if (data.colorTheme) {
+            // Migrate peachpuff to pastelpink
+            setColorThemeState(data.colorTheme === "peachpuff" ? "pastelpink" : data.colorTheme as ColorTheme)
+          }
           if (data.locale) setLocaleState(data.locale as Locale)
           if (data.currency) setCurrencyState(data.currency as Currency)
         }
@@ -76,11 +79,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const html = document.documentElement
     
     // Remove old classes
-    html.classList.remove("dark", "theme-peachpuff", "theme-slate", "theme-limegreen", "theme-orangered", "theme-whitesmoke", "theme-amethyst")
+    html.classList.remove("dark", "theme-peachpuff", "theme-pastelpink", "theme-slate", "theme-limegreen", "theme-orangered", "theme-whitesmoke", "theme-amethyst")
     
-    if (theme === "dark") {
-      html.classList.add("dark")
-    }
+    // Always add dark mode
+    html.classList.add("dark")
     if (colorTheme !== "default") {
       html.classList.add(`theme-${colorTheme}`)
     }

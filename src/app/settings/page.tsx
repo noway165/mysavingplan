@@ -16,33 +16,6 @@ export default function SettingsPage() {
 
       <div className="bg-card rounded-2xl shadow-sm border border-border divide-y divide-border">
         
-        {/* Theme Settings */}
-        <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-              {theme === 'dark' ? <Moon size={24} /> : <Sun size={24} />}
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground text-lg">{t('dark_mode')}</h3>
-              <p className="text-muted-foreground text-sm">{t('dark_mode_desc')}</p>
-            </div>
-          </div>
-          <div className="flex bg-muted p-1 rounded-xl w-full sm:w-auto">
-            <button
-              onClick={() => setTheme('light')}
-              className={`flex-1 sm:flex-none px-6 py-2 text-sm font-medium rounded-lg transition-colors ${theme === 'light' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-            >
-              Sáng
-            </button>
-            <button
-              onClick={() => setTheme('dark')}
-              className={`flex-1 sm:flex-none px-6 py-2 text-sm font-medium rounded-lg transition-colors ${theme === 'dark' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-            >
-              Tối
-            </button>
-          </div>
-        </div>
-
         {/* Color Settings */}
         <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -57,7 +30,7 @@ export default function SettingsPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full mt-4 sm:mt-0">
             {([
               { id: 'default', name: 'Hổ phách', color: 'bg-amber-500' },
-              { id: 'peachpuff', name: 'Hồng đào', color: 'bg-[#FFDAB9]' },
+              { id: 'pastelpink', name: 'Hồng phấn', color: 'bg-[#FFC0CB]' },
               { id: 'slate', name: 'Xám đá', color: 'bg-slate-500' },
               { id: 'limegreen', name: 'Xanh chanh', color: 'bg-[#32CD32]' },
               { id: 'orangered', name: 'Cam đỏ', color: 'bg-[#FF4500]' },
