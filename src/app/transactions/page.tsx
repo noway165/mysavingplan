@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
-import { ArrowDownRight, ArrowUpRight, Search, Plus, Calendar, Filter, FileText, X, Trash2, Edit2 } from "lucide-react"
+import { ArrowDownRight, ArrowUpRight, Search, Plus, Calendar, Filter, FileText, X, Trash2, Edit2, Sparkles, AlertCircle } from "lucide-react"
 import { useTransactions, Transaction } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
 
@@ -19,9 +19,13 @@ export default function TransactionsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filterPeriod, setFilterPeriod] = useState<FilterPeriod>("all")
   
-  // Custom date filter
   const [customStartDate, setCustomStartDate] = useState("")
   const [customEndDate, setCustomEndDate] = useState("")
+
+  // AI Form state
+  const [aiText, setAiText] = useState("")
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState("")
 
   // Form state
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -102,6 +106,54 @@ export default function TransactionsPage() {
     resetForm()
   }
 
+  const handleAISubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!aiText.trim()) return
+    
+    setAiLoading(true)
+    setAiError("")
+    
+    try {
+      const res = await fetch("/api/ai-transaction", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: aiText })
+      })
+      
+      const data = await res.json()
+      
+      if (!res.ok) {
+        throw new Error(data.error || "Lỗi khi phân tích bằng AI")
+      }
+      
+      // Mặc định là tiếng Anh category, ta cần map sang tiếng Việt (giả sử AI trả về tiếng Anh vì trong prompt yêu cầu)
+      const catMap: Record<string, string> = {
+        food: "Ăn uống", shopping: "Mua sắm", transport: "Di chuyển", bills: "Hóa đơn", 
+        entertainment: "Giải trí", health: "Sức khỏe", education: "Giáo dục",
+        salary: "Lương", bonus: "Thưởng", side_income: "Thu nhập phụ", investment: "Đầu tư", other: "Khác"
+      }
+      
+      const category = catMap[data.category] || "Khác"
+      const now = new Date()
+      
+      const txData = {
+        title: data.description,
+        amount: Number(data.amount),
+        type: data.type as "expense" | "income",
+        category: category,
+        date: now.toLocaleDateString("vi-VN"),
+        time: now.toTimeString().substring(0, 5)
+      }
+      
+      await addTransaction(txData)
+      setAiText("")
+    } catch (err: any) {
+      setAiError(err.message)
+    } finally {
+      setAiLoading(false)
+    }
+  }
+
   const filteredTransactions = useMemo(() => {
     const now = new Date()
     const currentWeekStart = new Date(now)
@@ -162,6 +214,36 @@ export default function TransactionsPage() {
         >
           <Plus size={16} /> {t('add_new')}
         </button>
+      </div>
+
+      {/* AI Assistant Bar */}
+      <div className="bg-card rounded-2xl shadow-neon border-neon p-5 space-y-4">
+        <div className="flex items-center gap-2 text-primary">
+          <Sparkles size={20} />
+          <h2 className="font-bold text-lg">Nhập liệu siêu tốc bằng AI</h2>
+        </div>
+        <form onSubmit={handleAISubmit} className="flex gap-3">
+          <input 
+            type="text" 
+            value={aiText}
+            onChange={(e) => setAiText(e.target.value)}
+            disabled={aiLoading}
+            placeholder='Ví dụ: "Trà sữa Phúc Long 55k", "Nhận lương tháng này 15 củ"...' 
+            className="flex-1 px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50"
+          />
+          <button 
+            type="submit" 
+            disabled={!aiText.trim() || aiLoading}
+            className="bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center min-w-[100px]"
+          >
+            {aiLoading ? <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin"></div> : "Phân tích"}
+          </button>
+        </form>
+        {aiError && (
+          <p className="text-destructive text-sm flex items-center gap-1 mt-2">
+            <AlertCircle size={14} /> {aiError}
+          </p>
+        )}
       </div>
 
       <div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">

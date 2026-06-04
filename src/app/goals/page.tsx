@@ -7,6 +7,8 @@ import { useGoals, useGoalHistory, Goal, GoalHistoryEntry } from "@/hooks/useGoa
 import { useTransactions } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
 
+import confetti from "canvas-confetti"
+
 const COLORS = [
   { name: "Blue", value: "bg-blue-500" },
   { name: "Orange", value: "bg-orange-500" },
@@ -108,7 +110,18 @@ export default function GoalsPage() {
     const timeStr = now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})
     
     if (type === 'deposit') {
-      await updateGoalSavedAmount(goalId, goal.saved + numAmount)
+      const newSaved = goal.saved + numAmount
+      await updateGoalSavedAmount(goalId, newSaved)
+      
+      // Bắn pháo giấy nếu đạt 100% mục tiêu
+      if (goal.saved < goal.target && newSaved >= goal.target) {
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 }
+        })
+      }
+
       await addTransaction({
         title: `Nạp tiền: ${goal.name}`,
         amount: numAmount,
