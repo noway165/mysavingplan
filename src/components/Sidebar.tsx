@@ -39,7 +39,7 @@ export function Sidebar() {
       <div className="hidden lg:flex h-full w-64 flex-col bg-card border-r border-border shadow-sm text-foreground shrink-0">
         <div className="flex h-16 items-center px-6 border-b border-border">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary">
-            <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center text-primary-foreground">
+            <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-neon">
               <Sparkles size={18} />
             </div>
             MySavingsPlan
@@ -213,7 +213,7 @@ export function Sidebar() {
       )}
 
       {/* ===== MOBILE BOTTOM FLOATING NAVIGATION BAR ===== */}
-      <div className="lg:hidden fixed bottom-4 left-4 right-4 z-40 bg-card/90 backdrop-blur-lg border border-border/50 shadow-lg shadow-black/5 rounded-2xl">
+      <div className="lg:hidden fixed bottom-4 left-4 right-4 z-40 bg-card/90 backdrop-blur-lg border border-border/50 shadow-lg shadow-black/5 rounded-2xl border-neon transition-all duration-300">
         <nav className="flex items-center justify-around h-16 px-2">
           {mobileNavTabs.map((item) => {
             const isActive = pathname === item.href

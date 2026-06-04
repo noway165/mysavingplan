@@ -67,7 +67,7 @@ export default function SettingsPage() {
               <button
                 key={t.id}
                 onClick={() => setColorTheme(t.id)}
-                className={`w-10 h-10 rounded-full flex-shrink-0 border-2 transition-all ${colorTheme === t.id ? 'border-primary scale-110 shadow-md' : 'border-transparent hover:scale-105'} ${t.color}`}
+                className={`w-10 h-10 rounded-full flex-shrink-0 border-2 transition-all ${colorTheme === t.id ? 'border-primary scale-110 shadow-neon' : 'border-transparent hover:scale-105'} ${t.color}`}
                 title={t.id}
                 aria-label={`Theme ${t.id}`}
               />
