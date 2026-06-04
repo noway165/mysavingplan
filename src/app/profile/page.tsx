@@ -5,6 +5,7 @@ import { User as UserIcon, Camera, Save, LogOut } from "lucide-react"
 import { useAuth } from "@/components/AuthProvider"
 import { useSettings } from "@/context/SettingsContext"
 import { updateProfile } from "firebase/auth"
+import { PageClock } from "@/components/PageClock"
 
 export default function ProfilePage() {
   const { t } = useSettings()
@@ -36,9 +37,14 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('profile')}</h1>
-        <p className="text-muted-foreground mt-1">Quản lý thông tin cá nhân của bạn.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('profile')}</h1>
+          <p className="text-muted-foreground mt-1">Quản lý thông tin cá nhân của bạn.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <PageClock />
+        </div>
       </div>
 
       <div className="bg-card rounded-2xl shadow-sm border border-border p-8">

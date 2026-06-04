@@ -7,6 +7,7 @@ import { useBudgets, Budget } from "@/hooks/useBudgets"
 import { useSubscriptions, Subscription } from "@/hooks/useSubscriptions"
 import { useTransactions } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
+import { PageClock } from "@/components/PageClock"
 
 const CATEGORIES = ["Ăn uống", "Mua sắm", "Di chuyển", "Hóa đơn", "Giải trí", "Sức khỏe", "Giáo dục", "Khác"]
 
@@ -177,12 +178,15 @@ export default function BudgetPage() {
           <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('budget_title')}</h1>
           <p className="text-muted-foreground mt-1">Quản lý ngân sách và các khoản thuê bao định kỳ</p>
         </div>
-        <button 
-          onClick={activeTab === "budget" ? openAddBudgetModal : openAddSubModal}
-          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap self-start sm:self-auto"
-        >
-          <Plus size={16} /> {activeTab === "budget" ? t('add_budget') : "Thêm Thuê bao"}
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <PageClock />
+          <button 
+            onClick={activeTab === "budget" ? openAddBudgetModal : openAddSubModal}
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap self-start sm:self-auto"
+          >
+            <Plus size={16} /> {activeTab === "budget" ? t('add_budget') : "Thêm Thuê bao"}
+          </button>
+        </div>
       </div>
 
       <div className="flex gap-2 bg-muted p-1 rounded-xl w-full sm:w-auto self-start inline-flex">

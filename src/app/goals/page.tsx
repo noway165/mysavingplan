@@ -6,7 +6,7 @@ import { Target, Plus, Trash2, X, Coins, Edit2, Calendar, History, ArrowDownToLi
 import { useGoals, useGoalHistory, Goal, GoalHistoryEntry } from "@/hooks/useGoals"
 import { useTransactions } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
-
+import { PageClock } from "@/components/PageClock"
 import confetti from "canvas-confetti"
 
 const COLORS = [
@@ -179,12 +179,15 @@ export default function GoalsPage() {
           <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('goals_title')}</h1>
           <p className="text-muted-foreground mt-1">{t('goals_desc')}</p>
         </div>
-        <button 
-          onClick={openAddModal}
-          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap"
-        >
-          <Plus size={16} /> {t('create_goal')}
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <PageClock />
+          <button 
+            onClick={openAddModal}
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap"
+          >
+            <Plus size={16} /> {t('create_goal')}
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

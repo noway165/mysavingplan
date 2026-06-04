@@ -3,7 +3,6 @@
 import { Sidebar } from "@/components/Sidebar"
 import { useAuth } from "@/components/AuthProvider"
 import { LoginScreen } from "@/components/LoginScreen"
-import { GlobalClock } from "@/components/GlobalClock"
 
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
@@ -22,7 +21,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen overflow-hidden relative">
-      <GlobalClock />
       <Sidebar />
       {/* Main content: add bottom padding for floating mobile bar */}
       <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 pt-6 pb-24 lg:pt-8 lg:pb-8">

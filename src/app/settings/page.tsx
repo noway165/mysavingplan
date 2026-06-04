@@ -3,15 +3,21 @@
 import { useSettings, Theme, Currency } from "@/context/SettingsContext"
 import { Locale } from "@/lib/i18n"
 import { Moon, Sun, Globe, DollarSign, Palette } from "lucide-react"
+import { PageClock } from "@/components/PageClock"
 
 export default function SettingsPage() {
   const { t, theme, setTheme, colorTheme, setColorTheme, locale, setLocale, currency, setCurrency } = useSettings()
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-3xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('settings')}</h1>
-        <p className="text-muted-foreground mt-1">Cấu hình trải nghiệm ứng dụng của bạn.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('settings')}</h1>
+          <p className="text-muted-foreground mt-1">Cấu hình trải nghiệm ứng dụng của bạn.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <PageClock />
+        </div>
       </div>
 
       <div className="bg-card rounded-2xl shadow-sm border border-border divide-y divide-border">

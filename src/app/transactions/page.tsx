@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { ArrowDownRight, ArrowUpRight, Search, Plus, Calendar, Filter, FileText, X, Trash2, Edit2, Sparkles, AlertCircle, Clock } from "lucide-react"
 import { useTransactions, Transaction } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
+import { PageClock } from "@/components/PageClock"
 
 const CATEGORIES_EXPENSE = ["Ăn uống", "Mua sắm", "Di chuyển", "Hóa đơn", "Giải trí", "Sức khỏe", "Giáo dục", "Khác"]
 const CATEGORIES_INCOME = ["Lương", "Thưởng", "Thu nhập phụ", "Đầu tư", "Khác"]
@@ -203,12 +204,15 @@ export default function TransactionsPage() {
           <p className="text-muted-foreground mt-1">{t('tx_desc')}</p>
         </div>
         
-        <button 
-          onClick={openAddModal}
-          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap self-start sm:self-auto"
-        >
-          <Plus size={16} /> {t('add_new')}
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <PageClock />
+          <button 
+            onClick={openAddModal}
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap self-start sm:self-auto"
+          >
+            <Plus size={16} /> {t('add_new')}
+          </button>
+        </div>
       </div>
 
       {/* AI Assistant Bar */}

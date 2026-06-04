@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Sparkles, ArrowRight, TrendingDown, TrendingUp, AlertTriangle, Send } from "lucide-react"
+import { PageClock } from "@/components/PageClock"
 
 export default function AIInsightsPage() {
   const [messages, setMessages] = useState([
@@ -43,10 +44,13 @@ export default function AIInsightsPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 h-[calc(100vh-8rem)] flex flex-col">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">AI Insights</h1>
           <p className="text-gray-500 mt-1">Khám phá góc nhìn tài chính sâu sắc từ trợ lý ảo AI.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <PageClock />
         </div>
       </div>
 

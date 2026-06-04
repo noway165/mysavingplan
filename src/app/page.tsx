@@ -4,6 +4,7 @@ import { ArrowDownRight, ArrowUpRight, Wallet, Target, Plus, TrendingUp, Trendin
 import { DashboardCharts } from "@/components/DashboardCharts"
 import { CategoryPieChart } from "@/components/CategoryPieChart"
 import { ActivityHeatmap } from "@/components/ActivityHeatmap"
+import { PageClock } from "@/components/PageClock"
 import { useTransactions } from "@/hooks/useTransactions"
 import { useGoals } from "@/hooks/useGoals"
 import { useSettings } from "@/context/SettingsContext"
@@ -72,7 +73,8 @@ export default function Home() {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">{t('overview')}</h1>
           <p className="text-muted-foreground mt-1 text-sm sm:text-base">Chào mừng trở lại! Dưới đây là tình hình tài chính của bạn.</p>
         </div>
-        <div className="flex gap-2 sm:gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <PageClock />
           <Link href="/goals" className="flex items-center gap-1.5 sm:gap-2 rounded-xl bg-card px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-foreground shadow-sm ring-1 ring-inset ring-border hover:bg-muted transition-colors">
             <Plus size={14} /> {t('create_goal')}
           </Link>
