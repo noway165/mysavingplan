@@ -88,11 +88,19 @@
     --primary: 28 86% 65%;
     --primary-foreground: 28 90% 15%;
     --ring: 28 86% 65%;
+    --background: 28 50% 98%;
+    --card: 28 40% 100%;
+    --muted: 28 40% 92%;
+    --border: 28 30% 85%;
   }
   .dark.theme-peachpuff {
     --primary: 28 86% 75%;
     --primary-foreground: 28 90% 15%;
     --ring: 28 86% 75%;
+    --background: 28 30% 8%;
+    --card: 28 30% 12%;
+    --muted: 28 30% 16%;
+    --border: 28 30% 20%;
   }
 
   /* Slate Theme */
@@ -100,11 +108,19 @@
     --primary: 210 13% 50%;
     --primary-foreground: 210 40% 98%;
     --ring: 210 13% 50%;
+    --background: 210 50% 98%;
+    --card: 210 40% 100%;
+    --muted: 210 40% 92%;
+    --border: 210 30% 85%;
   }
   .dark.theme-slate {
     --primary: 210 13% 60%;
     --primary-foreground: 210 40% 10%;
     --ring: 210 13% 60%;
+    --background: 210 30% 8%;
+    --card: 210 30% 12%;
+    --muted: 210 30% 16%;
+    --border: 210 30% 20%;
   }
 
   /* Lime Green Theme */
@@ -112,11 +128,19 @@
     --primary: 120 61% 50%;
     --primary-foreground: 120 100% 98%;
     --ring: 120 61% 50%;
+    --background: 120 50% 98%;
+    --card: 120 40% 100%;
+    --muted: 120 40% 92%;
+    --border: 120 30% 85%;
   }
   .dark.theme-limegreen {
     --primary: 120 61% 40%;
     --primary-foreground: 120 100% 98%;
     --ring: 120 61% 40%;
+    --background: 120 30% 8%;
+    --card: 120 30% 12%;
+    --muted: 120 30% 16%;
+    --border: 120 30% 20%;
   }
 
   /* Orange Red Theme */
@@ -124,11 +148,19 @@
     --primary: 16 100% 50%;
     --primary-foreground: 0 0% 100%;
     --ring: 16 100% 50%;
+    --background: 16 50% 98%;
+    --card: 16 40% 100%;
+    --muted: 16 40% 92%;
+    --border: 16 30% 85%;
   }
   .dark.theme-orangered {
     --primary: 16 100% 55%;
     --primary-foreground: 0 0% 100%;
     --ring: 16 100% 55%;
+    --background: 16 30% 8%;
+    --card: 16 30% 12%;
+    --muted: 16 30% 16%;
+    --border: 16 30% 20%;
   }
 
   /* White Smoke Theme */
@@ -136,11 +168,19 @@
     --primary: 0 0% 85%;
     --primary-foreground: 0 0% 15%;
     --ring: 0 0% 85%;
+    --background: 0 0% 96%;
+    --card: 0 0% 100%;
+    --muted: 0 0% 92%;
+    --border: 0 0% 85%;
   }
   .dark.theme-whitesmoke {
     --primary: 0 0% 96%;
     --primary-foreground: 0 0% 10%;
     --ring: 0 0% 96%;
+    --background: 0 0% 8%;
+    --card: 0 0% 12%;
+    --muted: 0 0% 16%;
+    --border: 0 0% 20%;
   }
 
   /* Amethyst Theme */
@@ -148,11 +188,19 @@
     --primary: 270 50% 60%;
     --primary-foreground: 0 0% 100%;
     --ring: 270 50% 60%;
+    --background: 270 50% 98%;
+    --card: 270 40% 100%;
+    --muted: 270 40% 92%;
+    --border: 270 30% 85%;
   }
   .dark.theme-amethyst {
     --primary: 270 50% 65%;
     --primary-foreground: 0 0% 100%;
     --ring: 270 50% 65%;
+    --background: 270 30% 8%;
+    --card: 270 30% 12%;
+    --muted: 270 30% 16%;
+    --border: 270 30% 20%;
   }
 }
 
