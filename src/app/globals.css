@@ -204,16 +204,16 @@
   }
 }
 
-@layer utilities {
-  .border-neon {
-    box-shadow: 0 0 12px 0px hsl(var(--primary) / 0.6), inset 0 0 4px 0px hsl(var(--primary) / 0.3);
-    border-color: hsl(var(--primary) / 0.8);
-  }
-  .shadow-neon {
-    box-shadow: 0 0 20px 0px hsl(var(--primary) / 0.5);
-  }
-  .text-neon {
-    text-shadow: 0 0 8px hsl(var(--primary) / 0.6);
-  }
+@utility border-neon {
+  box-shadow: 0 0 12px 0px var(--color-primary), inset 0 0 4px 0px var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+@utility shadow-neon {
+  box-shadow: 0 0 20px 0px var(--color-primary);
+}
+
+@utility text-neon {
+  text-shadow: 0 0 8px var(--color-primary);
 }
 
