@@ -3,7 +3,6 @@
 import { ArrowDownRight, ArrowUpRight, Wallet, Target, Plus, TrendingUp, TrendingDown, Clock } from "lucide-react"
 import { DashboardCharts } from "@/components/DashboardCharts"
 import { CategoryPieChart } from "@/components/CategoryPieChart"
-import { ActivityHeatmap } from "@/components/ActivityHeatmap"
 import { useTransactions } from "@/hooks/useTransactions"
 import { useGoals } from "@/hooks/useGoals"
 import { useSettings } from "@/context/SettingsContext"
@@ -154,8 +153,6 @@ export default function Home() {
           <CategoryPieChart transactions={transactions} />
         </div>
       </div>
-
-      <ActivityHeatmap />
 
       <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
         {/* Recent Transactions */}
