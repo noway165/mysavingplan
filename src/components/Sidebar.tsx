@@ -39,7 +39,7 @@ export function Sidebar() {
       <div className="hidden lg:flex h-full w-64 flex-col bg-card border-r border-border shadow-sm text-foreground shrink-0">
         <div className="flex h-16 items-center px-6 border-b border-border">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary">
-            <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center text-white">
+            <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center text-primary-foreground">
               <Sparkles size={18} />
             </div>
             MySavingsPlan

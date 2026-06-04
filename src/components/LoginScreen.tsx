@@ -47,11 +47,11 @@ export function LoginScreen() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="h-16 w-16 bg-gradient-to-tr from-amber-600 to-orange-500 rounded-2xl flex items-center justify-center text-white mx-auto mb-5 shadow-lg shadow-amber-500/30">
+          <div className="h-16 w-16 bg-primary rounded-2xl flex items-center justify-center text-primary-foreground mx-auto mb-5 shadow-lg shadow-primary/30">
             <Sparkles size={32} />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">MySavingsPlan</h1>
@@ -71,7 +71,7 @@ export function LoginScreen() {
                 placeholder="Họ và tên"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
               />
             </div>
           )}
@@ -85,7 +85,7 @@ export function LoginScreen() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+              className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
             />
           </div>
 
@@ -99,7 +99,7 @@ export function LoginScreen() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full pl-12 pr-12 py-3.5 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+              className="w-full pl-12 pr-12 py-3.5 rounded-xl border border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
             />
             <button
               type="button"
@@ -121,7 +121,7 @@ export function LoginScreen() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-orange-500 text-white font-semibold py-3.5 px-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:from-amber-500 hover:to-orange-400 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold py-3.5 px-4 rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:opacity-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {submitting ? (
               <Loader2 size={20} className="animate-spin" />
@@ -140,7 +140,7 @@ export function LoginScreen() {
             {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}
             <button
               onClick={() => { setIsLogin(!isLogin); setError("") }}
-              className="ml-1 text-amber-600 font-semibold hover:text-amber-500 transition-colors"
+              className="ml-1 text-primary font-semibold hover:opacity-80 transition-colors"
             >
               {isLogin ? "Đăng ký ngay" : "Đăng nhập"}
             </button>
