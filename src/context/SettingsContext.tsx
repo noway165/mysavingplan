@@ -8,13 +8,16 @@ import { Locale, TranslationKeys, t as i18n_t } from "@/lib/i18n"
 import { doc as firestoreDoc, getDoc as firestoreGetDoc, setDoc as firestoreSetDoc } from "firebase/firestore"
 
 export type Theme = "light" | "dark"
+export type ColorTheme = "default" | "peachpuff" | "slate" | "limegreen" | "orangered" | "whitesmoke" | "amethyst"
 export type Currency = "VND" | "USD" | "EUR"
 
 type SettingsContextType = {
   theme: Theme
+  colorTheme: ColorTheme
   locale: Locale
   currency: Currency
   setTheme: (theme: Theme) => void
+  setColorTheme: (colorTheme: ColorTheme) => void
   setLocale: (locale: Locale) => void
   setCurrency: (currency: Currency) => void
   t: (key: keyof TranslationKeys) => string
@@ -23,9 +26,11 @@ type SettingsContextType = {
 
 const SettingsContext = createContext<SettingsContextType>({
   theme: "light",
+  colorTheme: "default",
   locale: "vi",
   currency: "VND",
   setTheme: () => {},
+  setColorTheme: () => {},
   setLocale: () => {},
   setCurrency: () => {},
   t: (key) => key,
@@ -35,6 +40,7 @@ const SettingsContext = createContext<SettingsContextType>({
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
   const [theme, setThemeState] = useState<Theme>("light")
+  const [colorTheme, setColorThemeState] = useState<ColorTheme>("default")
   const [locale, setLocaleState] = useState<Locale>("vi")
   const [currency, setCurrencyState] = useState<Currency>("VND")
   const [loading, setLoading] = useState(true)
@@ -52,6 +58,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         if (docSnap.exists()) {
           const data = docSnap.data()
           if (data.theme) setThemeState(data.theme as Theme)
+          if (data.colorTheme) setColorThemeState(data.colorTheme as ColorTheme)
           if (data.locale) setLocaleState(data.locale as Locale)
           if (data.currency) setCurrencyState(data.currency as Currency)
         }
@@ -66,19 +73,26 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   // Apply theme to document
   useEffect(() => {
+    const html = document.documentElement
+    
+    // Remove old classes
+    html.classList.remove("dark", "theme-peachpuff", "theme-slate", "theme-limegreen", "theme-orangered", "theme-whitesmoke", "theme-amethyst")
+    
     if (theme === "dark") {
-      document.documentElement.classList.add("dark")
-    } else {
-      document.documentElement.classList.remove("dark")
+      html.classList.add("dark")
     }
-  }, [theme])
+    if (colorTheme !== "default") {
+      html.classList.add(`theme-${colorTheme}`)
+    }
+  }, [theme, colorTheme])
 
-  const saveSettings = async (newTheme: Theme, newLocale: Locale, newCurrency: Currency) => {
+  const saveSettings = async (newTheme: Theme, newColorTheme: ColorTheme, newLocale: Locale, newCurrency: Currency) => {
     if (!user) return
     try {
       const docRef = firestoreDoc(db, "users", user.uid, "settings", "preferences")
       await firestoreSetDoc(docRef, {
         theme: newTheme,
+        colorTheme: newColorTheme,
         locale: newLocale,
         currency: newCurrency,
         updatedAt: new Date()
@@ -90,17 +104,22 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme)
-    saveSettings(newTheme, locale, currency)
+    saveSettings(newTheme, colorTheme, locale, currency)
+  }
+
+  const setColorTheme = (newColorTheme: ColorTheme) => {
+    setColorThemeState(newColorTheme)
+    saveSettings(theme, newColorTheme, locale, currency)
   }
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale)
-    saveSettings(theme, newLocale, currency)
+    saveSettings(theme, colorTheme, newLocale, currency)
   }
 
   const setCurrency = (newCurrency: Currency) => {
     setCurrencyState(newCurrency)
-    saveSettings(theme, locale, newCurrency)
+    saveSettings(theme, colorTheme, locale, newCurrency)
   }
 
   const t = (key: keyof TranslationKeys) => {
@@ -123,7 +142,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <SettingsContext.Provider value={{ theme, locale, currency, setTheme, setLocale, setCurrency, t, formatCurrency }}>
+    <SettingsContext.Provider value={{ theme, colorTheme, locale, currency, setTheme, setColorTheme, setLocale, setCurrency, t, formatCurrency }}>
       {children}
     </SettingsContext.Provider>
   )

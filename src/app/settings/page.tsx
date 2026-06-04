@@ -2,10 +2,10 @@
 
 import { useSettings, Theme, Currency } from "@/context/SettingsContext"
 import { Locale } from "@/lib/i18n"
-import { Moon, Sun, Globe, DollarSign } from "lucide-react"
+import { Moon, Sun, Globe, DollarSign, Palette } from "lucide-react"
 
 export default function SettingsPage() {
-  const { t, theme, setTheme, locale, setLocale, currency, setCurrency } = useSettings()
+  const { t, theme, setTheme, colorTheme, setColorTheme, locale, setLocale, currency, setCurrency } = useSettings()
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-3xl mx-auto">
@@ -40,6 +40,38 @@ export default function SettingsPage() {
             >
               Tối
             </button>
+          </div>
+        </div>
+
+        {/* Color Settings */}
+        <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+              <Palette size={24} />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground text-lg">Màu sắc chủ đạo</h3>
+              <p className="text-muted-foreground text-sm">Chọn tông màu yêu thích của bạn.</p>
+            </div>
+          </div>
+          <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 sm:pb-0">
+            {([
+              { id: 'default', color: 'bg-amber-500' },
+              { id: 'peachpuff', color: 'bg-[#FFDAB9]' },
+              { id: 'slate', color: 'bg-slate-500' },
+              { id: 'limegreen', color: 'bg-[#32CD32]' },
+              { id: 'orangered', color: 'bg-[#FF4500]' },
+              { id: 'whitesmoke', color: 'bg-[#F5F5F5] border-gray-300' },
+              { id: 'amethyst', color: 'bg-[#9966CC]' },
+            ] as const).map(t => (
+              <button
+                key={t.id}
+                onClick={() => setColorTheme(t.id)}
+                className={`w-10 h-10 rounded-full flex-shrink-0 border-2 transition-all ${colorTheme === t.id ? 'border-primary scale-110 shadow-md' : 'border-transparent hover:scale-105'} ${t.color}`}
+                title={t.id}
+                aria-label={`Theme ${t.id}`}
+              />
+            ))}
           </div>
         </div>
 
