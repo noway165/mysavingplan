@@ -56,7 +56,7 @@ export default function GoalsPage() {
   const openEditModal = (goal: Goal) => {
     setEditingGoal(goal)
     setGoalName(goal.name)
-    setGoalTarget(goal.target.toString())
+    setGoalTarget(goal.target.toLocaleString('en-US'))
     setGoalColor(goal.color)
     setGoalDeadline(goal.deadline || "")
     setShowAddModal(true)
@@ -64,12 +64,13 @@ export default function GoalsPage() {
 
   const handleSaveGoal = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!goalName.trim() || !goalTarget) return
+    const targetNum = Number(goalTarget.replace(/,/g, ''))
+    if (!goalName.trim() || !targetNum) return
     setSubmitting(true)
     
     const goalData: Partial<Omit<Goal, "id" | "createdAt" | "saved">> = {
       name: goalName.trim(),
-      target: Number(goalTarget),
+      target: targetNum,
       color: goalColor,
     }
     
@@ -97,13 +98,13 @@ export default function GoalsPage() {
   const handleTransaction = async (e: React.FormEvent, type: 'deposit' | 'withdraw') => {
     e.preventDefault()
     const goalId = type === 'deposit' ? showDepositModal : showWithdrawModal
-    if (!goalId || !amount) return
+    const numAmount = Number(amount.replace(/,/g, ''))
+    if (!goalId || !numAmount) return
     
     const goal = goals.find(g => g.id === goalId)
     if (!goal) return
     
     setSubmitting(true)
-    const numAmount = Number(amount)
     
     const now = new Date()
     const dateStr = now.toLocaleDateString('vi-VN')
@@ -327,13 +328,20 @@ export default function GoalsPage() {
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">{t('target_amount')}</label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   value={goalTarget}
-                  onChange={e => setGoalTarget(e.target.value)}
-                  placeholder="VD: 10000000"
+                  onChange={e => {
+                    const rawValue = e.target.value.replace(/\D/g, '')
+                    if (!rawValue) {
+                      setGoalTarget("")
+                    } else {
+                      setGoalTarget(Number(rawValue).toLocaleString('en-US'))
+                    }
+                  }}
+                  placeholder="VD: 10,000,000"
                   required
-                  min={1}
-                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-medium"
                 />
               </div>
 
@@ -392,15 +400,21 @@ export default function GoalsPage() {
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">{t('amount')}</label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   value={amount}
-                  onChange={e => setAmount(e.target.value)}
-                  placeholder="VD: 500000"
+                  onChange={e => {
+                    const rawValue = e.target.value.replace(/\D/g, '')
+                    if (!rawValue) {
+                      setAmount("")
+                    } else {
+                      setAmount(Number(rawValue).toLocaleString('en-US'))
+                    }
+                  }}
+                  placeholder="VD: 500,000"
                   required
-                  min={1}
-                  max={showWithdrawModal ? goals.find(g => g.id === showWithdrawModal)?.saved : undefined}
                   autoFocus
-                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-medium"
                 />
               </div>
 
