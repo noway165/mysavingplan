@@ -13,7 +13,8 @@ export type Transaction = {
   type: "income" | "expense"
   category: string
   date: string
-  time: string
+  time?: string
+  isImpulse?: boolean
   createdAt?: unknown
 }
 

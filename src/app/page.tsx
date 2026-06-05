@@ -11,6 +11,9 @@ import { useGoals } from "@/hooks/useGoals"
 import { useSettings } from "@/context/SettingsContext"
 import { useAuth } from "@/components/AuthProvider"
 import { TiltWrapper } from "@/components/TiltWrapper"
+import { GamificationWidget } from "@/components/GamificationWidget"
+import { BucketsWidget } from "@/components/BucketsWidget"
+import { AIWidget } from "@/components/AIWidget"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -113,6 +116,21 @@ export default function Home() {
           </div>
           <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalExpense)}</div>
         </div>
+      </div>
+
+      {/* GAMIFICATION & AI INSIGHTS ROW */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="lg:col-span-2">
+          <GamificationWidget />
+        </div>
+        <div className="lg:col-span-1">
+          <AIWidget />
+        </div>
+      </div>
+
+      {/* BUCKETS ALLOCATION ROW */}
+      <div>
+        <BucketsWidget balance={balance} />
       </div>
 
       {/* MIDDLE: Tabs Layout for Charts & Plant */}
