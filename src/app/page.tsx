@@ -1,17 +1,19 @@
 "use client"
 
-import { ArrowDownRight, ArrowUpRight, Wallet, Target, Plus, TrendingUp, TrendingDown, Clock } from "lucide-react"
+import { ArrowDownRight, ArrowUpRight, Wallet, Target, Plus, TrendingUp, TrendingDown, Clock, ChevronRight } from "lucide-react"
 import { DashboardCharts } from "@/components/DashboardCharts"
 import { CategoryPieChart } from "@/components/CategoryPieChart"
-import { ActivityHeatmap } from "@/components/ActivityHeatmap"
 import { PageClock } from "@/components/PageClock"
 import { useTransactions } from "@/hooks/useTransactions"
 import { useGoals } from "@/hooks/useGoals"
 import { useSettings } from "@/context/SettingsContext"
+import { useAuth } from "@/components/AuthProvider"
 import Link from "next/link"
+import { motion } from "framer-motion"
 
 export default function Home() {
   const { t, formatCurrency } = useSettings()
+  const { user } = useAuth()
   const { transactions, loading: tLoading } = useTransactions()
   const { goals, loading: gLoading } = useGoals()
 
@@ -56,194 +58,201 @@ export default function Home() {
     } catch {
       return 0
     }
-  }).slice(0, 5)
+  }).slice(0, 4) // Show 4 instead of 5 for better fit in Bento
 
   if (tLoading || gLoading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <div className="flex items-center justify-center py-32">
+        <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">{t('overview')}</h1>
-          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Chào mừng trở lại! Dưới đây là tình hình tài chính của bạn.</p>
+    <div className="space-y-6 sm:space-y-8 pb-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pl-2">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary font-bold text-xl border border-primary/20 shadow-sm">
+            {user?.displayName ? user.displayName.charAt(0).toUpperCase() : "U"}
+          </div>
+          <div>
+            <p className="text-muted-foreground text-sm font-medium">Chào buổi sáng,</p>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">{user?.displayName || "Người dùng"}</h1>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-3">
           <PageClock />
-          <Link href="/goals" className="flex items-center gap-1.5 sm:gap-2 rounded-xl bg-card px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-foreground shadow-sm ring-1 ring-inset ring-border hover:bg-muted transition-colors">
-            <Plus size={14} /> {t('create_goal')}
-          </Link>
-          <Link href="/transactions" className="flex items-center gap-1.5 sm:gap-2 rounded-xl bg-primary px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors">
-            <Plus size={14} /> {t('add_record')}
-          </Link>
         </div>
       </div>
 
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-3">
-        {/* Số dư */}
-        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-6 opacity-5">
-            <Wallet size={64} />
-          </div>
-          <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-3">
-            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-              <Wallet size={16} />
+      {/* BENTO GRID LAYOUT */}
+      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 auto-rows-[minmax(140px,auto)]">
+        
+        {/* BENTO 1: Tổng quan (Span 2x2) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/20 dark:border-white/5 relative overflow-hidden flex flex-col justify-between group hover:border-primary/30 transition-colors duration-500"
+        >
+          {/* Decorative glow */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground mb-2 uppercase tracking-wider">
+              <Wallet size={16} className="text-primary" />
+              Tổng tài sản
             </div>
-            {t('balance')}
+            <div className={`text-4xl sm:text-5xl font-black tracking-tight ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>
+              {formatCurrency(balance)}
+            </div>
           </div>
-          <div className={`text-2xl sm:text-3xl font-bold ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>{formatCurrency(balance)}</div>
-          <div className="mt-4 flex items-center text-sm">
-            <span className="flex items-center text-primary font-medium">
-              <TrendingUp size={16} className="mr-1" />
-              Đã tiết kiệm: {formatCurrency(totalSaved)}
-            </span>
-          </div>
-        </div>
 
-        {/* Thu nhập */}
-        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border">
-          <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-3">
-            <div className="h-8 w-8 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+          <div className="relative z-10 mt-8 flex flex-col sm:flex-row gap-3">
+            <Link href="/transactions" className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25 hover:bg-primary/90 hover:scale-[1.02] transition-all active:scale-95">
+              <Plus size={18} /> Ghi chép mới
+            </Link>
+            <Link href="/goals" className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-background/50 backdrop-blur-md px-4 py-3.5 text-sm font-bold text-foreground border border-border/50 hover:bg-muted hover:scale-[1.02] transition-all active:scale-95">
+              <Target size={18} /> Tạo mục tiêu
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* BENTO 2: Thu nhập (Span 1x1) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="md:col-span-1 lg:col-span-2 rounded-[2rem] bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 backdrop-blur-2xl p-6 shadow-sm border border-emerald-500/20 flex flex-col justify-center relative overflow-hidden"
+        >
+          <div className="absolute -right-4 -bottom-4 opacity-10">
+            <TrendingUp size={100} />
+          </div>
+          <div className="flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-2">
+            <div className="h-8 w-8 rounded-xl bg-emerald-500/20 flex items-center justify-center">
               <ArrowUpRight size={16} />
             </div>
-            {t('income')}
+            Thu nhập
           </div>
           <div className="text-2xl sm:text-3xl font-bold text-foreground">{formatCurrency(totalIncome)}</div>
-          <div className="mt-4 flex items-center text-sm">
-            <span className="text-muted-foreground">{transactions.filter(t => t.type === "income").length} {t('transactions_count')}</span>
-          </div>
-        </div>
+        </motion.div>
 
-        {/* Chi tiêu */}
-        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border">
-          <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-3">
-            <div className="h-8 w-8 rounded-full bg-destructive/10 flex items-center justify-center text-destructive">
+        {/* BENTO 3: Chi tiêu (Span 1x1) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="md:col-span-1 lg:col-span-1 rounded-[2rem] bg-gradient-to-br from-destructive/10 to-destructive/5 backdrop-blur-2xl p-6 shadow-sm border border-destructive/20 flex flex-col justify-center relative overflow-hidden"
+        >
+          <div className="flex items-center gap-2 text-sm font-semibold text-destructive mb-2">
+            <div className="h-8 w-8 rounded-xl bg-destructive/20 flex items-center justify-center">
               <ArrowDownRight size={16} />
             </div>
-            {t('expense')}
+            Đã chi
           </div>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground">{formatCurrency(totalExpense)}</div>
-          <div className="mt-4 flex items-center text-sm">
-            {lastMonthExpense > 0 ? (
-              <span className={`flex items-center font-medium ${expenseChange > 0 ? "text-destructive" : "text-emerald-600 dark:text-emerald-400"}`}>
-                {expenseChange > 0 ? <TrendingUp size={16} className="mr-1" /> : <TrendingDown size={16} className="mr-1" />}
-                {Math.abs(expenseChange).toFixed(1)}% {t('vs_last_month')}
-              </span>
-            ) : (
-              <span className="text-muted-foreground">{transactions.filter(t => t.type === "expense").length} {t('transactions_count')}</span>
-            )}
-          </div>
-        </div>
-      </div>
+          <div className="text-2xl font-bold text-foreground">{formatCurrency(totalExpense)}</div>
+        </motion.div>
 
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
-        <div className="md:col-span-2 rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border">
+        {/* BENTO 4: Mục tiêu thu gọn (Span 2x1) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="md:col-span-2 lg:col-span-3 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-white/20 dark:border-white/5 flex flex-col justify-center"
+        >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base sm:text-lg font-semibold text-foreground">Biểu đồ Thu / Chi</h2>
-          </div>
-          <DashboardCharts transactions={transactions} />
-        </div>
-
-        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base sm:text-lg font-semibold text-foreground">{t('category_chart')}</h2>
-          </div>
-          <CategoryPieChart transactions={transactions} />
-        </div>
-      </div>
-
-      <ActivityHeatmap />
-
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
-        {/* Recent Transactions */}
-        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border flex flex-col">
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h2 className="text-base sm:text-lg font-semibold text-foreground">{t('recent_transactions')}</h2>
-            <Link href="/transactions" className="text-sm text-primary font-medium hover:underline">
-              Xem tất cả
+            <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Tiến độ mục tiêu</h2>
+            <Link href="/goals" className="text-primary hover:scale-110 transition-transform">
+              <ChevronRight size={20} />
             </Link>
           </div>
-
-          {recentTransactions.length === 0 ? (
-             <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
-               <div className="h-14 w-14 rounded-full bg-muted flex items-center justify-center text-muted-foreground opacity-50 mb-4">
-                 <Clock size={28} />
-               </div>
-               <p className="text-muted-foreground text-sm mb-1">{t('no_data')}</p>
-             </div>
+          
+          {goals.length === 0 ? (
+            <p className="text-sm text-muted-foreground italic">Chưa có mục tiêu nào. Hãy tạo mới!</p>
           ) : (
             <div className="space-y-4">
-              {recentTransactions.map(tx => (
-                <div key={tx.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${tx.type === "income" ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" : "bg-destructive/10 text-destructive"}`}>
-                      {tx.type === "income" ? <ArrowDownRight size={16} /> : <ArrowUpRight size={16} />}
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground text-sm line-clamp-1">{tx.title}</p>
-                      <p className="text-xs text-muted-foreground">{tx.date}</p>
-                    </div>
-                  </div>
-                  <span className={`font-semibold text-sm ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}>
-                    {tx.type === "income" ? "+" : "-"}{formatCurrency(tx.amount)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Goals */}
-        <div className="rounded-2xl bg-card p-4 sm:p-6 shadow-sm border border-border flex flex-col">
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h2 className="text-base sm:text-lg font-semibold text-foreground">{t('savings_goals')}</h2>
-            <Link href="/goals" className="text-sm text-primary font-medium hover:underline">
-              Xem tất cả
-            </Link>
-          </div>
-
-          {goals.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
-              <div className="h-14 w-14 rounded-full bg-muted flex items-center justify-center text-muted-foreground opacity-50 mb-4">
-                <Target size={28} />
-              </div>
-              <p className="text-muted-foreground text-sm mb-1">{t('no_goals')}</p>
-            </div>
-          ) : (
-            <div className="space-y-6 flex-1">
-              {goals.slice(0, 4).map((goal) => {
+              {goals.slice(0, 2).map((goal) => {
                 const percent = goal.target > 0 ? Math.min(Math.round((goal.saved / goal.target) * 100), 100) : 0
                 return (
                   <div key={goal.id} className="group cursor-pointer">
-                    <div className="flex justify-between items-end mb-2">
-                      <div className="flex items-center gap-2">
-                        <div className={`h-8 w-8 rounded-lg ${goal.color} flex items-center justify-center text-white shadow-sm`}>
-                          <Target size={14} />
-                        </div>
-                        <div>
-                          <div className="text-sm font-semibold text-foreground">{goal.name}</div>
-                          <div className="text-xs text-muted-foreground">Còn lại {formatCurrency(goal.target - goal.saved)}</div>
-                        </div>
-                      </div>
-                      <div className="text-sm font-bold text-primary">{percent}%</div>
+                    <div className="flex justify-between items-end mb-1.5">
+                      <div className="text-sm font-semibold text-foreground">{goal.name}</div>
+                      <div className="text-xs font-bold text-primary">{percent}%</div>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                      <div
-                        className={`h-full ${goal.color} rounded-full transition-all group-hover:scale-105 origin-left`}
-                        style={{ width: `${percent}%` }}
-                      ></div>
+                    <div className="h-2 w-full rounded-full bg-background/50 overflow-hidden">
+                      <div className={`h-full ${goal.color} rounded-full transition-all`} style={{ width: `${percent}%` }} />
                     </div>
                   </div>
                 )
               })}
             </div>
           )}
-        </div>
+        </motion.div>
+
+        {/* BENTO 5: Biểu đồ Thu/Chi (Span 2x2) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-white/20 dark:border-white/5"
+        >
+          <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-6">Thống kê Luồng tiền</h2>
+          <DashboardCharts transactions={transactions} />
+        </motion.div>
+
+        {/* BENTO 6: Cơ cấu chi tiêu (Span 2x2) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-white/20 dark:border-white/5"
+        >
+          <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">Cơ cấu chi tiêu</h2>
+          <CategoryPieChart transactions={transactions} />
+        </motion.div>
+
+        {/* BENTO 7: Giao dịch gần nhất (Span 4x2) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="md:col-span-4 lg:col-span-6 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-white/20 dark:border-white/5 flex flex-col"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Giao dịch gần đây</h2>
+            <Link href="/transactions" className="text-sm font-bold text-primary flex items-center hover:opacity-80 transition-opacity">
+              Tất cả <ChevronRight size={16} className="ml-1" />
+            </Link>
+          </div>
+
+          {recentTransactions.length === 0 ? (
+             <div className="flex flex-col items-center justify-center text-center py-6">
+               <div className="h-12 w-12 rounded-2xl bg-background/50 flex items-center justify-center text-muted-foreground mb-3">
+                 <Clock size={24} />
+               </div>
+               <p className="text-muted-foreground text-sm font-medium">Chưa có giao dịch nào</p>
+             </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {recentTransactions.map(tx => (
+                <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl bg-background/40 hover:bg-background/60 transition-colors border border-border/30">
+                  <div className="flex items-center gap-4">
+                    <div className={`h-12 w-12 rounded-2xl flex items-center justify-center ${tx.type === "income" ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400" : "bg-destructive/20 text-destructive"} shadow-inner`}>
+                      {tx.type === "income" ? <ArrowDownRight size={20} /> : <ArrowUpRight size={20} />}
+                    </div>
+                    <div>
+                      <p className="font-bold text-foreground text-sm line-clamp-1">{tx.title}</p>
+                      <p className="text-xs font-medium text-muted-foreground mt-0.5">{tx.category} &bull; {tx.date}</p>
+                    </div>
+                  </div>
+                  <span className={`font-black text-sm whitespace-nowrap ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}>
+                    {tx.type === "income" ? "+" : "-"}{formatCurrency(tx.amount)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </motion.div>
       </div>
     </div>
   )
