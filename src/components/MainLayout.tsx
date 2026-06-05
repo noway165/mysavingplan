@@ -29,7 +29,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Main content area */}
-      <main className="relative z-10 h-full overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 pt-6 pb-32 sm:pb-36 lg:pt-10 scroll-smooth">
+      <main className="relative z-10 h-full overflow-y-auto overflow-x-hidden p-4 pb-28 sm:p-6 sm:pl-28 lg:p-8 lg:pl-32 pt-6 scroll-smooth">
         <div className="mx-auto max-w-6xl">
           <AnimatePresence mode="wait">
             <motion.div

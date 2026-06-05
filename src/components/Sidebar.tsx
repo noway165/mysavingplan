@@ -33,7 +33,7 @@ export function Sidebar() {
   return (
     <>
       {/* ===== DESKTOP FLOATING DOCK ===== */}
-      <div className="hidden sm:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-card/70 backdrop-blur-2xl border border-border/50 shadow-2xl shadow-black/10 rounded-[2rem] p-2 items-center gap-2">
+      <div className="hidden sm:flex flex-col fixed top-1/2 left-6 -translate-y-1/2 z-50 bg-card/70 backdrop-blur-2xl border border-border/50 shadow-2xl shadow-black/10 rounded-[2rem] p-2 items-center gap-2">
         {navigation.map((item) => {
           const isActive = pathname === item.href
           return (
@@ -41,7 +41,7 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "group relative flex items-center justify-center h-14 w-14 rounded-2xl transition-all duration-300 hover:-translate-y-3",
+                "group relative flex items-center justify-center h-14 w-14 rounded-2xl transition-all duration-300 hover:translate-x-2",
                 isActive 
                   ? "bg-primary/20 text-primary shadow-sm" 
                   : "bg-transparent text-muted-foreground hover:bg-card hover:text-foreground shadow-sm hover:shadow-md border border-transparent hover:border-border/50"
@@ -50,26 +50,26 @@ export function Sidebar() {
               <item.icon className={cn("h-6 w-6 transition-transform duration-300", isActive && "scale-110")} />
               
               {/* Tooltip */}
-              <span className="absolute -top-12 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom bg-foreground text-background text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-xl">
+              <span className="absolute left-16 top-1/2 -translate-y-1/2 scale-0 group-hover:scale-100 transition-all duration-200 origin-left bg-foreground text-background text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-xl">
                 {item.name}
               </span>
               
               {/* Active Dot */}
               {isActive && (
-                <span className="absolute -bottom-2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.8)]" />
+                <span className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.8)]" />
               )}
             </Link>
           )
         })}
         
-        <div className="w-px h-8 bg-border/80 mx-2" />
+        <div className="h-px w-8 bg-border/80 my-2" />
         
         <button
           onClick={signOut}
-          className="group relative flex items-center justify-center h-14 w-14 rounded-2xl transition-all duration-300 hover:-translate-y-3 bg-transparent text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 border border-transparent"
+          className="group relative flex items-center justify-center h-14 w-14 rounded-2xl transition-all duration-300 hover:translate-x-2 bg-transparent text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 border border-transparent"
         >
           <LogOut className="h-6 w-6" />
-          <span className="absolute -top-12 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom bg-destructive text-destructive-foreground text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-xl">
+          <span className="absolute left-16 top-1/2 -translate-y-1/2 scale-0 group-hover:scale-100 transition-all duration-200 origin-left bg-destructive text-destructive-foreground text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-xl">
             {t('logout')}
           </span>
         </button>
