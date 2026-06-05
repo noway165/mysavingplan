@@ -78,8 +78,18 @@ export function DashboardCharts({ transactions }: Props) {
   return (
     <div className="h-[320px] sm:h-[350px] w-full mt-4">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
-          <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={gridColor} />
+        <LineChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 0 }}>
+          <defs>
+            <filter id="glow-income" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+            <filter id="glow-expense" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+          <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={gridColor} opacity={0.3} />
           <XAxis 
             dataKey="date" 
             axisLine={false} 
@@ -96,16 +106,18 @@ export function DashboardCharts({ transactions }: Props) {
           />
           <Tooltip 
             contentStyle={{ 
-              borderRadius: '12px', 
-              border: '1px solid var(--border)', 
-              background: 'var(--card)',
-              color: 'var(--foreground)',
-              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+              borderRadius: '16px', 
+              border: '1px solid rgba(255,255,255,0.1)', 
+              background: 'rgba(0,0,0,0.6)',
+              backdropFilter: 'blur(10px)',
+              color: '#fff',
+              boxShadow: '0 8px 32px 0 rgba(0,0,0,0.5)',
               fontSize: '13px'
             }}
+            itemStyle={{ color: '#fff' }}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             formatter={(value: any) => [formatCurrency(Number(value)), '']}
-            labelStyle={{ fontWeight: 600, marginBottom: '4px' }}
+            labelStyle={{ fontWeight: 600, marginBottom: '4px', color: '#ccc' }}
           />
           <Legend 
             wrapperStyle={{ fontSize: '12px', paddingTop: '8px' }}
@@ -114,35 +126,21 @@ export function DashboardCharts({ transactions }: Props) {
           <Line 
             type="monotone"
             dataKey="income" 
-            stroke="#22c55e" 
-            strokeWidth={3}
-            dot={{ r: 4, strokeWidth: 2 }}
-            activeDot={{ r: 6 }}
-          >
-            <LabelList 
-              dataKey="income" 
-              position="top" 
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              formatter={(value: any) => Number(value) > 0 ? shortenCurrency(Number(value)) : ''} 
-              style={{ fontSize: 10, fill: '#22c55e', fontWeight: 600 }}
-            />
-          </Line>
+            stroke="#00f2fe" 
+            strokeWidth={4}
+            dot={false}
+            activeDot={{ r: 6, fill: '#00f2fe', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-income)' }}
+            style={{ filter: 'url(#glow-income)' }}
+          />
           <Line 
             type="monotone"
             dataKey="expense" 
-            stroke="#ef4444" 
-            strokeWidth={3}
-            dot={{ r: 4, strokeWidth: 2 }}
-            activeDot={{ r: 6 }}
-          >
-            <LabelList 
-              dataKey="expense" 
-              position="bottom" 
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              formatter={(value: any) => Number(value) > 0 ? shortenCurrency(Number(value)) : ''} 
-              style={{ fontSize: 10, fill: '#ef4444', fontWeight: 600 }}
-            />
-          </Line>
+            stroke="#fe0979" 
+            strokeWidth={4}
+            dot={false}
+            activeDot={{ r: 6, fill: '#fe0979', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-expense)' }}
+            style={{ filter: 'url(#glow-expense)' }}
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>

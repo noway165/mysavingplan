@@ -17,7 +17,7 @@ export function GamificationWidget({ transactions }: { transactions: any[] }) {
   const progressPercent = Math.min(100, Math.max(0, (currentLevelXP / 1000) * 100))
 
   return (
-    <div className="bento-card p-5 md:p-6 bg-gradient-to-br from-primary/10 to-transparent relative overflow-hidden">
+    <div className="p-5 md:p-6 relative overflow-hidden h-full">
       <div className="absolute -right-4 -top-4 opacity-5">
         <Trophy size={100} />
       </div>
@@ -28,8 +28,8 @@ export function GamificationWidget({ transactions }: { transactions: any[] }) {
             {rank === 'Gold' ? <ShieldCheck size={24} /> : rank === 'Silver' ? <Shield size={24} /> : <ShieldAlert size={24} />}
           </div>
           <div>
-            <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Hạng Kỷ Luật</div>
-            <div className="text-lg font-bold text-foreground">{rank} - Lvl {level}</div>
+            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-wider">Hạng Kỷ Luật</div>
+            <div className="text-lg font-bold text-white">{rank} - Lvl {level}</div>
           </div>
         </div>
         
@@ -39,14 +39,14 @@ export function GamificationWidget({ transactions }: { transactions: any[] }) {
         </div>
       </div>
 
-      <div className="space-y-2 relative z-10">
-        <div className="flex justify-between text-xs font-medium">
-          <span className="text-muted-foreground">Kinh nghiệm (XP)</span>
-          <span className="text-foreground">{xp} / {xpForNextLevel}</span>
+      <div className="space-y-2 relative z-10 mt-2">
+        <div className="flex justify-between text-xs font-bold">
+          <span className="text-white/60">Kinh nghiệm (XP)</span>
+          <span className="text-white/90">{xp} / {xpForNextLevel}</span>
         </div>
-        <div className="h-3 w-full bg-background/50 rounded-full overflow-hidden border border-border/50">
+        <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-white/10 shadow-inner">
           <div 
-            className="h-full bg-primary transition-all duration-1000 ease-out" 
+            className="h-full bg-gradient-to-r from-[#00f2fe] to-purple-500 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(0,242,254,0.5)]" 
             style={{ width: `${progressPercent}%` }}
           />
         </div>

@@ -71,118 +71,82 @@ export default function Home() {
         </div>
       </div>
 
-      {/* TOP: Balance & Summary Cards (Finflow Style) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        {/* Số dư */}
-        <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Số dư</div>
-            <div className="h-8 w-8 rounded-full bg-primary/15 flex items-center justify-center text-primary">
-              <Wallet size={16} />
-            </div>
+      <div className="relative rounded-3xl overflow-hidden bg-[#0a0a1a] border border-white/5 shadow-2xl p-4 md:p-8 min-h-[600px] flex flex-col justify-between">
+        {/* Background Ambient Glows */}
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[150px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 w-[800px] h-[400px] bg-[#00f2fe]/5 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+
+        {/* TOP ROW: Glassmorphism Control Panel */}
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center border-l-4 border-l-[#00f2fe]">
+            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest mb-1">Số dư hiện tại</div>
+            <div className="text-xl md:text-2xl font-bold tracking-tight text-white neon-text-cyan">{formatCurrency(balance)}</div>
           </div>
-          <div className="text-2xl md:text-3xl font-bold tracking-tight text-primary">{formatCurrency(balance)}</div>
-        </div>
-        
-        {/* Tiết kiệm */}
-        <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tiết kiệm</div>
-            <div className="h-8 w-8 rounded-full bg-primary/15 flex items-center justify-center text-primary">
-              <Target size={16} />
-            </div>
+          <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center border-l-4 border-l-purple-500">
+            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest mb-1">Đã tiết kiệm</div>
+            <div className="text-xl md:text-2xl font-bold tracking-tight text-white">{formatCurrency(totalSaved)}</div>
           </div>
-          <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalSaved)}</div>
+          <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center">
+            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest mb-1 flex items-center gap-1"><ArrowDownRight size={14} className="text-[#00f2fe]" /> Tổng thu</div>
+            <div className="text-lg md:text-xl font-bold tracking-tight text-white/90">{formatCurrency(totalIncome)}</div>
+          </div>
+          <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center">
+            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest mb-1 flex items-center gap-1"><ArrowUpRight size={14} className="text-[#fe0979]" /> Tổng chi</div>
+            <div className="text-lg md:text-xl font-bold tracking-tight text-white/90">{formatCurrency(totalExpense)}</div>
+          </div>
         </div>
 
-        {/* Thu nhập */}
-        <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tổng thu</div>
-            <div className="h-8 w-8 rounded-full bg-primary/15 flex items-center justify-center text-primary">
-              <ArrowDownRight size={16} />
+        {/* MIDDLE: Massive Chart Area */}
+        <div className="relative z-10 flex-1 flex flex-col lg:flex-row gap-6 h-full min-h-[400px]">
+          {/* Main Chart */}
+          <div className="flex-1 h-full w-full relative">
+            <div className="absolute top-0 right-0 z-20 flex gap-2">
+              <button onClick={() => setActiveTab('cashflow')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'cashflow' ? 'bg-[#00f2fe]/20 text-[#00f2fe] border border-[#00f2fe]/50 shadow-[0_0_10px_rgba(0,242,254,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Trend</button>
+              <button onClick={() => setActiveTab('category')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'category' ? 'bg-[#fe0979]/20 text-[#fe0979] border border-[#fe0979]/50 shadow-[0_0_10px_rgba(254,9,121,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Category</button>
+              <button onClick={() => setActiveTab('plant')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'plant' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Plant</button>
+            </div>
+            
+            <div className="w-full h-full pt-8 pb-4">
+              <AnimatePresence mode="wait">
+                {activeTab === 'cashflow' && (
+                  <motion.div key="cashflow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full">
+                    <DashboardCharts transactions={transactions} />
+                  </motion.div>
+                )}
+                {activeTab === 'category' && (
+                  <motion.div key="category" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full flex items-center justify-center">
+                    <div className="w-full max-w-[500px]">
+                      <CategoryPieChart transactions={transactions} />
+                    </div>
+                  </motion.div>
+                )}
+                {activeTab === 'plant' && (
+                  <motion.div key="plant" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full">
+                    <SavingsPlant totalSaved={totalSaved} totalTarget={totalGoalsTarget} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
-          <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalIncome)}</div>
-        </div>
 
-        {/* Đã chi */}
-        <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tổng chi</div>
-            <div className="h-8 w-8 rounded-full bg-primary/15 flex items-center justify-center text-primary">
-              <ArrowUpRight size={16} />
+          {/* Floating Side Panels (Glassmorphism) */}
+          <div className="w-full lg:w-[350px] flex flex-col gap-4">
+            <div className="bg-glass-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl relative">
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#00f2fe] to-purple-500"></div>
+              <GamificationWidget transactions={transactions} />
+            </div>
+            <div className="bg-glass-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl relative flex-1">
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-[#fe0979]"></div>
+              <AIWidget transactions={transactions} />
             </div>
           </div>
-          <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalExpense)}</div>
-        </div>
-      </div>
-
-      {/* GAMIFICATION & AI INSIGHTS ROW */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-        <div className="lg:col-span-2">
-          <GamificationWidget transactions={transactions} />
-        </div>
-        <div className="lg:col-span-1">
-          <AIWidget transactions={transactions} />
         </div>
       </div>
 
       {/* BUCKETS ALLOCATION ROW */}
-      <div>
+      <div className="mt-8">
         <BucketsWidget balance={balance} />
-      </div>
-
-      {/* MIDDLE: Tabs Layout for Charts & Plant */}
-      <div>
-        <div className="bento-card overflow-hidden flex flex-col">
-          {/* Segmented Control Tabs */}
-          <div className="p-3">
-            <div className="flex items-center p-1 bg-muted rounded-xl overflow-x-auto hide-scrollbar">
-              <button 
-                onClick={() => setActiveTab('cashflow')}
-                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'cashflow' ? 'bg-primary shadow-sm text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                <BarChart3 size={16} /> Luồng tiền
-              </button>
-              <button 
-                onClick={() => setActiveTab('category')}
-                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'category' ? 'bg-primary shadow-sm text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                <PieChart size={16} /> Cơ cấu
-              </button>
-              <button 
-                onClick={() => setActiveTab('plant')}
-                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'plant' ? 'bg-primary shadow-sm text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                <Sprout size={16} /> Cây tiết kiệm
-              </button>
-            </div>
-          </div>
-
-          {/* Tab Content */}
-          <div className="p-4 md:p-6 h-[400px] md:h-[450px]">
-            <AnimatePresence mode="wait">
-              {activeTab === 'cashflow' && (
-                <motion.div key="cashflow" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }} className="h-full">
-                  <DashboardCharts transactions={transactions} />
-                </motion.div>
-              )}
-              {activeTab === 'category' && (
-                <motion.div key="category" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }} className="h-full flex items-center justify-center">
-                  <div className="w-full max-w-[500px]">
-                    <CategoryPieChart transactions={transactions} />
-                  </div>
-                </motion.div>
-              )}
-              {activeTab === 'plant' && (
-                <motion.div key="plant" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }} className="h-full">
-                  <SavingsPlant totalSaved={totalSaved} totalTarget={totalGoalsTarget} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
       </div>
 
       {/* BOTTOM: Recent Transactions */}

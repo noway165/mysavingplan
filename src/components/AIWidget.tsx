@@ -55,7 +55,7 @@ export function AIWidget({ transactions }: { transactions: any[] }) {
     if (maxCat === "Mua sắm" || maxCat === "Giải trí" || maxCat === "Ăn uống") {
       return (
         <>
-          Cảnh báo: Bạn đã đốt <span className="text-destructive font-bold">{percent}%</span> chi tiêu tuần này ({formatCurrency(maxVal)}) vào <span className="font-bold">{maxCat}</span>. Hãy kìm hãm lại trong những ngày tới để không bị rớt Hạng kỷ luật nhé!
+          Cảnh báo: Bạn đã đốt <span className="text-[#fe0979] font-bold">{percent}%</span> chi tiêu tuần này ({formatCurrency(maxVal)}) vào <span className="font-bold">{maxCat}</span>. Hãy kìm hãm lại trong những ngày tới để không bị rớt Hạng kỷ luật nhé!
         </>
       )
     }
@@ -69,23 +69,23 @@ export function AIWidget({ transactions }: { transactions: any[] }) {
   }, [transactions, formatCurrency])
 
   return (
-    <div className="bento-card p-5 md:p-6 bg-card border-primary/30 relative overflow-hidden group h-full flex flex-col justify-between">
+    <div className="p-5 md:p-6 relative overflow-hidden group h-full flex flex-col justify-between">
       <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500">
-        <Sparkles size={120} />
+        <Sparkles size={120} className="text-white" />
       </div>
       
       <div>
-        <div className="flex items-center gap-2 text-primary mb-3 relative z-10">
+        <div className="flex items-center gap-2 text-[#fe0979] mb-3 relative z-10">
           <Sparkles size={20} className="animate-pulse" />
-          <h2 className="font-bold text-sm uppercase tracking-widest">AI Insights</h2>
+          <h2 className="font-bold text-sm uppercase tracking-widest text-white/80">AI Insights</h2>
         </div>
 
-        <p className="text-sm text-muted-foreground leading-relaxed relative z-10 font-medium">
+        <p className="text-sm text-white/70 leading-relaxed relative z-10 font-medium">
           {insight}
         </p>
       </div>
 
-      <Link href="/insights" className="mt-4 flex items-center gap-1 text-xs font-bold text-primary cursor-pointer hover:underline relative z-10 w-fit">
+      <Link href="/insights" className="mt-4 flex items-center gap-1 text-xs font-bold text-[#00f2fe] cursor-pointer hover:underline relative z-10 w-fit">
         Xem chi tiết báo cáo <ArrowRight size={14} />
       </Link>
     </div>
