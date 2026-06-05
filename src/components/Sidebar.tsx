@@ -33,7 +33,7 @@ export function Sidebar() {
   return (
     <>
       {/* ===== DESKTOP FLOATING DOCK ===== */}
-      <div className="hidden sm:flex flex-col fixed top-1/2 left-6 -translate-y-1/2 z-50 bg-card/70 backdrop-blur-2xl border border-border/50 shadow-2xl shadow-black/10 rounded-[2rem] p-2 items-center gap-2">
+      <div className="hidden sm:flex flex-col fixed top-1/2 left-6 -translate-y-1/2 z-50 neumo-flat rounded-[2rem] p-2 items-center gap-2">
         {navigation.map((item) => {
           const isActive = pathname === item.href
           return (
@@ -43,8 +43,8 @@ export function Sidebar() {
               className={cn(
                 "group relative flex items-center justify-center h-14 w-14 rounded-2xl transition-all duration-300 hover:translate-x-2",
                 isActive 
-                  ? "bg-primary/20 text-primary shadow-sm" 
-                  : "bg-transparent text-muted-foreground hover:bg-card hover:text-foreground shadow-sm hover:shadow-md border border-transparent hover:border-border/50"
+                  ? "neumo-pressed text-primary" 
+                  : "bg-transparent text-muted-foreground hover:neumo-flat hover:text-foreground border border-transparent"
               )}
             >
               <item.icon className={cn("h-6 w-6 transition-transform duration-300", isActive && "scale-110")} />
@@ -80,7 +80,7 @@ export function Sidebar() {
         <div className="sm:hidden fixed inset-0 z-[60] flex items-end justify-center" onClick={() => setMobileMenuOpen(false)}>
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200" />
           <div 
-            className="relative w-full bg-card/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-border/50 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] animate-in slide-in-from-bottom-full duration-300 max-h-[85vh] overflow-y-auto pb-safe pt-2"
+            className="relative w-full neumo-flat rounded-t-[2.5rem] rounded-b-none border-t border-border/10 animate-in slide-in-from-bottom-full duration-300 max-h-[85vh] overflow-y-auto pb-safe pt-2"
             onClick={e => e.stopPropagation()}
           >
             <div className="w-12 h-1.5 bg-muted-foreground/20 rounded-full mx-auto mb-6 mt-2" />
@@ -93,10 +93,10 @@ export function Sidebar() {
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      "flex flex-col items-center justify-center gap-2 rounded-2xl p-4 text-sm font-medium transition-all border border-border/50 shadow-sm",
+                      "flex flex-col items-center justify-center gap-2 rounded-2xl p-4 text-sm font-medium transition-all",
                       pathname === item.href
-                        ? "bg-primary/20 text-primary border-primary/20"
-                        : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
+                        ? "neumo-pressed text-primary"
+                        : "neumo-convex text-muted-foreground hover:neumo-flat hover:text-foreground"
                     )}
                   >
                     <item.icon className="h-6 w-6" />
@@ -135,7 +135,7 @@ export function Sidebar() {
       )}
 
       {/* ===== MOBILE BOTTOM FLOATING NAVIGATION BAR ===== */}
-      <div className="sm:hidden fixed bottom-6 left-4 right-4 z-50 bg-card/80 backdrop-blur-2xl border border-border/50 shadow-2xl shadow-black/10 rounded-[2rem] transition-all duration-300">
+      <div className="sm:hidden fixed bottom-6 left-4 right-4 z-50 neumo-flat rounded-[2rem] transition-all duration-300">
         <nav className="flex items-center justify-around h-[4.5rem] px-2">
           {mobileNavTabs.map((item) => {
             const isActive = pathname === item.href
@@ -151,7 +151,7 @@ export function Sidebar() {
                 )}
               >
                 {isActive && (
-                  <div className="absolute inset-0 bg-primary/10 rounded-2xl scale-100 animate-in zoom-in-90 duration-300" />
+                  <div className="absolute inset-0 neumo-pressed rounded-2xl scale-100 animate-in zoom-in-90 duration-300" />
                 )}
                 <item.icon className={cn("h-6 w-6 z-10 transition-transform duration-300", isActive && "scale-110")} />
                 <span className={cn("text-[10px] font-medium leading-none z-10", isActive && "font-bold")}>
