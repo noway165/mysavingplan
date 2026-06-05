@@ -7,6 +7,7 @@ export interface GamificationState {
   streak: number;
   lastActiveDate: string | null;
   badges: string[];
+  historicalSynced: boolean;
 }
 
 const DEFAULT_STATE: GamificationState = {
@@ -14,6 +15,7 @@ const DEFAULT_STATE: GamificationState = {
   streak: 0,
   lastActiveDate: null,
   badges: [],
+  historicalSynced: false,
 };
 
 export function useGamification() {
@@ -64,6 +66,71 @@ export function useGamification() {
     }
   };
 
+  const syncHistoricalData = (transactions: any[]) => {
+    if (state.historicalSynced || transactions.length === 0) return;
+
+    // Lấy tất cả các ngày có giao dịch, định dạng DD/MM/YYYY sang YYYY-MM-DD
+    const uniqueDates = new Set<string>();
+    transactions.forEach(tx => {
+      if (!tx.date) return;
+      try {
+        const parts = tx.date.split('/');
+        if (parts.length === 3) {
+          uniqueDates.add(`${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`);
+        }
+      } catch (e) {}
+    });
+
+    const sortedDates = Array.from(uniqueDates).sort().reverse(); // Mới nhất lên đầu
+    if (sortedDates.length === 0) return;
+
+    let calculatedStreak = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let currentDate = new Date(today);
+    let checkIndex = 0;
+
+    // Check if streak started today or yesterday
+    const firstLogDate = new Date(sortedDates[0]);
+    firstLogDate.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.floor((today.getTime() - firstLogDate.getTime()) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays <= 1) {
+      // The most recent log is today or yesterday, streak is active
+      calculatedStreak = 1;
+      currentDate = firstLogDate;
+      checkIndex = 1;
+
+      while (checkIndex < sortedDates.length) {
+        const nextDate = new Date(sortedDates[checkIndex]);
+        nextDate.setHours(0, 0, 0, 0);
+        const expectedDate = new Date(currentDate);
+        expectedDate.setDate(expectedDate.getDate() - 1);
+
+        if (nextDate.getTime() === expectedDate.getTime()) {
+          calculatedStreak++;
+          currentDate = nextDate;
+          checkIndex++;
+        } else {
+          break;
+        }
+      }
+    }
+
+    // Tặng 10 XP cho mỗi ngày có giao dịch trong quá khứ
+    const bonusXP = sortedDates.length * 10;
+
+    saveState({
+      ...state,
+      xp: state.xp + bonusXP,
+      streak: calculatedStreak,
+      lastActiveDate: sortedDates[0],
+      historicalSynced: true
+    });
+  };
+
   const addBadge = (badgeId: string) => {
     if (!state.badges.includes(badgeId)) {
       saveState({ ...state, badges: [...state.badges, badgeId] });
@@ -87,6 +154,7 @@ export function useGamification() {
     loading,
     addXP,
     checkDailyStreak,
+    syncHistoricalData,
     addBadge,
   };
 }

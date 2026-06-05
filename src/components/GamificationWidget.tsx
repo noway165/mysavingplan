@@ -3,8 +3,16 @@
 import { useGamification } from "@/hooks/useGamification"
 import { Shield, ShieldAlert, ShieldCheck, Flame, Trophy } from "lucide-react"
 
-export function GamificationWidget() {
-  const { xp, level, rank, streak, xpForNextLevel, currentLevelXP } = useGamification()
+import { useEffect } from "react"
+
+export function GamificationWidget({ transactions }: { transactions: any[] }) {
+  const { xp, level, rank, streak, xpForNextLevel, currentLevelXP, syncHistoricalData } = useGamification()
+  
+  useEffect(() => {
+    if (transactions && transactions.length > 0) {
+      syncHistoricalData(transactions)
+    }
+  }, [transactions, syncHistoricalData])
   
   const progressPercent = Math.min(100, Math.max(0, (currentLevelXP / 1000) * 100))
 
