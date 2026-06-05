@@ -20,12 +20,28 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="h-screen w-full overflow-hidden relative bg-background/50 dark:bg-background/90 text-foreground transition-colors duration-500">
-      {/* Mesh Gradient Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50 dark:opacity-20 mix-blend-screen dark:mix-blend-lighten">
-        <div className="absolute -top-[10%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-primary/20 blur-[100px] animate-[pulse_6s_ease-in-out_infinite]" />
-        <div className="absolute top-[20%] -right-[10%] w-[40vw] h-[40vw] rounded-full bg-blue-500/20 blur-[100px] animate-[pulse_8s_ease-in-out_infinite]" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-[20%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-emerald-500/10 blur-[120px] animate-[pulse_10s_ease-in-out_infinite]" style={{ animationDelay: '4s' }} />
+    <div className="h-screen w-full overflow-hidden relative bg-background dark:bg-background text-foreground transition-colors duration-500 bg-scifi-grid">
+      {/* Noise Overlay */}
+      <div className="noise-overlay" />
+      {/* Wireframe 3D Sphere & Glow */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 dark:opacity-30 mix-blend-screen dark:mix-blend-lighten perspective-[1000px]">
+        <motion.div 
+          animate={{ rotateY: 360, rotateX: 360 }}
+          transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
+          className="absolute -right-[20vw] top-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] rounded-full"
+          style={{ transformStyle: 'preserve-3d' }}
+        >
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={`y-${i}`} className="absolute inset-0 rounded-full border-[1px] border-primary/30" style={{ transform: `rotateY(${i * 15}deg)` }} />
+          ))}
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={`x-${i}`} className="absolute inset-0 rounded-full border-[1px] border-primary/30" style={{ transform: `rotateX(${i * 15}deg)` }} />
+          ))}
+          <div className="absolute inset-0 rounded-full bg-primary/5 blur-3xl shadow-[0_0_100px_rgba(var(--color-primary),0.2)]" />
+        </motion.div>
+
+        {/* Ambient Glow */}
+        <div className="absolute -top-[10%] -left-[10%] w-[40vw] h-[40vw] rounded-full bg-primary/10 blur-[120px] animate-[pulse_8s_ease-in-out_infinite]" />
       </div>
 
       {/* Main content area */}
