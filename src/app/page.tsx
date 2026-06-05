@@ -97,7 +97,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 sm:p-8 shadow-sm border border-primary/20 relative overflow-hidden flex flex-col justify-between group hover:border-primary transition-colors duration-500 h-full"
+            className="glass-bento p-6 sm:p-8 relative overflow-hidden flex flex-col justify-between group h-full"
           >
             {/* Decorative glow */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
@@ -129,7 +129,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-emerald-500/20 flex flex-col justify-center relative overflow-hidden h-full group hover:border-emerald-500/50 transition-colors"
+            className="glass-bento p-6 flex flex-col justify-center relative overflow-hidden h-full group"
           >
             <div className="absolute -right-4 -bottom-4 opacity-10 pointer-events-none">
               <TrendingUp size={100} />
@@ -150,7 +150,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-destructive/20 flex flex-col justify-center relative overflow-hidden h-full group hover:border-destructive/50 transition-colors"
+            className="glass-bento p-6 flex flex-col justify-center relative overflow-hidden h-full group"
           >
             <div className="flex items-center gap-2 text-sm font-semibold text-destructive mb-2">
               <div className="h-8 w-8 rounded-xl bg-destructive/20 flex items-center justify-center">
@@ -168,7 +168,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="rounded-[2rem] bg-card/60 backdrop-blur-2xl shadow-sm border border-primary/20 flex flex-col justify-center overflow-hidden h-full group hover:border-primary transition-colors"
+            className="glass-bento flex flex-col justify-center overflow-hidden h-full group"
           >
             <SavingsPlant totalSaved={totalSaved} totalTarget={totalGoalsTarget} />
           </motion.div>
@@ -180,7 +180,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-primary/20 h-full group hover:border-primary transition-colors"
+            className="glass-bento p-6 h-full group"
           >
             <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-6">Thống kê Luồng tiền</h2>
             <DashboardCharts transactions={transactions} />
@@ -193,7 +193,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-primary/20 h-full group hover:border-primary transition-colors"
+            className="glass-bento p-6 h-full group"
           >
             <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">Cơ cấu chi tiêu</h2>
             <CategoryPieChart transactions={transactions} />
@@ -206,7 +206,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-primary/20 flex flex-col h-full group hover:border-primary transition-colors"
+            className="glass-bento p-6 flex flex-col h-full group"
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Giao dịch gần đây</h2>

@@ -20,28 +20,36 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="h-screen w-full overflow-hidden relative bg-background dark:bg-background text-foreground transition-colors duration-500 bg-scifi-grid">
-      {/* Noise Overlay */}
-      <div className="noise-overlay" />
-      {/* Wireframe 3D Sphere & Glow */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 dark:opacity-30 mix-blend-screen dark:mix-blend-lighten perspective-[1000px]">
+    <div className="h-screen w-full overflow-hidden relative bg-background text-foreground transition-colors duration-500">
+      {/* Animated Gradient Background Blobs for Glassmorphism */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-60 dark:opacity-40">
         <motion.div 
-          animate={{ rotateY: 360, rotateX: 360 }}
-          transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-          className="absolute -right-[20vw] top-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] rounded-full"
-          style={{ transformStyle: 'preserve-3d' }}
-        >
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={`y-${i}`} className="absolute inset-0 rounded-full border-[1px] border-primary/30" style={{ transform: `rotateY(${i * 15}deg)` }} />
-          ))}
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={`x-${i}`} className="absolute inset-0 rounded-full border-[1px] border-primary/30" style={{ transform: `rotateX(${i * 15}deg)` }} />
-          ))}
-          <div className="absolute inset-0 rounded-full bg-primary/5 blur-3xl shadow-[0_0_100px_rgba(var(--color-primary),0.2)]" />
-        </motion.div>
-
-        {/* Ambient Glow */}
-        <div className="absolute -top-[10%] -left-[10%] w-[40vw] h-[40vw] rounded-full bg-primary/10 blur-[120px] animate-[pulse_8s_ease-in-out_infinite]" />
+          animate={{ 
+            x: ["0%", "20%", "-10%", "0%"],
+            y: ["0%", "-20%", "10%", "0%"],
+            scale: [1, 1.1, 0.9, 1]
+          }}
+          transition={{ repeat: Infinity, duration: 20, ease: "easeInOut" }}
+          className="absolute -top-[10%] -left-[10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] rounded-full bg-primary/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen"
+        />
+        <motion.div 
+          animate={{ 
+            x: ["0%", "-30%", "20%", "0%"],
+            y: ["0%", "20%", "-10%", "0%"],
+            scale: [1, 1.2, 0.8, 1]
+          }}
+          transition={{ repeat: Infinity, duration: 25, ease: "easeInOut", delay: 2 }}
+          className="absolute top-[20%] -right-[10%] w-[45vw] h-[45vw] max-w-[500px] max-h-[500px] rounded-full bg-blue-500/20 dark:bg-blue-600/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen"
+        />
+        <motion.div 
+          animate={{ 
+            x: ["0%", "10%", "-20%", "0%"],
+            y: ["0%", "30%", "-20%", "0%"],
+            scale: [1, 0.9, 1.1, 1]
+          }}
+          transition={{ repeat: Infinity, duration: 18, ease: "easeInOut", delay: 4 }}
+          className="absolute -bottom-[20%] left-[20%] w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] rounded-full bg-emerald-500/20 dark:bg-emerald-600/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen"
+        />
       </div>
 
       {/* Main content area */}

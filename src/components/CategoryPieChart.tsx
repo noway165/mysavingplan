@@ -5,14 +5,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recha
 import { Transaction } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
 
-const COLORS = [
-  'hsl(var(--primary))',
-  'hsl(var(--destructive))', 
-  'hsl(120, 100%, 70%)', 
-  'hsl(280, 100%, 70%)', 
-  'hsl(40, 100%, 60%)', 
-  'hsl(320, 100%, 60%)'
-]
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#ffc658', '#82ca9d', '#a4de6c']
 
 interface CategoryPieChartProps {
   transactions: Transaction[]
@@ -27,7 +20,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   if (percent < 0.05) return null;
 
   return (
-    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight="bold" className="drop-shadow-md">
+    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight="bold">
       {`${(percent * 100).toFixed(0)}%`}
     </text>
   );
@@ -54,17 +47,14 @@ export function CategoryPieChart({ transactions }: CategoryPieChartProps) {
 
   if (data.length === 0) {
     return (
-      <div className="h-[300px] flex items-center justify-center text-primary/50 bg-primary/5 rounded-xl border border-primary/20 border-dashed backdrop-blur-md">
-        <p className="animate-pulse">{t('no_data')} ...</p>
+      <div className="h-[300px] flex items-center justify-center text-muted-foreground bg-muted/20 rounded-xl border border-border border-dashed">
+        <p>{t('no_data')}</p>
       </div>
     )
   }
 
   return (
-    <div className="h-[300px] w-full relative group">
-      {/* Background glow for the chart area */}
-      <div className="absolute inset-0 bg-primary/5 rounded-full blur-3xl scale-50 group-hover:scale-75 transition-transform duration-1000 pointer-events-none" />
-      
+    <div className="h-[300px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -72,46 +62,25 @@ export function CategoryPieChart({ transactions }: CategoryPieChartProps) {
             cx="50%"
             cy="50%"
             labelLine={false}
-            outerRadius={110}
-            innerRadius={80} // This makes it a Doughnut Chart
+            outerRadius={100}
+            innerRadius={60}
+            fill="#8884d8"
             dataKey="value"
-            paddingAngle={5} // Space between slices
+            paddingAngle={2}
             label={renderCustomizedLabel}
-            stroke="rgba(0,0,0,0.2)"
-            strokeWidth={2}
           >
             {data.map((entry, index) => (
-              <Cell 
-                key={`cell-${index}`} 
-                fill={COLORS[index % COLORS.length]} 
-                style={{
-                  filter: `drop-shadow(0 0 10px ${COLORS[index % COLORS.length]}80)`
-                }}
-              />
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
           <Tooltip 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             formatter={(value: any) => formatCurrency(Number(value))}
-            contentStyle={{ 
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
-              borderColor: 'rgba(255, 255, 255, 0.1)',
-              color: 'white',
-              borderRadius: '12px',
-              backdropFilter: 'blur(8px)',
-              boxShadow: '0 0 20px rgba(0,0,0,0.5)'
-            }}
-            itemStyle={{ fontWeight: 'bold' }}
+            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
           />
-          <Legend 
-            wrapperStyle={{ paddingTop: '20px' }}
-          />
+          <Legend />
         </PieChart>
       </ResponsiveContainer>
-      
-      {/* Center text for Doughnut */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-6">
-        <span className="text-sm font-semibold text-muted-foreground">Tổng chi</span>
-      </div>
     </div>
   )
 }
