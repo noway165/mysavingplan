@@ -1,30 +1,13 @@
 "use client"
 
 import { useMemo } from "react"
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts"
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from "recharts"
 import { Transaction } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#ffc658', '#82ca9d', '#a4de6c']
 
 interface CategoryPieChartProps {
   transactions: Transaction[]
 }
-
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
-  const RADIAN = Math.PI / 180;
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  if (percent < 0.05) return null;
-
-  return (
-    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight="bold">
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
-};
 
 export function CategoryPieChart({ transactions }: CategoryPieChartProps) {
   const { t, formatCurrency } = useSettings()
@@ -39,47 +22,56 @@ export function CategoryPieChart({ transactions }: CategoryPieChartProps) {
       categoryTotals[tx.category] = (categoryTotals[tx.category] || 0) + tx.amount
     })
 
+    // Find the max value to set radius domain
+    const maxVal = Math.max(...Object.values(categoryTotals), 0)
+
     // Format for Recharts
     return Object.entries(categoryTotals)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value) // Sort descending
+      .map(([subject, A]) => ({ subject, A, fullMark: maxVal }))
   }, [transactions])
 
   if (data.length === 0) {
     return (
-      <div className="h-[300px] flex items-center justify-center text-muted-foreground bg-muted/20 rounded-xl border border-border border-dashed">
-        <p>{t('no_data')}</p>
+      <div className="h-[300px] flex items-center justify-center text-primary/50 bg-primary/5 rounded-xl border border-primary/20 border-dashed backdrop-blur-md font-mono">
+        <p className="animate-pulse">{t('no_data')} ...</p>
       </div>
     )
   }
 
   return (
-    <div className="h-[300px] w-full">
+    <div className="h-[300px] w-full font-mono relative group">
+      {/* HUD Glow behind radar */}
+      <div className="absolute inset-0 bg-primary/5 rounded-full blur-2xl scale-50 group-hover:scale-75 transition-transform duration-1000 pointer-events-none" />
+      
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            outerRadius={100}
-            innerRadius={60}
-            fill="#8884d8"
-            dataKey="value"
-            paddingAngle={2}
-            label={renderCustomizedLabel}
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            formatter={(value: any) => formatCurrency(Number(value))}
-            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+        <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
+          <PolarGrid stroke="rgba(var(--color-primary), 0.3)" />
+          <PolarAngleAxis 
+            dataKey="subject" 
+            tick={{ fill: "hsl(var(--primary))", fontSize: 10, fontFamily: 'monospace' }} 
           />
-          <Legend />
-        </PieChart>
+          <PolarRadiusAxis angle={30} domain={[0, 'dataMax']} tick={false} axisLine={false} />
+          <Radar
+            name="Chi tiêu"
+            dataKey="A"
+            stroke="hsl(var(--primary))"
+            fill="hsl(var(--primary))"
+            fillOpacity={0.4}
+            className="drop-shadow-[0_0_10px_rgba(var(--color-primary),0.8)]"
+          />
+          <Tooltip 
+            formatter={(value: any) => [formatCurrency(Number(value)), '']}
+            contentStyle={{ 
+              backgroundColor: 'rgba(var(--color-background), 0.9)', 
+              borderColor: 'hsl(var(--primary))',
+              color: 'hsl(var(--foreground))',
+              borderRadius: '8px',
+              fontFamily: 'monospace',
+              boxShadow: '0 0 15px rgba(var(--color-primary), 0.3)'
+            }}
+            itemStyle={{ color: 'hsl(var(--primary))' }}
+          />
+        </RadarChart>
       </ResponsiveContainer>
     </div>
   )
