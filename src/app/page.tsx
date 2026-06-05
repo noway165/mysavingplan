@@ -72,25 +72,45 @@ export default function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {/* Số dư */}
         <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
-          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Số dư</div>
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Số dư</div>
+            <div className="h-8 w-8 rounded-full bg-primary/15 flex items-center justify-center text-primary">
+              <Wallet size={16} />
+            </div>
+          </div>
           <div className="text-2xl md:text-3xl font-bold tracking-tight text-primary">{formatCurrency(balance)}</div>
         </div>
         
         {/* Tiết kiệm */}
         <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
-          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Tiết kiệm</div>
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tiết kiệm</div>
+            <div className="h-8 w-8 rounded-full bg-primary/15 flex items-center justify-center text-primary">
+              <Target size={16} />
+            </div>
+          </div>
           <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalSaved)}</div>
         </div>
 
         {/* Thu nhập */}
         <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
-          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Tổng thu</div>
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tổng thu</div>
+            <div className="h-8 w-8 rounded-full bg-primary/15 flex items-center justify-center text-primary">
+              <ArrowDownRight size={16} />
+            </div>
+          </div>
           <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalIncome)}</div>
         </div>
 
         {/* Đã chi */}
         <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
-          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Tổng chi</div>
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tổng chi</div>
+            <div className="h-8 w-8 rounded-full bg-primary/15 flex items-center justify-center text-primary">
+              <ArrowUpRight size={16} />
+            </div>
+          </div>
           <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalExpense)}</div>
         </div>
       </div>
