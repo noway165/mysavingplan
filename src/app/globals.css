@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-vt323), monospace;
-  --font-playfair: var(--font-vt323), monospace;
+  --font-sans: "Inter", var(--font-sans);
+  --font-playfair: var(--font-playfair), serif;
   
   /* Cấu hình màu sắc cho Tailwind v4 */
   --color-background: hsl(var(--background));

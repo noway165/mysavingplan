@@ -1,31 +1,58 @@
 "use client"
 
 import { useMemo } from "react"
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts"
 import { Transaction } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
+
+const COLORS = [
+  'hsl(var(--primary))',
+  'hsl(var(--destructive))', 
+  'hsl(120, 100%, 70%)', 
+  'hsl(280, 100%, 70%)', 
+  'hsl(40, 100%, 60%)', 
+  'hsl(320, 100%, 60%)'
+]
 
 interface CategoryPieChartProps {
   transactions: Transaction[]
 }
 
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  if (percent < 0.05) return null;
+
+  return (
+    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight="bold" className="drop-shadow-md">
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
 export function CategoryPieChart({ transactions }: CategoryPieChartProps) {
   const { t, formatCurrency } = useSettings()
 
-  const { totalIncome, totalExpense, percentage } = useMemo(() => {
-    let income = 0
-    let expense = 0
-    transactions.forEach(tx => {
-      if (tx.type === 'income') income += tx.amount
-      else expense += tx.amount
+  const data = useMemo(() => {
+    // Only analyze expenses
+    const expenses = transactions.filter(t => t.type === 'expense')
+    
+    // Calculate total per category
+    const categoryTotals: Record<string, number> = {}
+    expenses.forEach(tx => {
+      categoryTotals[tx.category] = (categoryTotals[tx.category] || 0) + tx.amount
     })
-    
-    // Percentage of expense relative to income
-    const pct = income === 0 ? (expense > 0 ? 100 : 0) : Math.min(Math.round((expense / income) * 100), 100)
-    
-    return { totalIncome: income, totalExpense: expense, percentage: pct }
+
+    // Format for Recharts
+    return Object.entries(categoryTotals)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value) // Sort descending
   }, [transactions])
 
-  if (transactions.length === 0) {
+  if (data.length === 0) {
     return (
       <div className="h-[300px] flex items-center justify-center text-primary/50 bg-primary/5 rounded-xl border border-primary/20 border-dashed backdrop-blur-md">
         <p className="animate-pulse">{t('no_data')} ...</p>
@@ -33,44 +60,57 @@ export function CategoryPieChart({ transactions }: CategoryPieChartProps) {
     )
   }
 
-  // Calculate the wave height based on percentage (100% = top, 0% = bottom)
-  // We use CSS top property for this. 100% full = top 0%. 0% full = top 100%
-  const topPosition = 100 - percentage;
-
   return (
-    <div className="h-[300px] w-full relative flex items-center justify-center p-4">
-      <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-primary/30 overflow-hidden shadow-[0_0_30px_rgba(var(--color-primary),0.3)] bg-background/50">
-        
-        {/* Background glow */}
-        <div className="absolute inset-0 bg-primary/10" />
-
-        {/* Liquid waves */}
-        <div 
-          className="absolute left-[-50%] right-[-50%] bottom-0 transition-all duration-1000 ease-in-out"
-          style={{ top: `${topPosition}%` }}
-        >
-          {/* Back wave */}
-          <div className="absolute w-[200%] h-[200%] bg-primary/40 rounded-[45%] animate-[spin_8s_linear_infinite]" style={{ top: '-10%' }} />
-          {/* Front wave */}
-          <div className="absolute w-[200%] h-[200%] bg-primary/80 rounded-[40%] animate-[spin_6s_linear_infinite_reverse]" style={{ top: '-5%' }} />
-        </div>
-
-        {/* Text content inside the circle */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 drop-shadow-md">
-          <span className="text-4xl sm:text-5xl font-black text-white mix-blend-difference">{percentage}%</span>
-          <span className="text-xs uppercase tracking-widest text-white/80 mix-blend-difference mt-1">Đã tiêu</span>
-        </div>
-      </div>
-
-      <div className="absolute bottom-2 w-full flex justify-between px-6 text-sm">
-        <div className="flex flex-col">
-          <span className="text-muted-foreground">Thu nhập</span>
-          <span className="font-bold text-emerald-400">{formatCurrency(totalIncome)}</span>
-        </div>
-        <div className="flex flex-col text-right">
-          <span className="text-muted-foreground">Chi tiêu</span>
-          <span className="font-bold text-destructive">{formatCurrency(totalExpense)}</span>
-        </div>
+    <div className="h-[300px] w-full relative group">
+      {/* Background glow for the chart area */}
+      <div className="absolute inset-0 bg-primary/5 rounded-full blur-3xl scale-50 group-hover:scale-75 transition-transform duration-1000 pointer-events-none" />
+      
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            outerRadius={110}
+            innerRadius={80} // This makes it a Doughnut Chart
+            dataKey="value"
+            paddingAngle={5} // Space between slices
+            label={renderCustomizedLabel}
+            stroke="rgba(0,0,0,0.2)"
+            strokeWidth={2}
+          >
+            {data.map((entry, index) => (
+              <Cell 
+                key={`cell-${index}`} 
+                fill={COLORS[index % COLORS.length]} 
+                style={{
+                  filter: `drop-shadow(0 0 10px ${COLORS[index % COLORS.length]}80)`
+                }}
+              />
+            ))}
+          </Pie>
+          <Tooltip 
+            formatter={(value: any) => formatCurrency(Number(value))}
+            contentStyle={{ 
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+              borderColor: 'rgba(255, 255, 255, 0.1)',
+              color: 'white',
+              borderRadius: '12px',
+              backdropFilter: 'blur(8px)',
+              boxShadow: '0 0 20px rgba(0,0,0,0.5)'
+            }}
+            itemStyle={{ fontWeight: 'bold' }}
+          />
+          <Legend 
+            wrapperStyle={{ paddingTop: '20px' }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
+      
+      {/* Center text for Doughnut */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-6">
+        <span className="text-sm font-semibold text-muted-foreground">Tổng chi</span>
       </div>
     </div>
   )
