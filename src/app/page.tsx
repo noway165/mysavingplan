@@ -69,7 +69,7 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           {/* BALANCE TYPOGRAPHY */}
-          <div className="clean-card p-6 md:p-8 h-full flex flex-col justify-between min-h-[220px]">
+          <div className="bento-card p-6 md:p-8 h-full flex flex-col justify-between min-h-[220px]">
             <div className="flex justify-between items-start">
               <div className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-widest">
                  Tổng tài sản
@@ -78,7 +78,7 @@ export default function Home() {
             </div>
             
             <div className="mt-4 mb-8">
-              <div className={`text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>
+              <div className={`text-5xl md:text-6xl lg:text-7xl font-mono tracking-tighter ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>
                 {formatCurrency(balance)}
               </div>
             </div>
@@ -96,19 +96,19 @@ export default function Home() {
 
         <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-6">
           <div>
-            <div className="clean-card p-5 md:p-6 flex flex-col justify-center h-full">
+            <div className="bento-card p-5 md:p-6 flex flex-col justify-center h-full">
               <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-2 tracking-widest uppercase">
                 <ArrowUpRight size={16} /> Thu nhập
               </div>
-              <div className="text-2xl md:text-3xl font-bold tracking-tight">{formatCurrency(totalIncome)}</div>
+              <div className="text-2xl md:text-3xl font-mono tracking-tight">{formatCurrency(totalIncome)}</div>
             </div>
           </div>
           <div>
-            <div className="clean-card p-5 md:p-6 flex flex-col justify-center h-full">
+            <div className="bento-card p-5 md:p-6 flex flex-col justify-center h-full">
               <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-destructive mb-2 tracking-widest uppercase">
                 <ArrowDownRight size={16} /> Đã chi
               </div>
-              <div className="text-2xl md:text-3xl font-bold tracking-tight">{formatCurrency(totalExpense)}</div>
+              <div className="text-2xl md:text-3xl font-mono tracking-tight">{formatCurrency(totalExpense)}</div>
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function Home() {
 
       {/* MIDDLE: Tabs Layout for Charts & Plant */}
       <div>
-        <div className="clean-card overflow-hidden flex flex-col">
+        <div className="bento-card overflow-hidden flex flex-col">
           {/* Segmented Control Tabs */}
           <div className="p-3">
             <div className="flex items-center p-1 bg-muted rounded-xl overflow-x-auto hide-scrollbar">
@@ -168,7 +168,7 @@ export default function Home() {
 
       {/* BOTTOM: Recent Transactions */}
       <div>
-        <div className="clean-card p-5 md:p-8">
+        <div className="bento-card p-5 md:p-8">
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">Giao dịch gần đây</h2>
             <Link href="/transactions" className="text-sm font-semibold text-muted-foreground hover:text-foreground flex items-center transition-colors">
@@ -196,7 +196,7 @@ export default function Home() {
                       <p className="text-xs font-medium text-muted-foreground mt-0.5">{tx.category} &bull; {tx.date}</p>
                     </div>
                   </div>
-                  <span className={`font-bold text-sm md:text-base whitespace-nowrap tracking-tight ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}>
+                  <span className={`font-mono text-sm md:text-base whitespace-nowrap tracking-tight ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}>
                     {tx.type === "income" ? "+" : "-"}{formatCurrency(tx.amount)}
                   </span>
                 </div>
