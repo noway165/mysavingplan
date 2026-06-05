@@ -20,36 +20,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="h-screen w-full overflow-hidden relative bg-background text-foreground transition-colors duration-500">
-      {/* Animated Gradient Background Blobs for Glassmorphism */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-60 dark:opacity-40">
-        <motion.div 
-          animate={{ 
-            x: ["0%", "20%", "-10%", "0%"],
-            y: ["0%", "-20%", "10%", "0%"],
-            scale: [1, 1.1, 0.9, 1]
-          }}
-          transition={{ repeat: Infinity, duration: 20, ease: "easeInOut" }}
-          className="absolute -top-[10%] -left-[10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] rounded-full bg-primary/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen"
-        />
-        <motion.div 
-          animate={{ 
-            x: ["0%", "-30%", "20%", "0%"],
-            y: ["0%", "20%", "-10%", "0%"],
-            scale: [1, 1.2, 0.8, 1]
-          }}
-          transition={{ repeat: Infinity, duration: 25, ease: "easeInOut", delay: 2 }}
-          className="absolute top-[20%] -right-[10%] w-[45vw] h-[45vw] max-w-[500px] max-h-[500px] rounded-full bg-blue-500/20 dark:bg-blue-600/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen"
-        />
-        <motion.div 
-          animate={{ 
-            x: ["0%", "10%", "-20%", "0%"],
-            y: ["0%", "30%", "-20%", "0%"],
-            scale: [1, 0.9, 1.1, 1]
-          }}
-          transition={{ repeat: Infinity, duration: 18, ease: "easeInOut", delay: 4 }}
-          className="absolute -bottom-[20%] left-[20%] w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] rounded-full bg-emerald-500/20 dark:bg-emerald-600/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen"
-        />
+    <div className="h-screen w-full overflow-hidden relative bg-background text-foreground transition-colors duration-500 aurora-background">
+      {/* Aurora glow overlays */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-60 mix-blend-screen">
+        <div className="absolute -top-[10%] -left-[10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] rounded-full bg-primary/10 blur-[120px] mix-blend-plus-lighter" />
+        <div className="absolute top-[20%] -right-[10%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full bg-blue-500/10 blur-[150px] mix-blend-plus-lighter" />
+        <div className="absolute -bottom-[20%] left-[20%] w-[70vw] h-[70vw] max-w-[900px] max-h-[900px] rounded-full bg-emerald-500/10 blur-[130px] mix-blend-plus-lighter" />
       </div>
 
       {/* Main content area */}
