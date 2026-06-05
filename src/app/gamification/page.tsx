@@ -5,6 +5,7 @@ import { Trophy, Star, Medal, Target, Flame, Lock } from "lucide-react"
 import { useTransactions } from "@/hooks/useTransactions"
 import { useGoals } from "@/hooks/useGoals"
 import { PageClock } from "@/components/PageClock"
+import { SavingsPlant } from "@/components/SavingsPlant"
 
 export default function GamificationPage() {
   const { transactions } = useTransactions()
@@ -14,6 +15,8 @@ export default function GamificationPage() {
   const totalTransactions = transactions.length
   const completedGoals = goals.filter(g => g.saved >= g.target).length
   const totalBalance = transactions.reduce((sum, t) => t.type === "income" ? sum + t.amount : sum - t.amount, 0)
+  const totalSaved = goals.reduce((sum, g) => sum + g.saved, 0)
+  const totalGoalsTarget = goals.reduce((sum, g) => sum + g.target, 0)
 
   // Dynamic XP based on activity
   const xp = (totalTransactions * 50) + (completedGoals * 200) + (goals.length * 100)
@@ -114,6 +117,11 @@ export default function GamificationPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Savings Plant */}
+      <div className="rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/20 dark:border-white/5 overflow-hidden">
+        <SavingsPlant totalSaved={totalSaved} totalTarget={totalGoalsTarget} />
       </div>
 
       <div>

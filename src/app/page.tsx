@@ -4,6 +4,7 @@ import { ArrowDownRight, ArrowUpRight, Wallet, Target, Plus, TrendingUp, Trendin
 import { DashboardCharts } from "@/components/DashboardCharts"
 import { CategoryPieChart } from "@/components/CategoryPieChart"
 import { PageClock } from "@/components/PageClock"
+import { SavingsPlant } from "@/components/SavingsPlant"
 import { useTransactions } from "@/hooks/useTransactions"
 import { useGoals } from "@/hooks/useGoals"
 import { useSettings } from "@/context/SettingsContext"
@@ -21,6 +22,7 @@ export default function Home() {
   const totalExpense = transactions.filter(t => t.type === "expense").reduce((sum, t) => sum + t.amount, 0)
   const balance = totalIncome - totalExpense
   const totalSaved = goals.reduce((sum, g) => sum + g.saved, 0)
+  const totalGoalsTarget = goals.reduce((sum, g) => sum + g.target, 0)
 
   // Calculate vs last month
   const now = new Date()
@@ -103,7 +105,7 @@ export default function Home() {
               <Wallet size={16} className="text-primary" />
               Tổng tài sản
             </div>
-            <div className={`text-4xl sm:text-5xl font-black tracking-tight ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>
+            <div className={`text-4xl sm:text-5xl font-black tracking-tight font-playfair ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>
               {formatCurrency(balance)}
             </div>
           </div>
@@ -134,7 +136,7 @@ export default function Home() {
             </div>
             Thu nhập
           </div>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground">{formatCurrency(totalIncome)}</div>
+          <div className="text-2xl sm:text-3xl font-bold text-foreground font-playfair">{formatCurrency(totalIncome)}</div>
         </motion.div>
 
         {/* BENTO 3: Chi tiêu (Span 1x1) */}
@@ -150,43 +152,17 @@ export default function Home() {
             </div>
             Đã chi
           </div>
-          <div className="text-2xl font-bold text-foreground">{formatCurrency(totalExpense)}</div>
+          <div className="text-2xl font-bold text-foreground font-playfair">{formatCurrency(totalExpense)}</div>
         </motion.div>
 
-        {/* BENTO 4: Mục tiêu thu gọn (Span 2x1) */}
+        {/* BENTO 4: Chậu Cây Tiết Kiệm (Span 2x2) */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="md:col-span-2 lg:col-span-3 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-white/20 dark:border-white/5 flex flex-col justify-center"
+          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl shadow-sm border border-white/20 dark:border-white/5 flex flex-col justify-center overflow-hidden"
         >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Tiến độ mục tiêu</h2>
-            <Link href="/goals" className="text-primary hover:scale-110 transition-transform">
-              <ChevronRight size={20} />
-            </Link>
-          </div>
-          
-          {goals.length === 0 ? (
-            <p className="text-sm text-muted-foreground italic">Chưa có mục tiêu nào. Hãy tạo mới!</p>
-          ) : (
-            <div className="space-y-4">
-              {goals.slice(0, 2).map((goal) => {
-                const percent = goal.target > 0 ? Math.min(Math.round((goal.saved / goal.target) * 100), 100) : 0
-                return (
-                  <div key={goal.id} className="group cursor-pointer">
-                    <div className="flex justify-between items-end mb-1.5">
-                      <div className="text-sm font-semibold text-foreground">{goal.name}</div>
-                      <div className="text-xs font-bold text-primary">{percent}%</div>
-                    </div>
-                    <div className="h-2 w-full rounded-full bg-background/50 overflow-hidden">
-                      <div className={`h-full ${goal.color} rounded-full transition-all`} style={{ width: `${percent}%` }} />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
+          <SavingsPlant totalSaved={totalSaved} totalTarget={totalGoalsTarget} />
         </motion.div>
 
         {/* BENTO 5: Biểu đồ Thu/Chi (Span 2x2) */}
