@@ -40,48 +40,48 @@
 
 @layer base {
   :root {
-    --background: 40 10% 95%; /* Beige/Off-white #F2F1ED */
-    --foreground: 222.2 84% 4.9%; /* Very dark gray */
-    --card: 40 10% 95%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 40 10% 95%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 38 92.4% 43.9%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 40 10% 90%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 40 10% 90%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 40 10% 90%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --background: 0 0% 98%; /* Zinc-50 */
+    --foreground: 240 5.9% 10%; /* Zinc-900 */
+    --card: 0 0% 100%;
+    --card-foreground: 240 5.9% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 5.9% 10%;
+    --primary: 240 5.9% 10%; /* Black */
+    --primary-foreground: 0 0% 98%; /* White */
+    --secondary: 240 4.8% 95.9%; /* Zinc-100 */
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%; /* Zinc-500 */
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 40 10% 85%;
-    --input: 40 10% 85%;
-    --ring: 38 92.4% 43.9%;
-    --radius: 1.5rem; /* Larger radius for neumo */
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%; /* Zinc-200 */
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 1rem;
   }
 
   .dark {
-    --background: 222 6% 16%; /* Dark slate #262729 */
-    --foreground: 0 0% 95%;
-    --card: 222 6% 16%;
-    --card-foreground: 0 0% 95%;
-    --popover: 222 6% 16%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 38 92.4% 43.9%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 222 6% 20%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 222 6% 20%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 222 6% 20%;
-    --accent-foreground: 210 40% 98%;
+    --background: 240 10% 3.9%; /* Zinc-950 */
+    --foreground: 0 0% 98%; /* Zinc-50 */
+    --card: 240 5.9% 10%; /* Zinc-900 */
+    --card-foreground: 0 0% 98%;
+    --popover: 240 5.9% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%; /* White */
+    --primary-foreground: 240 5.9% 10%; /* Black */
+    --secondary: 240 3.7% 15.9%; /* Zinc-800 */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%; /* Zinc-400 */
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 222 6% 12%;
-    --input: 222 6% 12%;
-    --ring: 38 92.4% 43.9%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
   }
 
   /* Pastel Pink Theme */
@@ -213,21 +213,8 @@
   }
 }
 
-@utility neumo-flat {
-  @apply bg-white dark:bg-black rounded-3xl border border-black/5 dark:border-white/10 transition-all duration-500 shadow-sm;
-}
-
-@utility neumo-pressed {
-  @apply bg-black/5 dark:bg-white/10 rounded-3xl border border-transparent transition-all duration-500;
-}
-
-@utility neumo-convex {
-  @apply bg-white dark:bg-black rounded-3xl border border-black/5 dark:border-white/10 transition-all duration-500;
-}
-
-@utility black-card {
-  @apply rounded-3xl border border-white/10 text-white transition-all duration-500 overflow-hidden relative shadow-lg;
-  background: #1a1a1a;
+@utility clean-card {
+  @apply bg-card rounded-2xl border border-border shadow-sm transition-all duration-300;
 }
 
 @utility hide-scrollbar {

@@ -56,8 +56,8 @@ export default function Home() {
             {user?.displayName ? user.displayName.charAt(0).toUpperCase() : "U"}
           </div>
           <div>
-            <p className="text-muted-foreground text-xs md:text-sm font-medium tracking-wide">Chào buổi sáng,</p>
-            <h1 className="text-2xl md:text-3xl font-playfair italic font-bold tracking-tight text-foreground">{user?.displayName || "Người dùng"}</h1>
+            <p className="text-muted-foreground text-xs md:text-sm font-medium tracking-wide">Good morning,</p>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{user?.displayName || "Người dùng"}</h1>
           </div>
         </div>
         <div className="flex items-center gap-3 self-end md:self-auto">
@@ -68,28 +68,26 @@ export default function Home() {
       {/* TOP: Balance & Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
-          {/* THE BLACK CARD */}
-          <div className="black-card p-6 md:p-8 relative h-full flex flex-col justify-between min-h-[220px]">
-            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-white/10 to-transparent opacity-50 pointer-events-none" />
-            <div className="flex justify-between items-start z-10">
-              <div className="flex items-center gap-2 text-xs md:text-sm font-medium text-white/70 uppercase tracking-widest">
-                 Black Card
+          {/* BALANCE TYPOGRAPHY */}
+          <div className="clean-card p-6 md:p-8 h-full flex flex-col justify-between min-h-[220px]">
+            <div className="flex justify-between items-start">
+              <div className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-widest">
+                 Tổng tài sản
               </div>
-              <Wallet size={20} className="text-white/50" />
+              <Wallet size={20} className="text-muted-foreground" />
             </div>
             
-            <div className="z-10 mt-6">
-              <div className="text-white/60 text-xs md:text-sm mb-1">Tổng tài sản</div>
-              <div className={`text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter font-playfair ${balance >= 0 ? "text-white" : "text-red-400"}`}>
+            <div className="mt-4 mb-8">
+              <div className={`text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>
                 {formatCurrency(balance)}
               </div>
             </div>
 
-            <div className="z-10 mt-8 flex gap-3 md:gap-4">
-              <Link href="/transactions" className="flex items-center justify-center gap-2 rounded-2xl bg-white/10 hover:bg-white/20 px-5 py-3 text-sm font-medium text-white transition-all backdrop-blur-md border border-white/10">
+            <div className="flex gap-3 md:gap-4 mt-auto">
+              <Link href="/transactions" className="flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-5 py-3 text-sm font-semibold text-primary-foreground transition-all shadow-sm">
                 <Plus size={16} /> Ghi chép
               </Link>
-              <Link href="/goals" className="flex items-center justify-center gap-2 rounded-2xl bg-white text-black hover:bg-gray-200 px-5 py-3 text-sm font-bold transition-all shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+              <Link href="/goals" className="flex items-center justify-center gap-2 rounded-xl bg-secondary text-secondary-foreground hover:bg-secondary/80 px-5 py-3 text-sm font-semibold transition-all">
                 <Target size={16} /> Mục tiêu
               </Link>
             </div>
@@ -98,19 +96,19 @@ export default function Home() {
 
         <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-6">
           <div>
-            <div className="neumo-flat p-5 md:p-6 flex flex-col justify-center h-full">
-              <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-1 md:mb-2 tracking-wide">
-                <ArrowUpRight size={16} /> THU NHẬP
+            <div className="clean-card p-5 md:p-6 flex flex-col justify-center h-full">
+              <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-2 tracking-widest uppercase">
+                <ArrowUpRight size={16} /> Thu nhập
               </div>
-              <div className="text-xl md:text-2xl font-bold font-playfair tracking-tight">{formatCurrency(totalIncome)}</div>
+              <div className="text-2xl md:text-3xl font-bold tracking-tight">{formatCurrency(totalIncome)}</div>
             </div>
           </div>
           <div>
-            <div className="neumo-flat p-5 md:p-6 flex flex-col justify-center h-full">
-              <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-destructive mb-1 md:mb-2 tracking-wide">
-                <ArrowDownRight size={16} /> ĐÃ CHI
+            <div className="clean-card p-5 md:p-6 flex flex-col justify-center h-full">
+              <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-destructive mb-2 tracking-widest uppercase">
+                <ArrowDownRight size={16} /> Đã chi
               </div>
-              <div className="text-xl md:text-2xl font-bold font-playfair tracking-tight">{formatCurrency(totalExpense)}</div>
+              <div className="text-2xl md:text-3xl font-bold tracking-tight">{formatCurrency(totalExpense)}</div>
             </div>
           </div>
         </div>
@@ -118,27 +116,29 @@ export default function Home() {
 
       {/* MIDDLE: Tabs Layout for Charts & Plant */}
       <div>
-        <div className="neumo-flat overflow-hidden flex flex-col">
-          {/* Tabs Navigation */}
-          <div className="flex items-center p-3 overflow-x-auto overflow-y-hidden hide-scrollbar gap-4">
-            <button 
-              onClick={() => setActiveTab('cashflow')}
-              className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all border border-transparent ${activeTab === 'cashflow' ? 'bg-primary text-primary-foreground shadow-md' : 'bg-black/5 dark:bg-white/5 text-muted-foreground hover:text-foreground'}`}
-            >
-              <BarChart3 size={16} /> Luồng tiền
-            </button>
-            <button 
-              onClick={() => setActiveTab('category')}
-              className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all border border-transparent ${activeTab === 'category' ? 'bg-primary text-primary-foreground shadow-md' : 'bg-black/5 dark:bg-white/5 text-muted-foreground hover:text-foreground'}`}
-            >
-              <PieChart size={16} /> Cơ cấu
-            </button>
-            <button 
-              onClick={() => setActiveTab('plant')}
-              className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all border border-transparent ${activeTab === 'plant' ? 'bg-primary text-primary-foreground shadow-md' : 'bg-black/5 dark:bg-white/5 text-muted-foreground hover:text-foreground'}`}
-            >
-              <Sprout size={16} /> Cây tiết kiệm
-            </button>
+        <div className="clean-card overflow-hidden flex flex-col">
+          {/* Segmented Control Tabs */}
+          <div className="p-3">
+            <div className="flex items-center p-1 bg-muted rounded-xl overflow-x-auto hide-scrollbar">
+              <button 
+                onClick={() => setActiveTab('cashflow')}
+                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'cashflow' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                <BarChart3 size={16} /> Luồng tiền
+              </button>
+              <button 
+                onClick={() => setActiveTab('category')}
+                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'category' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                <PieChart size={16} /> Cơ cấu
+              </button>
+              <button 
+                onClick={() => setActiveTab('plant')}
+                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'plant' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                <Sprout size={16} /> Cây tiết kiệm
+              </button>
+            </div>
           </div>
 
           {/* Tab Content */}
@@ -168,35 +168,35 @@ export default function Home() {
 
       {/* BOTTOM: Recent Transactions */}
       <div>
-        <div className="neumo-flat p-5 md:p-8">
+        <div className="clean-card p-5 md:p-8">
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">Giao dịch gần đây</h2>
-            <Link href="/transactions" className="text-sm font-bold text-primary flex items-center hover:opacity-80 transition-opacity">
+            <Link href="/transactions" className="text-sm font-semibold text-muted-foreground hover:text-foreground flex items-center transition-colors">
               Tất cả <ChevronRight size={16} className="ml-1" />
             </Link>
           </div>
 
           {recentTransactions.length === 0 ? (
              <div className="flex flex-col items-center justify-center text-center py-6">
-               <div className="h-12 w-12 rounded-full neumo-pressed flex items-center justify-center text-muted-foreground mb-3">
+               <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center text-muted-foreground mb-3">
                  <Clock size={24} />
                </div>
                <p className="text-muted-foreground text-sm font-medium tracking-wide">Chưa có giao dịch nào</p>
              </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-2">
               {recentTransactions.map(tx => (
-                <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl transition-colors hover:bg-black/5 dark:hover:bg-white/5 group">
+                <div key={tx.id} className="flex items-center justify-between p-4 rounded-xl transition-colors hover:bg-muted/50 group">
                   <div className="flex items-center gap-4">
-                    <div className={`h-12 w-12 rounded-full flex items-center justify-center bg-white dark:bg-black border border-black/5 shadow-sm ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"}`}>
+                    <div className={`h-12 w-12 rounded-full flex items-center justify-center bg-background border border-border shadow-sm ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}>
                       {tx.type === "income" ? <ArrowDownRight size={20} /> : <ArrowUpRight size={20} />}
                     </div>
                     <div>
-                      <p className="font-bold text-foreground text-sm line-clamp-1 group-hover:text-primary transition-colors">{tx.title}</p>
-                      <p className="text-xs font-medium text-muted-foreground mt-0.5 tracking-wide">{tx.category} &bull; {tx.date}</p>
+                      <p className="font-semibold text-foreground text-sm line-clamp-1">{tx.title}</p>
+                      <p className="text-xs font-medium text-muted-foreground mt-0.5">{tx.category} &bull; {tx.date}</p>
                     </div>
                   </div>
-                  <span className={`font-black text-sm md:text-base whitespace-nowrap font-playfair tracking-tight ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}>
+                  <span className={`font-bold text-sm md:text-base whitespace-nowrap tracking-tight ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}>
                     {tx.type === "income" ? "+" : "-"}{formatCurrency(tx.amount)}
                   </span>
                 </div>
