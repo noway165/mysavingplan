@@ -9,7 +9,6 @@ import { useTransactions } from "@/hooks/useTransactions"
 import { useGoals } from "@/hooks/useGoals"
 import { useSettings } from "@/context/SettingsContext"
 import { useAuth } from "@/components/AuthProvider"
-import { DraggableDashboard } from "@/components/DraggableDashboard"
 import Link from "next/link"
 import { motion } from "framer-motion"
 
@@ -89,14 +88,14 @@ export default function Home() {
       </div>
 
       {/* BENTO GRID LAYOUT */}
-      <DraggableDashboard>
+      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 auto-rows-[minmax(140px,auto)]">
         
         {/* BENTO 1: Tổng quan (Span 2x2) */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-primary/20 relative overflow-hidden flex flex-col justify-between group hover:border-primary transition-colors duration-500 h-full"
+          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/20 dark:border-white/5 relative overflow-hidden flex flex-col justify-between group hover:border-primary/30 transition-colors duration-500"
         >
           {/* Decorative glow */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -126,7 +125,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="md:col-span-1 lg:col-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-emerald-500/20 flex flex-col justify-center relative overflow-hidden h-full group hover:border-emerald-500/50 transition-colors"
+          className="md:col-span-1 lg:col-span-2 rounded-[2rem] bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 backdrop-blur-2xl p-6 shadow-sm border border-emerald-500/20 flex flex-col justify-center relative overflow-hidden"
         >
           <div className="absolute -right-4 -bottom-4 opacity-10">
             <TrendingUp size={100} />
@@ -145,7 +144,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="md:col-span-1 lg:col-span-1 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-destructive/20 flex flex-col justify-center relative overflow-hidden h-full group hover:border-destructive/50 transition-colors"
+          className="md:col-span-1 lg:col-span-1 rounded-[2rem] bg-gradient-to-br from-destructive/10 to-destructive/5 backdrop-blur-2xl p-6 shadow-sm border border-destructive/20 flex flex-col justify-center relative overflow-hidden"
         >
           <div className="flex items-center gap-2 text-sm font-semibold text-destructive mb-2">
             <div className="h-8 w-8 rounded-xl bg-destructive/20 flex items-center justify-center">
@@ -161,7 +160,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl shadow-sm border border-primary/20 flex flex-col justify-center overflow-hidden h-full group hover:border-primary transition-colors"
+          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl shadow-sm border border-white/20 dark:border-white/5 flex flex-col justify-center overflow-hidden"
         >
           <SavingsPlant totalSaved={totalSaved} totalTarget={totalGoalsTarget} />
         </motion.div>
@@ -171,7 +170,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-primary/20 h-full group hover:border-primary transition-colors"
+          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-white/20 dark:border-white/5"
         >
           <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-6">Thống kê Luồng tiền</h2>
           <DashboardCharts transactions={transactions} />
@@ -182,7 +181,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-primary/20 h-full group hover:border-primary transition-colors"
+          className="md:col-span-2 lg:col-span-3 md:row-span-2 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-white/20 dark:border-white/5"
         >
           <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">Cơ cấu chi tiêu</h2>
           <CategoryPieChart transactions={transactions} />
@@ -193,7 +192,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="md:col-span-4 lg:col-span-6 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-primary/20 flex flex-col h-full group hover:border-primary transition-colors"
+          className="md:col-span-4 lg:col-span-6 rounded-[2rem] bg-card/60 backdrop-blur-2xl p-6 shadow-sm border border-white/20 dark:border-white/5 flex flex-col"
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Giao dịch gần đây</h2>
@@ -230,7 +229,7 @@ export default function Home() {
             </div>
           )}
         </motion.div>
-      </DraggableDashboard>
+      </div>
     </div>
   )
 }
