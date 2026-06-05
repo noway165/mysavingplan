@@ -62,59 +62,36 @@ export default function Home() {
         </div>
         <div className="flex items-center gap-3 self-end md:self-auto">
           <PageClock />
+          <Link href="/transactions" className="flex items-center justify-center gap-2 rounded-full bg-primary hover:bg-primary/90 px-4 py-2 md:px-5 md:py-2.5 text-xs md:text-sm font-semibold text-primary-foreground transition-all shadow-sm whitespace-nowrap">
+            <Plus size={16} /> Ghi chép
+          </Link>
         </div>
       </div>
 
-      {/* TOP: Balance & Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2">
-          {/* BALANCE TYPOGRAPHY */}
-          <div className="bento-card p-6 md:p-8 h-full flex flex-col justify-between min-h-[220px] relative z-0">
-            {/* Aurora Glow Effects */}
-            <div className="absolute -top-32 -right-32 w-96 h-96 bg-primary/20 rounded-full blur-[100px] pointer-events-none -z-10" />
-            <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none -z-10" />
-
-            <div className="flex justify-between items-start">
-              <div className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-widest relative z-10">
-                 Tổng tài sản
-              </div>
-              <Wallet size={20} className="text-muted-foreground relative z-10" />
-            </div>
-            
-            <div className="mt-4 mb-8">
-              <div className={`text-5xl md:text-6xl lg:text-7xl font-mono tracking-tighter ${balance >= 0 ? "text-foreground" : "text-destructive"}`}>
-                {formatCurrency(balance)}
-              </div>
-            </div>
-
-            <div className="flex gap-3 md:gap-4 mt-auto">
-              <Link href="/transactions" className="flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-5 py-3 text-sm font-semibold text-primary-foreground transition-all shadow-sm">
-                <Plus size={16} /> Ghi chép
-              </Link>
-              <Link href="/goals" className="flex items-center justify-center gap-2 rounded-xl bg-secondary text-secondary-foreground hover:bg-secondary/80 px-5 py-3 text-sm font-semibold transition-all">
-                <Target size={16} /> Mục tiêu
-              </Link>
-            </div>
-          </div>
+      {/* TOP: Balance & Summary Cards (Finflow Style) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        {/* Số dư */}
+        <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Số dư</div>
+          <div className="text-2xl md:text-3xl font-bold tracking-tight text-primary">{formatCurrency(balance)}</div>
+        </div>
+        
+        {/* Tiết kiệm */}
+        <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Tiết kiệm</div>
+          <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalSaved)}</div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-6">
-          <div>
-            <div className="bento-card p-5 md:p-6 flex flex-col justify-center h-full">
-              <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-2 tracking-widest uppercase">
-                <ArrowUpRight size={16} /> Thu nhập
-              </div>
-              <div className="text-2xl md:text-3xl font-mono tracking-tight">{formatCurrency(totalIncome)}</div>
-            </div>
-          </div>
-          <div>
-            <div className="bento-card p-5 md:p-6 flex flex-col justify-center h-full">
-              <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-destructive mb-2 tracking-widest uppercase">
-                <ArrowDownRight size={16} /> Đã chi
-              </div>
-              <div className="text-2xl md:text-3xl font-mono tracking-tight">{formatCurrency(totalExpense)}</div>
-            </div>
-          </div>
+        {/* Thu nhập */}
+        <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Tổng thu</div>
+          <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalIncome)}</div>
+        </div>
+
+        {/* Đã chi */}
+        <div className="bento-card p-5 md:p-6 flex flex-col justify-center">
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Tổng chi</div>
+          <div className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{formatCurrency(totalExpense)}</div>
         </div>
       </div>
 
