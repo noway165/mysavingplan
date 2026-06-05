@@ -69,12 +69,16 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           {/* BALANCE TYPOGRAPHY */}
-          <div className="bento-card p-6 md:p-8 h-full flex flex-col justify-between min-h-[220px]">
+          <div className="bento-card p-6 md:p-8 h-full flex flex-col justify-between min-h-[220px] relative z-0">
+            {/* Aurora Glow Effects */}
+            <div className="absolute -top-32 -right-32 w-96 h-96 bg-primary/20 rounded-full blur-[100px] pointer-events-none -z-10" />
+            <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+
             <div className="flex justify-between items-start">
-              <div className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-widest">
+              <div className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-widest relative z-10">
                  Tổng tài sản
               </div>
-              <Wallet size={20} className="text-muted-foreground" />
+              <Wallet size={20} className="text-muted-foreground relative z-10" />
             </div>
             
             <div className="mt-4 mb-8">
@@ -122,19 +126,19 @@ export default function Home() {
             <div className="flex items-center p-1 bg-muted rounded-xl overflow-x-auto hide-scrollbar">
               <button 
                 onClick={() => setActiveTab('cashflow')}
-                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'cashflow' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'cashflow' ? 'bg-primary shadow-sm text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 <BarChart3 size={16} /> Luồng tiền
               </button>
               <button 
                 onClick={() => setActiveTab('category')}
-                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'category' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'category' ? 'bg-primary shadow-sm text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 <PieChart size={16} /> Cơ cấu
               </button>
               <button 
                 onClick={() => setActiveTab('plant')}
-                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'plant' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${activeTab === 'plant' ? 'bg-primary shadow-sm text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 <Sprout size={16} /> Cây tiết kiệm
               </button>

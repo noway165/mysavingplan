@@ -83,6 +83,90 @@
     --input: 0 0% 10%;
     --ring: 0 0% 100%;
   }
+
+  /* Pastel Pink Theme */
+  .theme-pastelpink {
+    --primary: 340 85% 75%;
+    --primary-foreground: 340 90% 15%;
+    --ring: 340 85% 75%;
+  }
+  .dark.theme-pastelpink {
+    --primary: 340 85% 80%;
+    --primary-foreground: 340 90% 15%;
+    --ring: 340 85% 80%;
+  }
+
+  /* Slate Theme */
+  .theme-slate {
+    --primary: 210 13% 50%;
+    --primary-foreground: 210 40% 98%;
+    --ring: 210 13% 50%;
+  }
+  .dark.theme-slate {
+    --primary: 210 13% 60%;
+    --primary-foreground: 210 40% 10%;
+    --ring: 210 13% 60%;
+  }
+
+  /* Lime Green Theme */
+  .theme-limegreen {
+    --primary: 120 61% 50%;
+    --primary-foreground: 120 100% 98%;
+    --ring: 120 61% 50%;
+  }
+  .dark.theme-limegreen {
+    --primary: 120 61% 40%;
+    --primary-foreground: 120 100% 98%;
+    --ring: 120 61% 40%;
+  }
+
+  /* Orange Red Theme */
+  .theme-orangered {
+    --primary: 16 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 16 100% 50%;
+  }
+  .dark.theme-orangered {
+    --primary: 16 100% 55%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 16 100% 55%;
+  }
+
+  /* White Smoke Theme */
+  .theme-whitesmoke {
+    --primary: 0 0% 85%;
+    --primary-foreground: 0 0% 15%;
+    --ring: 0 0% 85%;
+  }
+  .dark.theme-whitesmoke {
+    --primary: 0 0% 96%;
+    --primary-foreground: 0 0% 10%;
+    --ring: 0 0% 96%;
+  }
+
+  /* Amethyst Theme */
+  .theme-amethyst {
+    --primary: 270 50% 60%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 270 50% 60%;
+  }
+  .dark.theme-amethyst {
+    --primary: 270 50% 65%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 270 50% 65%;
+  }
+
+  /* Amber Theme (Default fallback in settings but we add it to be sure) */
+  .theme-amber {
+    --primary: 40 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 40 100% 50%;
+  }
+  .dark.theme-amber {
+    --primary: 40 100% 55%;
+    --primary-foreground: 0 0% 10%;
+    --ring: 40 100% 55%;
+  }
 }
 
 
