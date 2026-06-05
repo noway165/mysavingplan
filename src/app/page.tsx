@@ -52,7 +52,7 @@ export default function Home() {
     <div className="max-w-6xl mx-auto space-y-6 md:space-y-8 pb-10 px-2 md:px-0">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 md:h-14 md:w-14 rounded-full neumo-convex flex items-center justify-center text-primary font-bold text-xl md:text-2xl">
+          <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-white dark:bg-black border border-black/10 shadow-sm flex items-center justify-center text-primary font-bold text-xl md:text-2xl">
             {user?.displayName ? user.displayName.charAt(0).toUpperCase() : "U"}
           </div>
           <div>
@@ -67,7 +67,7 @@ export default function Home() {
 
       {/* TOP: Balance & Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <TiltWrapper className="md:col-span-2">
+        <div className="md:col-span-2">
           {/* THE BLACK CARD */}
           <div className="black-card p-6 md:p-8 relative h-full flex flex-col justify-between min-h-[220px]">
             <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-white/10 to-transparent opacity-50 pointer-events-none" />
@@ -94,48 +94,48 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        </TiltWrapper>
+        </div>
 
         <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-6">
-          <TiltWrapper>
+          <div>
             <div className="neumo-flat p-5 md:p-6 flex flex-col justify-center h-full">
               <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-1 md:mb-2 tracking-wide">
                 <ArrowUpRight size={16} /> THU NHẬP
               </div>
               <div className="text-xl md:text-2xl font-bold font-playfair tracking-tight">{formatCurrency(totalIncome)}</div>
             </div>
-          </TiltWrapper>
-          <TiltWrapper>
+          </div>
+          <div>
             <div className="neumo-flat p-5 md:p-6 flex flex-col justify-center h-full">
               <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-destructive mb-1 md:mb-2 tracking-wide">
                 <ArrowDownRight size={16} /> ĐÃ CHI
               </div>
               <div className="text-xl md:text-2xl font-bold font-playfair tracking-tight">{formatCurrency(totalExpense)}</div>
             </div>
-          </TiltWrapper>
+          </div>
         </div>
       </div>
 
       {/* MIDDLE: Tabs Layout for Charts & Plant */}
-      <TiltWrapper>
+      <div>
         <div className="neumo-flat overflow-hidden flex flex-col">
           {/* Tabs Navigation */}
           <div className="flex items-center p-3 overflow-x-auto overflow-y-hidden hide-scrollbar gap-4">
             <button 
               onClick={() => setActiveTab('cashflow')}
-              className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all ${activeTab === 'cashflow' ? 'neumo-pressed text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all border border-transparent ${activeTab === 'cashflow' ? 'bg-primary text-primary-foreground shadow-md' : 'bg-black/5 dark:bg-white/5 text-muted-foreground hover:text-foreground'}`}
             >
               <BarChart3 size={16} /> Luồng tiền
             </button>
             <button 
               onClick={() => setActiveTab('category')}
-              className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all ${activeTab === 'category' ? 'neumo-pressed text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all border border-transparent ${activeTab === 'category' ? 'bg-primary text-primary-foreground shadow-md' : 'bg-black/5 dark:bg-white/5 text-muted-foreground hover:text-foreground'}`}
             >
               <PieChart size={16} /> Cơ cấu
             </button>
             <button 
               onClick={() => setActiveTab('plant')}
-              className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all ${activeTab === 'plant' ? 'neumo-pressed text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`whitespace-nowrap flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all border border-transparent ${activeTab === 'plant' ? 'bg-primary text-primary-foreground shadow-md' : 'bg-black/5 dark:bg-white/5 text-muted-foreground hover:text-foreground'}`}
             >
               <Sprout size={16} /> Cây tiết kiệm
             </button>
@@ -164,10 +164,10 @@ export default function Home() {
             </AnimatePresence>
           </div>
         </div>
-      </TiltWrapper>
+      </div>
 
       {/* BOTTOM: Recent Transactions */}
-      <TiltWrapper>
+      <div>
         <div className="neumo-flat p-5 md:p-8">
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">Giao dịch gần đây</h2>
@@ -186,9 +186,9 @@ export default function Home() {
           ) : (
             <div className="space-y-4">
               {recentTransactions.map(tx => (
-                <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl transition-colors hover:neumo-pressed group">
+                <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl transition-colors hover:bg-black/5 dark:hover:bg-white/5 group">
                   <div className="flex items-center gap-4">
-                    <div className={`h-12 w-12 rounded-full flex items-center justify-center neumo-convex ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"}`}>
+                    <div className={`h-12 w-12 rounded-full flex items-center justify-center bg-white dark:bg-black border border-black/5 shadow-sm ${tx.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"}`}>
                       {tx.type === "income" ? <ArrowDownRight size={20} /> : <ArrowUpRight size={20} />}
                     </div>
                     <div>
@@ -204,7 +204,7 @@ export default function Home() {
             </div>
           )}
         </div>
-      </TiltWrapper>
+      </div>
     </div>
   )
 }

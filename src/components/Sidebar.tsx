@@ -43,8 +43,8 @@ export function Sidebar() {
               className={cn(
                 "group relative flex items-center justify-center h-14 w-14 rounded-2xl transition-all duration-300 hover:translate-x-2",
                 isActive 
-                  ? "neumo-pressed text-primary" 
-                  : "bg-transparent text-muted-foreground hover:neumo-flat hover:text-foreground border border-transparent"
+                  ? "bg-primary text-primary-foreground shadow-md" 
+                  : "bg-transparent text-muted-foreground hover:bg-black/5 dark:hover:bg-white/5 hover:text-foreground border border-transparent"
               )}
             >
               <item.icon className={cn("h-6 w-6 transition-transform duration-300", isActive && "scale-110")} />
@@ -95,8 +95,8 @@ export function Sidebar() {
                     className={cn(
                       "flex flex-col items-center justify-center gap-2 rounded-2xl p-4 text-sm font-medium transition-all",
                       pathname === item.href
-                        ? "neumo-pressed text-primary"
-                        : "neumo-convex text-muted-foreground hover:neumo-flat hover:text-foreground"
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "bg-black/5 dark:bg-white/5 text-muted-foreground hover:bg-black/10 dark:hover:bg-white/10 hover:text-foreground"
                     )}
                   >
                     <item.icon className="h-6 w-6" />
@@ -151,9 +151,9 @@ export function Sidebar() {
                 )}
               >
                 {isActive && (
-                  <div className="absolute inset-0 neumo-pressed rounded-2xl scale-100 animate-in zoom-in-90 duration-300" />
+                  <div className="absolute inset-0 bg-primary rounded-2xl scale-100 animate-in zoom-in-90 duration-300" />
                 )}
-                <item.icon className={cn("h-6 w-6 z-10 transition-transform duration-300", isActive && "scale-110")} />
+                <item.icon className={cn("h-6 w-6 z-10 transition-transform duration-300", isActive && "scale-110 text-primary-foreground")} />
                 <span className={cn("text-[10px] font-medium leading-none z-10", isActive && "font-bold")}>
                   {item.name}
                 </span>
