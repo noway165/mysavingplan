@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion"
 import { useSettings } from "@/context/SettingsContext"
-import Image from "next/image"
 
 interface SavingsPlantProps {
   totalSaved: number
@@ -54,16 +53,10 @@ export function SavingsPlant({ totalSaved, totalTarget }: SavingsPlantProps) {
           initial={{ scale: 0, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className="mb-4 drop-shadow-2xl relative"
-          style={{ width: 40 + level * 30, height: 40 + level * 30 }}
+          className="text-6xl sm:text-7xl mb-4 drop-shadow-2xl"
+          style={{ textShadow: "0 10px 20px rgba(0,0,0,0.2)" }}
         >
-          <Image 
-            src="/pvz.png" 
-            alt="PvZ Money Flower" 
-            fill
-            className="object-contain"
-            priority
-          />
+          {currentStage.emoji}
         </motion.div>
         
         <h3 className="text-lg font-bold text-foreground mb-1 font-playfair tracking-wide">{currentStage.title}</h3>
