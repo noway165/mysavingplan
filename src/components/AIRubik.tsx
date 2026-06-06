@@ -1,27 +1,60 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useState, useRef } from "react"
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 
 export function AIRubik({ size = 100, isAnalyzing = false }: { size?: number, isAnalyzing?: boolean }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  
+  const springConfig = { damping: 20, stiffness: 100 }
+  const mouseRotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [45, -45]), springConfig)
+  const mouseRotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-45, 45]), springConfig)
+
+  const [autoRotate, setAutoRotate] = useState({ x: 0, y: 0 })
+
+  useEffect(() => {
+    let animationFrameId: number
+    const animate = () => {
+      setAutoRotate(prev => ({
+        x: prev.x + (isAnalyzing ? 2 : 0.3),
+        y: prev.y + (isAnalyzing ? 2 : 0.5)
+      }))
+      animationFrameId = requestAnimationFrame(animate)
+    }
+    animate()
+    return () => cancelAnimationFrame(animationFrameId)
+  }, [isAnalyzing])
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const width = rect.width
+    const height = rect.height
+    const mouseXPos = e.clientX - rect.left
+    const mouseYPos = e.clientY - rect.top
+    const xPct = mouseXPos / width - 0.5
+    const yPct = mouseYPos / height - 0.5
+    mouseX.set(xPct)
+    mouseY.set(yPct)
+  }
+
+  const handleMouseLeave = () => {
+    mouseX.set(0)
+    mouseY.set(0)
+  }
+
   return (
-    <div className="relative" style={{ width: size, height: size, perspective: '1000px' }}>
+    <div 
+      ref={containerRef}
+      className="relative cursor-grab active:cursor-grabbing" 
+      style={{ width: size, height: size, perspective: '1000px' }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
       <style>{`
-        @keyframes spin-cube {
-          0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-          100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
-        }
-        @keyframes spin-cube-fast {
-          0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-          100% { transform: rotateX(720deg) rotateY(720deg) rotateZ(720deg); }
-        }
-        .cube-container {
-          width: 100%;
-          height: 100%;
-          position: absolute;
-          transform-style: preserve-3d;
-          animation: ${isAnalyzing ? 'spin-cube-fast 2s linear infinite' : 'spin-cube 15s linear infinite'};
-        }
         .cube-face {
           position: absolute;
           width: ${size}px;
@@ -34,6 +67,7 @@ export function AIRubik({ size = 100, isAnalyzing = false }: { size?: number, is
           grid-template-rows: repeat(3, 1fr);
           gap: 2px;
           padding: 2px;
+          backface-visibility: visible;
         }
         .cube-face > div {
           background: rgba(0, 242, 254, 0.2);
@@ -47,7 +81,14 @@ export function AIRubik({ size = 100, isAnalyzing = false }: { size?: number, is
         .bottom { transform: rotateX(-90deg) translateZ(${size/2}px); }
       `}</style>
       
-      <div className="cube-container">
+      <motion.div 
+        className="w-full h-full absolute"
+        style={{
+          transformStyle: 'preserve-3d',
+          rotateX: useTransform(() => mouseRotateX.get() + autoRotate.x),
+          rotateY: useTransform(() => mouseRotateY.get() + autoRotate.y)
+        }}
+      >
         {['front', 'back', 'right', 'left', 'top', 'bottom'].map((face) => (
           <div key={face} className={`cube-face ${face}`}>
             {[...Array(9)].map((_, i) => (
@@ -68,7 +109,7 @@ export function AIRubik({ size = 100, isAnalyzing = false }: { size?: number, is
             ))}
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   )
 }

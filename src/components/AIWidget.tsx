@@ -71,7 +71,7 @@ export function AIWidget({ transactions }: { transactions: any[] }) {
 
   return (
     <div className="hud-panel p-5 md:p-6 h-full flex flex-col justify-between">
-      <div className="absolute -right-10 -top-10 opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none">
+      <div className="absolute -right-10 -top-10 opacity-20 hover:opacity-100 transition-opacity duration-500 z-0">
         <AIRubik size={200} isAnalyzing={false} />
       </div>
       
