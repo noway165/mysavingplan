@@ -63,24 +63,24 @@
   }
 
   .dark {
-    --background: 222 47% 11%; /* Slate 900 (#0F172A) */
-    --foreground: 0 0% 100%; /* Pure White (#FFFFFF) */
-    --card: 215 28% 17%; /* Slate 800 (#1E293B) */
+    --background: 240 45% 7%; /* #0a0a1a */
+    --foreground: 0 0% 100%; /* Pure White */
+    --card: 240 45% 10%; /* Slightly lighter than background */
     --card-foreground: 0 0% 100%;
-    --popover: 215 28% 17%;
+    --popover: 240 45% 10%;
     --popover-foreground: 0 0% 100%;
     --primary: 0 0% 100%; 
     --primary-foreground: 0 0% 0%; 
-    --secondary: 215 28% 22%; /* Slate 700 */
+    --secondary: 240 40% 15%; 
     --secondary-foreground: 0 0% 100%;
-    --muted: 215 28% 22%;
+    --muted: 240 40% 15%;
     --muted-foreground: 215 20% 65%; /* Slate 400 */
-    --accent: 215 28% 22%;
+    --accent: 240 40% 15%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62.8% 50.6%; /* Brighter red for dark theme */
     --destructive-foreground: 0 0% 100%;
-    --border: 215 28% 22%; /* Slate 700 */
-    --input: 215 28% 22%;
+    --border: 0 0% 100%; /* Used with opacity via tailwind like border-white/5 */
+    --input: 240 40% 15%;
     --ring: 0 0% 100%;
   }
 
@@ -199,11 +199,11 @@
 }
 
 @utility bento-card {
-  @apply bg-card rounded-2xl border border-border border-t-[2px] border-t-primary/30 overflow-hidden;
+  @apply bg-black/40 backdrop-blur-md rounded-2xl border border-white/5 shadow-xl overflow-hidden;
 }
 
 @utility bento-card-inner {
-  @apply bg-background/50 rounded-2xl border border-border;
+  @apply bg-white/5 backdrop-blur-md rounded-2xl border border-white/5;
 }
 
 @utility hide-scrollbar {
