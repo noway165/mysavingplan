@@ -5,6 +5,7 @@ import { Sparkles, ArrowRight } from "lucide-react"
 import { useSettings } from "@/context/SettingsContext"
 
 import Link from "next/link"
+import { AIRubik } from "./AIRubik"
 
 export function AIWidget({ transactions }: { transactions: any[] }) {
   const { formatCurrency } = useSettings()
@@ -69,15 +70,17 @@ export function AIWidget({ transactions }: { transactions: any[] }) {
   }, [transactions, formatCurrency])
 
   return (
-    <div className="p-5 md:p-6 relative overflow-hidden group h-full flex flex-col justify-between">
-      <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500">
-        <Sparkles size={120} className="text-white" />
+    <div className="hud-panel p-5 md:p-6 h-full flex flex-col justify-between">
+      <div className="absolute -right-10 -top-10 opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none">
+        <AIRubik size={200} isAnalyzing={false} />
       </div>
       
       <div>
-        <div className="flex items-center gap-2 text-[#fe0979] mb-3 relative z-10">
-          <Sparkles size={20} className="animate-pulse" />
-          <h2 className="font-bold text-sm uppercase tracking-widest text-white/80">AI Insights</h2>
+        <div className="flex items-center gap-3 text-[#fe0979] mb-3 relative z-10">
+          <div className="w-8 h-8">
+            <AIRubik size={32} isAnalyzing={true} />
+          </div>
+          <h2 className="font-bold text-sm uppercase tracking-widest text-white/80 font-serif">AI Insights</h2>
         </div>
 
         <p className="text-sm text-white/70 leading-relaxed relative z-10 font-medium">

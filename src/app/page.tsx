@@ -5,7 +5,7 @@ import { ArrowDownRight, ArrowUpRight, Wallet, Target, Plus, Clock, ChevronRight
 import { DashboardCharts } from "@/components/DashboardCharts"
 import { CategoryPieChart } from "@/components/CategoryPieChart"
 import { PageClock } from "@/components/PageClock"
-import { SavingsPlant } from "@/components/SavingsPlant"
+import { DragonAvatar } from "@/components/DragonAvatar"
 import { useTransactions } from "@/hooks/useTransactions"
 import { useGoals } from "@/hooks/useGoals"
 import { useSettings } from "@/context/SettingsContext"
@@ -60,7 +60,7 @@ export default function Home() {
           </div>
           <div>
             <p className="text-muted-foreground text-xs md:text-sm font-medium tracking-wide">Good morning,</p>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{user?.displayName || "Người dùng"}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground font-serif">{user?.displayName || "Người dùng"}</h1>
           </div>
         </div>
         <div className="flex items-center gap-3 self-end md:self-auto">
@@ -100,7 +100,7 @@ export default function Home() {
             <div className="absolute top-0 right-0 z-20 flex gap-2">
               <button onClick={() => setActiveTab('cashflow')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'cashflow' ? 'bg-[#00f2fe]/20 text-[#00f2fe] border border-[#00f2fe]/50 shadow-[0_0_10px_rgba(0,242,254,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Trend</button>
               <button onClick={() => setActiveTab('category')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'category' ? 'bg-[#fe0979]/20 text-[#fe0979] border border-[#fe0979]/50 shadow-[0_0_10px_rgba(254,9,121,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Category</button>
-              <button onClick={() => setActiveTab('plant')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'plant' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Plant</button>
+              <button onClick={() => setActiveTab('plant')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'plant' ? 'bg-[#00f2fe]/20 text-[#00f2fe] border border-[#00f2fe]/50 shadow-[0_0_10px_rgba(0,242,254,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Dragon Pet</button>
             </div>
             
             <div className="w-full h-full pt-8 pb-4">
@@ -118,8 +118,15 @@ export default function Home() {
                   </motion.div>
                 )}
                 {activeTab === 'plant' && (
-                  <motion.div key="plant" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full">
-                    <SavingsPlant totalSaved={totalSaved} totalTarget={totalGoalsTarget} />
+                  <motion.div key="plant" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full flex flex-col items-center justify-center relative">
+                    <div className="absolute top-4 left-4 text-xs font-bold text-white/50 tracking-widest uppercase">
+                      Hệ Thống Rồng Hộ Mệnh
+                    </div>
+                    <DragonAvatar level={1 + Math.floor(totalSaved / 1000000)} size={250} />
+                    <div className="mt-8 text-center">
+                      <p className="text-white font-bold text-lg">Draco - Level {1 + Math.floor(totalSaved / 1000000)}</p>
+                      <p className="text-[#00f2fe] text-xs font-medium">Tiết kiệm thêm để tiến hóa!</p>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
