@@ -9,8 +9,8 @@ export interface VirtualBucket {
 
 const DEFAULT_BUCKETS: VirtualBucket[] = [
   { id: 'savings', name: 'Tiết kiệm', percentage: 50, balance: 0 },
-  { id: 'emergency', name: 'Khẩn cấp', percentage: 25, balance: 0 },
-  { id: 'investment', name: 'Đầu tư', percentage: 15, balance: 0 },
+  { id: 'emergency', name: 'Phòng hờ', percentage: 25, balance: 0 },
+  { id: 'dining', name: 'Ăn uống', percentage: 15, balance: 0 },
   { id: 'leisure', name: 'Giải trí', percentage: 10, balance: 0 }
 ];
 
@@ -22,7 +22,14 @@ export function useBuckets() {
     const saved = localStorage.getItem('mysavings_buckets');
     if (saved) {
       try {
-        setBuckets(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        // Force update names and handle old 'investment' id mapped to 'dining'
+        const merged = DEFAULT_BUCKETS.map(defaultBucket => {
+          const oldId = defaultBucket.id === 'dining' ? 'investment' : defaultBucket.id;
+          const found = parsed.find((b: any) => b.id === defaultBucket.id || b.id === oldId);
+          return found ? { ...defaultBucket, balance: found.balance, percentage: found.percentage } : defaultBucket;
+        });
+        setBuckets(merged);
       } catch (e) {
         console.error("Error parsing buckets", e);
       }
