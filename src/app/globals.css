@@ -36,6 +36,10 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+  
+  /* Dynamic Neon Colors cho HUD Theme */
+  --color-neon-primary: var(--neon-primary);
+  --color-neon-secondary: var(--neon-secondary);
 }
 
 @layer base {
@@ -60,6 +64,8 @@
     --input: 0 0% 90%;
     --ring: 0 0% 0%;
     --radius: 1.5rem;
+    --neon-primary: #00f2fe;
+    --neon-secondary: #fe0979;
   }
 
   .dark {
@@ -82,6 +88,8 @@
     --border: 0 0% 100%; /* Used with opacity via tailwind like border-white/5 */
     --input: 240 40% 15%;
     --ring: 0 0% 100%;
+    --neon-primary: #00f2fe;
+    --neon-secondary: #fe0979;
   }
 
   /* Pastel Pink Theme */
@@ -97,6 +105,8 @@
     --primary: 340 85% 80%;
     --primary-foreground: 340 90% 15%;
     --ring: 340 85% 80%;
+    --neon-primary: #ffb6c1; /* Pink */
+    --neon-secondary: #d8b4fe; /* Purple */
   }
 
   /* Slate Theme */
@@ -112,6 +122,8 @@
     --primary: 210 13% 60%;
     --primary-foreground: 210 40% 10%;
     --ring: 210 13% 60%;
+    --neon-primary: #94a3b8; /* Slate */
+    --neon-secondary: #38bdf8; /* Sky Blue */
   }
 
   /* Lime Green Theme */
@@ -127,6 +139,8 @@
     --primary: 120 61% 40%;
     --primary-foreground: 120 100% 98%;
     --ring: 120 61% 40%;
+    --neon-primary: #4ade80; /* Matrix Green */
+    --neon-secondary: #facc15; /* Yellow */
   }
 
   /* Orange Red Theme */
@@ -142,6 +156,8 @@
     --primary: 16 100% 55%;
     --primary-foreground: 0 0% 100%;
     --ring: 16 100% 55%;
+    --neon-primary: #fb923c; /* Orange */
+    --neon-secondary: #f87171; /* Red */
   }
 
   /* White Smoke Theme */
@@ -157,6 +173,8 @@
     --primary: 0 0% 96%;
     --primary-foreground: 0 0% 10%;
     --ring: 0 0% 96%;
+    --neon-primary: #f8fafc; /* White */
+    --neon-secondary: #94a3b8; /* Gray */
   }
 
   /* Amethyst Theme */
@@ -172,6 +190,8 @@
     --primary: 270 50% 65%;
     --primary-foreground: 0 0% 100%;
     --ring: 270 50% 65%;
+    --neon-primary: #a78bfa; /* Violet */
+    --neon-secondary: #f472b6; /* Pink */
   }
 
   /* Amber Theme (Default fallback in settings but we add it to be sure) */
@@ -187,6 +207,8 @@
     --primary: 40 100% 55%;
     --primary-foreground: 0 0% 10%;
     --ring: 40 100% 55%;
+    --neon-primary: #fbbf24; /* Amber */
+    --neon-secondary: #fb923c; /* Orange */
   }
 }
 
@@ -200,25 +222,25 @@
 
 @utility bento-card {
   @apply relative bg-black/40 backdrop-blur-md overflow-hidden;
-  border-top: 1px solid rgba(0,242,254,0.3);
-  border-bottom: 1px solid rgba(254,9,121,0.3);
-  box-shadow: inset 0 0 20px rgba(0,242,254,0.05), 0 8px 32px rgba(0,0,0,0.5);
+  border-top: 1px solid color-mix(in srgb, var(--neon-primary) 30%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--neon-secondary) 30%, transparent);
+  box-shadow: inset 0 0 20px color-mix(in srgb, var(--neon-primary) 5%, transparent), 0 8px 32px rgba(0,0,0,0.5);
   clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
   
   &::before {
     content: "";
     position: absolute;
     top: 0; left: 0; width: 1rem; height: 1rem;
-    border-top: 2px solid #00f2fe;
-    border-left: 2px solid #00f2fe;
+    border-top: 2px solid var(--neon-primary);
+    border-left: 2px solid var(--neon-primary);
     pointer-events: none;
   }
   &::after {
     content: "";
     position: absolute;
     bottom: 0; right: 0; width: 1rem; height: 1rem;
-    border-bottom: 2px solid #fe0979;
-    border-right: 2px solid #fe0979;
+    border-bottom: 2px solid var(--neon-secondary);
+    border-right: 2px solid var(--neon-secondary);
     pointer-events: none;
   }
 }
@@ -243,12 +265,12 @@
   @apply bg-black/40 backdrop-blur-md border border-white/5 shadow-xl;
 }
 
-@utility neon-text-cyan {
-  text-shadow: 0 0 10px rgba(0, 242, 254, 0.8), 0 0 20px rgba(0, 242, 254, 0.4);
+@utility neon-text-primary {
+  text-shadow: 0 0 10px color-mix(in srgb, var(--neon-primary) 80%, transparent), 0 0 20px color-mix(in srgb, var(--neon-primary) 40%, transparent);
 }
 
-@utility neon-text-pink {
-  text-shadow: 0 0 10px rgba(254, 9, 121, 0.8), 0 0 20px rgba(254, 9, 121, 0.4);
+@utility neon-text-secondary {
+  text-shadow: 0 0 10px color-mix(in srgb, var(--neon-secondary) 80%, transparent), 0 0 20px color-mix(in srgb, var(--neon-secondary) 40%, transparent);
 }
 
 

@@ -120,10 +120,10 @@ export default function AIInsightsPage() {
         <div className="md:col-span-1 space-y-6 overflow-y-auto pr-2 custom-scrollbar">
           
           {/* Real Data Insights */}
-          <div className="hud-panel p-5 border border-[#00f2fe]/30 hover:border-[#00f2fe] transition-colors relative group">
-            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00f2fe]" />
+          <div className="hud-panel p-5 border border-neon-primary/30 hover:border-neon-primary transition-colors relative group">
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-neon-primary" />
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-lg bg-[#00f2fe]/10 flex items-center justify-center text-[#00f2fe] shadow-[0_0_15px_rgba(0,242,254,0.3)]">
+              <div className="h-10 w-10 rounded-lg bg-neon-primary/10 flex items-center justify-center text-neon-primary shadow-[0_0_15px_color-mix(in_srgb,var(--neon-primary)_30%,transparent)]">
                 <TrendingDown size={20} />
               </div>
               <h3 className="font-semibold text-white font-mono uppercase tracking-wider text-sm">Cơ hội tiết kiệm</h3>
@@ -143,17 +143,17 @@ export default function AIInsightsPage() {
                   }
                 }}
                 disabled={allocated}
-                className={`text-sm font-semibold flex items-center gap-1 transition-all ${allocated ? 'text-emerald-500 cursor-not-allowed' : 'text-[#00f2fe] hover:gap-2'}`}
+                className={`text-sm font-semibold flex items-center gap-1 transition-all ${allocated ? 'text-emerald-500 cursor-not-allowed' : 'text-neon-primary hover:gap-2'}`}
               >
                 {allocated ? "Đã phân bổ" : "Thực hiện ngay"} {!allocated && <ArrowRight size={16} />}
               </button>
             )}
           </div>
 
-          <div className="hud-panel p-5 border border-[#fe0979]/30 hover:border-[#fe0979] transition-colors relative">
-            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#fe0979]" />
+          <div className="hud-panel p-5 border border-neon-secondary/30 hover:border-neon-secondary transition-colors relative">
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-neon-secondary" />
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-lg bg-[#fe0979]/10 flex items-center justify-center text-[#fe0979] shadow-[0_0_15px_rgba(254,9,121,0.3)] animate-pulse">
+              <div className="h-10 w-10 rounded-lg bg-neon-secondary/10 flex items-center justify-center text-neon-secondary shadow-[0_0_15px_color-mix(in_srgb,var(--neon-secondary)_30%,transparent)] animate-pulse">
                 <AlertTriangle size={20} />
               </div>
               <h3 className="font-semibold text-white font-mono uppercase tracking-wider text-sm">Cảnh báo chi tiêu</h3>
@@ -166,7 +166,7 @@ export default function AIInsightsPage() {
             {highestCategoryAmount > 0 && (
               <button 
                 onClick={() => router.push('/transactions')}
-                className="text-sm font-semibold text-[#fe0979] flex items-center gap-1 hover:gap-2 transition-all"
+                className="text-sm font-semibold text-neon-secondary flex items-center gap-1 hover:gap-2 transition-all"
               >
                 Xem chi tiết <ArrowRight size={16} />
               </button>
@@ -196,20 +196,20 @@ export default function AIInsightsPage() {
         </div>
 
         {/* Chat Area - HUD Style */}
-        <div className="md:col-span-2 hud-panel border border-[#00f2fe]/20 flex flex-col overflow-hidden h-full relative">
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(0,242,254,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,242,254,0.03)_1px,transparent_1px)] bg-[size:30px_30px] opacity-20 pointer-events-none" />
+        <div className="md:col-span-2 hud-panel border border-neon-primary/20 flex flex-col overflow-hidden h-full relative">
+          <div className="absolute inset-0 bg-[linear-gradient(color-mix(in_srgb,var(--neon-primary)_3%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--neon-primary)_3%,transparent)_1px,transparent_1px)] bg-[size:30px_30px] opacity-20 pointer-events-none" />
           
-          <div className="p-4 border-b border-[#00f2fe]/20 bg-black/40 flex items-center justify-between gap-3 relative z-10">
+          <div className="p-4 border-b border-neon-primary/20 bg-black/40 flex items-center justify-between gap-3 relative z-10">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-[#00f2fe]/10 border border-[#00f2fe]/50 flex items-center justify-center text-[#00f2fe] shadow-[0_0_10px_rgba(0,242,254,0.5)]">
+              <div className="h-10 w-10 rounded-lg bg-neon-primary/10 border border-neon-primary/50 flex items-center justify-center text-neon-primary shadow-[0_0_10px_color-mix(in_srgb,var(--neon-primary)_50%,transparent)]">
                 <Cpu size={20} />
               </div>
               <div>
                 <h2 className="font-semibold text-white font-mono uppercase tracking-widest text-sm">Hệ Thống Trí Tuệ Nhân Tạo</h2>
-                <div className="text-xs font-medium text-[#00f2fe] flex items-center gap-1 font-mono">
+                <div className="text-xs font-medium text-neon-primary flex items-center gap-1 font-mono">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00f2fe] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00f2fe]"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-primary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-primary"></span>
                   </span>
                   ONLINE_
                 </div>
@@ -224,14 +224,14 @@ export default function AIInsightsPage() {
             {messages.map((msg, i) => (
               <div key={i} className={`flex gap-4 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
                 {msg.role === "ai" && (
-                  <div className="h-8 w-8 rounded-lg border border-[#00f2fe]/50 bg-[#00f2fe]/10 flex items-center justify-center text-[#00f2fe] shrink-0 mt-1 shadow-[0_0_8px_rgba(0,242,254,0.5)]">
+                  <div className="h-8 w-8 rounded-lg border border-neon-primary/50 bg-neon-primary/10 flex items-center justify-center text-neon-primary shrink-0 mt-1 shadow-[0_0_8px_color-mix(in_srgb,var(--neon-primary)_50%,transparent)]">
                     <Sparkles size={14} />
                   </div>
                 )}
                 <div className={`p-4 rounded-xl max-w-[80%] text-sm leading-relaxed backdrop-blur-md font-mono ${
                   msg.role === "user" 
-                    ? "bg-[#fe0979]/20 text-[#fe0979] border border-[#fe0979]/30 rounded-tr-none shadow-[0_0_15px_rgba(254,9,121,0.15)]" 
-                    : "bg-[#00f2fe]/10 text-[#00f2fe] border border-[#00f2fe]/30 rounded-tl-none shadow-[0_0_15px_rgba(0,242,254,0.15)]"
+                    ? "bg-neon-secondary/20 text-neon-secondary border border-neon-secondary/30 rounded-tr-none shadow-[0_0_15px_color-mix(in_srgb,var(--neon-secondary)_15%,transparent)]" 
+                    : "bg-neon-primary/10 text-neon-primary border border-neon-primary/30 rounded-tl-none shadow-[0_0_15px_color-mix(in_srgb,var(--neon-primary)_15%,transparent)]"
                 }`}>
                   {msg.content}
                 </div>
@@ -240,22 +240,22 @@ export default function AIInsightsPage() {
             
             {isTyping && (
               <div className="flex gap-4">
-                <div className="h-8 w-8 rounded-lg border border-[#00f2fe]/50 bg-[#00f2fe]/10 flex items-center justify-center text-[#00f2fe] shrink-0 mt-1">
+                <div className="h-8 w-8 rounded-lg border border-neon-primary/50 bg-neon-primary/10 flex items-center justify-center text-neon-primary shrink-0 mt-1">
                   <Sparkles size={14} />
                 </div>
-                <div className="p-4 rounded-xl bg-[#00f2fe]/10 border border-[#00f2fe]/30 text-[#00f2fe] rounded-tl-none flex items-center gap-1.5 w-16 h-12">
-                  <div className="w-1.5 h-1.5 bg-[#00f2fe] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                  <div className="w-1.5 h-1.5 bg-[#00f2fe] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                  <div className="w-1.5 h-1.5 bg-[#00f2fe] rounded-full animate-bounce"></div>
+                <div className="p-4 rounded-xl bg-neon-primary/10 border border-neon-primary/30 text-neon-primary rounded-tl-none flex items-center gap-1.5 w-16 h-12">
+                  <div className="w-1.5 h-1.5 bg-neon-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                  <div className="w-1.5 h-1.5 bg-neon-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                  <div className="w-1.5 h-1.5 bg-neon-primary rounded-full animate-bounce"></div>
                 </div>
               </div>
             )}
             <div ref={chatEndRef} />
           </div>
           
-          <div className="p-4 border-t border-[#00f2fe]/20 bg-black/40 relative z-10">
+          <div className="p-4 border-t border-neon-primary/20 bg-black/40 relative z-10">
             <div className="relative">
-              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[#00f2fe]/50 font-mono">
+              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-neon-primary/50 font-mono">
                 &gt;
               </div>
               <input 
@@ -264,12 +264,12 @@ export default function AIInsightsPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Gõ lệnh hoặc câu hỏi..." 
-                className="w-full pl-8 pr-12 py-3.5 rounded-lg border border-[#00f2fe]/30 text-sm focus:outline-none focus:ring-1 focus:ring-[#00f2fe] focus:border-[#00f2fe] bg-black/50 text-[#00f2fe] placeholder:text-[#00f2fe]/30 font-mono transition-all"
+                className="w-full pl-8 pr-12 py-3.5 rounded-lg border border-neon-primary/30 text-sm focus:outline-none focus:ring-1 focus:ring-neon-primary focus:border-neon-primary bg-black/50 text-neon-primary placeholder:text-neon-primary/30 font-mono transition-all"
               />
               <button 
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-md bg-[#00f2fe]/20 text-[#00f2fe] hover:bg-[#00f2fe]/40 hover:shadow-[0_0_10px_rgba(0,242,254,0.5)] transition-all disabled:opacity-30 disabled:cursor-not-allowed border border-[#00f2fe]/30"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-md bg-neon-primary/20 text-neon-primary hover:bg-neon-primary/40 hover:shadow-[0_0_10px_color-mix(in_srgb,var(--neon-primary)_50%,transparent)] transition-all disabled:opacity-30 disabled:cursor-not-allowed border border-neon-primary/30"
               >
                 <Send size={16} />
               </button>

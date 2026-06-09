@@ -46,7 +46,7 @@ export function GamificationWidget({ transactions }: { transactions: any[] }) {
         </div>
         <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-white/10 shadow-inner">
           <div 
-            className="h-full bg-gradient-to-r from-[#00f2fe] to-purple-500 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(0,242,254,0.5)]" 
+            className="h-full bg-gradient-to-r from-neon-primary to-purple-500 transition-all duration-1000 ease-out shadow-[0_0_10px_color-mix(in_srgb,var(--neon-primary)_50%,transparent)]" 
             style={{ width: `${progressPercent}%` }}
           />
         </div>

@@ -75,7 +75,7 @@ export default function Home() {
 
         {/* TOP ROW: Glassmorphism Control Panel */}
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center border-l-4 border-l-[#00f2fe]">
+          <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center border-l-4 border-l-neon-primary">
             <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest mb-1">Số dư hiện tại</div>
             <div className="text-xl md:text-2xl font-bold tracking-tight text-white neon-text-cyan">{formatCurrency(balance)}</div>
           </div>
@@ -84,11 +84,11 @@ export default function Home() {
             <div className="text-xl md:text-2xl font-bold tracking-tight text-white">{formatCurrency(totalSaved)}</div>
           </div>
           <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center">
-            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest mb-1 flex items-center gap-1"><ArrowDownRight size={14} className="text-[#00f2fe]" /> Tổng thu</div>
+            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest mb-1 flex items-center gap-1"><ArrowDownRight size={14} className="text-neon-primary" /> Tổng thu</div>
             <div className="text-lg md:text-xl font-bold tracking-tight text-white/90">{formatCurrency(totalIncome)}</div>
           </div>
           <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center">
-            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest mb-1 flex items-center gap-1"><ArrowUpRight size={14} className="text-[#fe0979]" /> Tổng chi</div>
+            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest mb-1 flex items-center gap-1"><ArrowUpRight size={14} className="text-neon-secondary" /> Tổng chi</div>
             <div className="text-lg md:text-xl font-bold tracking-tight text-white/90">{formatCurrency(totalExpense)}</div>
           </div>
         </div>
@@ -98,9 +98,9 @@ export default function Home() {
           {/* Main Chart */}
           <div className="flex-1 h-full w-full relative">
             <div className="absolute top-0 right-0 z-20 flex gap-2">
-              <button onClick={() => setActiveTab('cashflow')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'cashflow' ? 'bg-[#00f2fe]/20 text-[#00f2fe] border border-[#00f2fe]/50 shadow-[0_0_10px_rgba(0,242,254,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Trend</button>
-              <button onClick={() => setActiveTab('category')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'category' ? 'bg-[#fe0979]/20 text-[#fe0979] border border-[#fe0979]/50 shadow-[0_0_10px_rgba(254,9,121,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Category</button>
-              <button onClick={() => setActiveTab('plant')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'plant' ? 'bg-[#00f2fe]/20 text-[#00f2fe] border border-[#00f2fe]/50 shadow-[0_0_10px_rgba(0,242,254,0.3)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Plant</button>
+              <button onClick={() => setActiveTab('cashflow')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'cashflow' ? 'bg-neon-primary/20 text-neon-primary border border-neon-primary/50 shadow-[0_0_10px_color-mix(in_srgb,var(--neon-primary)_30%,transparent)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Trend</button>
+              <button onClick={() => setActiveTab('category')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'category' ? 'bg-neon-secondary/20 text-neon-secondary border border-neon-secondary/50 shadow-[0_0_10px_color-mix(in_srgb,var(--neon-secondary)_30%,transparent)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Category</button>
+              <button onClick={() => setActiveTab('plant')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeTab === 'plant' ? 'bg-neon-primary/20 text-neon-primary border border-neon-primary/50 shadow-[0_0_10px_color-mix(in_srgb,var(--neon-primary)_30%,transparent)]' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Plant</button>
             </div>
             
             <div className="w-full h-full pt-8 pb-4">
@@ -132,11 +132,11 @@ export default function Home() {
           {/* Floating Side Panels (Glassmorphism) */}
           <div className="w-full lg:w-[350px] flex flex-col gap-4">
             <div className="bg-glass-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl relative">
-              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#00f2fe] to-purple-500"></div>
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-neon-primary to-purple-500"></div>
               <GamificationWidget transactions={transactions} />
             </div>
             <div className="bg-glass-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl relative flex-1">
-              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-[#fe0979]"></div>
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-neon-secondary"></div>
               <AIWidget transactions={transactions} />
             </div>
           </div>

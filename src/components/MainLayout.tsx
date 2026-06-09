@@ -25,7 +25,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2" />
         <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[150px] translate-x-1/3 translate-y-1/3" />
-        <div className="absolute top-1/2 left-1/2 w-[800px] h-[400px] bg-[#00f2fe]/5 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute top-1/2 left-1/2 w-[800px] h-[400px] bg-neon-primary/5 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2" />
       </div>
 
       {/* Main content area */}

@@ -126,7 +126,7 @@ export function DashboardCharts({ transactions }: Props) {
           <Line 
             type="monotone"
             dataKey="income" 
-            stroke="#00f2fe" 
+            stroke="var(--neon-primary)" 
             strokeWidth={4}
             dot={false}
             activeDot={{ r: 6, fill: '#00f2fe', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-income)' }}
@@ -135,7 +135,7 @@ export function DashboardCharts({ transactions }: Props) {
           <Line 
             type="monotone"
             dataKey="expense" 
-            stroke="#fe0979" 
+            stroke="var(--neon-secondary)" 
             strokeWidth={4}
             dot={false}
             activeDot={{ r: 6, fill: '#fe0979', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-expense)' }}
