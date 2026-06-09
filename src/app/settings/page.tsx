@@ -35,13 +35,18 @@ export default function SettingsPage() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full mt-4 sm:mt-0">
             {([
-              { id: 'default', name: 'Hổ phách', color: 'bg-amber-500' },
+              { id: 'default', name: 'Hổ phách (Mặc định)', color: 'bg-amber-500' },
               { id: 'pastelpink', name: 'Hồng phấn', color: 'bg-[#FFC0CB]' },
               { id: 'slate', name: 'Xám đá', color: 'bg-slate-500' },
               { id: 'limegreen', name: 'Xanh chanh', color: 'bg-[#32CD32]' },
               { id: 'orangered', name: 'Cam đỏ', color: 'bg-[#FF4500]' },
               { id: 'whitesmoke', name: 'Trắng khói', color: 'bg-[#F5F5F5] border border-gray-300' },
               { id: 'amethyst', name: 'Tím ngọc', color: 'bg-[#9966CC]' },
+              { id: 'spring', name: 'Mùa Xuân', color: 'bg-[#ec4899]' },
+              { id: 'summer', name: 'Mùa Hè', color: 'bg-[#06b6d4]' },
+              { id: 'autumn', name: 'Mùa Thu', color: 'bg-[#f97316]' },
+              { id: 'winter', name: 'Mùa Đông', color: 'bg-[#bae6fd]' },
+              { id: 'vietnam', name: 'Việt Nam', color: 'bg-[#ef4444]' },
             ] as const).map(t => (
               <button
                 key={t.id}

@@ -210,6 +210,91 @@
     --neon-primary: #fbbf24; /* Amber */
     --neon-secondary: #fb923c; /* Orange */
   }
+
+  /* Spring Theme */
+  .theme-spring {
+    --primary: 330 80% 60%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 330 80% 60%;
+  }
+  .dark.theme-spring {
+    --background: 330 30% 6%;
+    --card: 330 30% 10%;
+    --border: 330 30% 16%;
+    --primary: 330 80% 65%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 330 80% 65%;
+    --neon-primary: #ec4899; /* Pink */
+    --neon-secondary: #22c55e; /* Green */
+  }
+
+  /* Summer Theme */
+  .theme-summer {
+    --primary: 190 90% 45%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 190 90% 45%;
+  }
+  .dark.theme-summer {
+    --background: 190 40% 6%;
+    --card: 190 40% 10%;
+    --border: 190 40% 16%;
+    --primary: 190 90% 50%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 190 90% 50%;
+    --neon-primary: #06b6d4; /* Cyan */
+    --neon-secondary: #eab308; /* Yellow */
+  }
+
+  /* Autumn Theme */
+  .theme-autumn {
+    --primary: 25 95% 50%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 25 95% 50%;
+  }
+  .dark.theme-autumn {
+    --background: 25 40% 6%;
+    --card: 25 40% 10%;
+    --border: 25 40% 16%;
+    --primary: 25 95% 55%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 25 95% 55%;
+    --neon-primary: #f97316; /* Orange */
+    --neon-secondary: #a16207; /* Brown/Dark Gold */
+  }
+
+  /* Winter Theme */
+  .theme-winter {
+    --primary: 200 80% 70%;
+    --primary-foreground: 200 90% 15%;
+    --ring: 200 80% 70%;
+  }
+  .dark.theme-winter {
+    --background: 200 40% 6%;
+    --card: 200 40% 10%;
+    --border: 200 40% 16%;
+    --primary: 200 80% 75%;
+    --primary-foreground: 200 90% 15%;
+    --ring: 200 80% 75%;
+    --neon-primary: #bae6fd; /* Light Blue */
+    --neon-secondary: #ffffff; /* White */
+  }
+
+  /* Vietnam Theme */
+  .theme-vietnam {
+    --primary: 0 90% 50%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 0 90% 50%;
+  }
+  .dark.theme-vietnam {
+    --background: 0 40% 6%;
+    --card: 0 40% 10%;
+    --border: 0 40% 16%;
+    --primary: 0 90% 55%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 0 90% 55%;
+    --neon-primary: #ef4444; /* Red */
+    --neon-secondary: #fbbf24; /* Gold */
+  }
 }
 
 
