@@ -784,16 +784,17 @@ function VietnamBackground() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const lanterns: { x: number, y: number, size: number, speedY: number, speedX: number, sway: number }[] = []
+    const stars: { x: number, y: number, size: number, speedY: number, speedX: number, sway: number, rot: number }[] = []
     
     for (let i = 0; i < 25; i++) {
-      lanterns.push({
+      stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 10 + 5,
+        size: Math.random() * 8 + 4,
         speedY: Math.random() * -0.5 - 0.2,
         speedX: Math.random() * 0.2 - 0.1,
-        sway: Math.random() * Math.PI * 2
+        sway: Math.random() * Math.PI * 2,
+        rot: Math.random() * Math.PI * 2
       })
     }
 
@@ -802,31 +803,40 @@ function VietnamBackground() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      lanterns.forEach(l => {
-        l.x += l.speedX + Math.sin(l.sway) * 0.2
-        l.y += l.speedY
-        l.sway += 0.02
+      stars.forEach(s => {
+        s.x += s.speedX + Math.sin(s.sway) * 0.2
+        s.y += s.speedY
+        s.sway += 0.02
+        s.rot += 0.01
 
-        if (l.y < -30) {
-          l.y = canvas.height + 30
-          l.x = Math.random() * canvas.width
+        if (s.y < -30) {
+          s.y = canvas.height + 30
+          s.x = Math.random() * canvas.width
         }
 
         ctx.save()
-        ctx.translate(l.x, l.y)
+        ctx.translate(s.x, s.y)
+        ctx.rotate(s.rot)
         
-        // Lantern body
+        // Draw 5-pointed star
         ctx.beginPath()
+        for (let j = 0; j < 5; j++) {
+          ctx.lineTo(Math.cos((18 + j * 72) * Math.PI / 180) * s.size,
+                     -Math.sin((18 + j * 72) * Math.PI / 180) * s.size)
+          ctx.lineTo(Math.cos((54 + j * 72) * Math.PI / 180) * (s.size / 2.5),
+                     -Math.sin((54 + j * 72) * Math.PI / 180) * (s.size / 2.5))
+        }
+        ctx.closePath()
+        
         ctx.fillStyle = "#fbbf24" // Gold
-        ctx.ellipse(0, 0, l.size, l.size * 1.5, 0, 0, Math.PI * 2)
         ctx.fill()
         
         // Glow
-        const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, l.size * 3)
-        gradient.addColorStop(0, "rgba(251, 191, 36, 0.4)")
+        const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, s.size * 4)
+        gradient.addColorStop(0, "rgba(251, 191, 36, 0.5)")
         gradient.addColorStop(1, "rgba(251, 191, 36, 0)")
         ctx.fillStyle = gradient
-        ctx.arc(0, 0, l.size * 3, 0, Math.PI * 2)
+        ctx.arc(0, 0, s.size * 4, 0, Math.PI * 2)
         ctx.fill()
         
         ctx.restore()

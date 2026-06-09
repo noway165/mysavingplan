@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", var(--font-sans);
+  --font-sans: var(--font-main, "Inter", var(--font-inter), sans-serif);
   --font-serif: var(--font-playfair), serif;
   
   /* Cấu hình màu sắc cho Tailwind v4 */
@@ -44,34 +44,45 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* Pure White */
-    --foreground: 0 0% 0%; /* Pure Black */
-    --card: 0 0% 98%; /* Light Gray (#FAFAFA) */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 98%;
     --card-foreground: 0 0% 0%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
-    --primary: 0 0% 0%; /* Pure Black */
-    --primary-foreground: 0 0% 100%; /* Pure White */
-    --secondary: 0 0% 96%; /* #F5F5F5 */
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 0%;
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%; /* #737373 */
+    --muted-foreground: 0 0% 45%;
     --accent: 0 0% 96%;
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 90%; /* #E5E5E5 */
+    --border: 0 0% 90%;
     --input: 0 0% 90%;
     --ring: 0 0% 0%;
     --radius: 1.5rem;
     --neon-primary: #00f2fe;
     --neon-secondary: #fe0979;
+    
+    /* Dynamic Layout Variables - Default HUD (J.A.R.V.I.S) */
+    --bento-radius: 1.5rem;
+    --bento-bg: rgba(0, 0, 0, 0.4);
+    --bento-border-top: 1px solid color-mix(in srgb, var(--neon-primary) 30%, transparent);
+    --bento-border-bottom: 1px solid color-mix(in srgb, var(--neon-secondary) 30%, transparent);
+    --bento-border-full: none;
+    --bento-shadow: inset 0 0 20px color-mix(in srgb, var(--neon-primary) 5%, transparent), 0 8px 32px rgba(0,0,0,0.5);
+    --bento-clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+    --bento-corner-display: block;
+    --bento-backdrop-blur: 12px;
   }
 
   .dark {
-    --background: 240 45% 7%; /* #0a0a1a */
-    --foreground: 0 0% 100%; /* Pure White */
-    --card: 240 45% 10%; /* Slightly lighter than background */
+    --background: 240 45% 7%;
+    --foreground: 0 0% 100%;
+    --card: 240 45% 10%;
     --card-foreground: 0 0% 100%;
     --popover: 240 45% 10%;
     --popover-foreground: 0 0% 100%;
@@ -80,12 +91,12 @@
     --secondary: 240 40% 15%; 
     --secondary-foreground: 0 0% 100%;
     --muted: 240 40% 15%;
-    --muted-foreground: 215 20% 65%; /* Slate 400 */
+    --muted-foreground: 215 20% 65%;
     --accent: 240 40% 15%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 50.6%; /* Brighter red for dark theme */
+    --destructive: 0 62.8% 50.6%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 100%; /* Used with opacity via tailwind like border-white/5 */
+    --border: 0 0% 100%;
     --input: 240 40% 15%;
     --ring: 0 0% 100%;
     --neon-primary: #00f2fe;
@@ -107,6 +118,17 @@
     --ring: 340 85% 80%;
     --neon-primary: #ffb6c1; /* Pink */
     --neon-secondary: #d8b4fe; /* Purple */
+    
+    /* Nature Layout */
+    --bento-radius: 1.5rem;
+    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
+    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
+    --bento-backdrop-blur: 16px;
   }
 
   /* Slate Theme */
@@ -124,6 +146,16 @@
     --ring: 210 13% 60%;
     --neon-primary: #94a3b8; /* Slate */
     --neon-secondary: #38bdf8; /* Sky Blue */
+    
+    /* Neumorphism Layout */
+    --bento-radius: 1rem;
+    --bento-bg: rgba(255, 255, 255, 0.05);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(255, 255, 255, 0.15);
+    --bento-shadow: -5px -5px 15px rgba(255,255,255,0.02), 5px 5px 15px rgba(0,0,0,0.5);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
   }
 
   /* Lime Green Theme */
@@ -141,6 +173,17 @@
     --ring: 120 61% 40%;
     --neon-primary: #4ade80; /* Matrix Green */
     --neon-secondary: #facc15; /* Yellow */
+    
+    /* Matrix Layout */
+    --bento-radius: 0px;
+    --bento-bg: rgba(0, 0, 0, 0.8);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px dashed var(--neon-primary);
+    --bento-shadow: 0 0 10px rgba(74, 222, 128, 0.1);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
+    --font-main: "Courier New", Courier, monospace;
   }
 
   /* Orange Red Theme */
@@ -175,6 +218,16 @@
     --ring: 0 0% 96%;
     --neon-primary: #f8fafc; /* White */
     --neon-secondary: #94a3b8; /* Gray */
+    
+    /* Neumorphism Layout */
+    --bento-radius: 1rem;
+    --bento-bg: rgba(255, 255, 255, 0.05);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(255, 255, 255, 0.15);
+    --bento-shadow: -5px -5px 15px rgba(255,255,255,0.02), 5px 5px 15px rgba(0,0,0,0.5);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
   }
 
   /* Amethyst Theme */
@@ -192,9 +245,19 @@
     --ring: 270 50% 65%;
     --neon-primary: #a78bfa; /* Violet */
     --neon-secondary: #f472b6; /* Pink */
+    
+    /* Neumorphism Layout */
+    --bento-radius: 1rem;
+    --bento-bg: rgba(255, 255, 255, 0.05);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(255, 255, 255, 0.15);
+    --bento-shadow: -5px -5px 15px rgba(255,255,255,0.02), 5px 5px 15px rgba(0,0,0,0.5);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
   }
 
-  /* Amber Theme (Default fallback in settings but we add it to be sure) */
+  /* Amber Theme (Default) */
   .theme-amber {
     --primary: 40 100% 50%;
     --primary-foreground: 0 0% 100%;
@@ -226,6 +289,17 @@
     --ring: 330 80% 65%;
     --neon-primary: #ec4899; /* Pink */
     --neon-secondary: #22c55e; /* Green */
+    
+    /* Nature Layout */
+    --bento-radius: 1.5rem;
+    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
+    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
+    --bento-backdrop-blur: 16px;
   }
 
   /* Summer Theme */
@@ -243,6 +317,17 @@
     --ring: 190 90% 50%;
     --neon-primary: #06b6d4; /* Cyan */
     --neon-secondary: #eab308; /* Yellow */
+    
+    /* Nature Layout */
+    --bento-radius: 1.5rem;
+    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
+    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
+    --bento-backdrop-blur: 16px;
   }
 
   /* Autumn Theme */
@@ -260,6 +345,17 @@
     --ring: 25 95% 55%;
     --neon-primary: #f97316; /* Orange */
     --neon-secondary: #a16207; /* Brown/Dark Gold */
+    
+    /* Nature Layout */
+    --bento-radius: 1.5rem;
+    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
+    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
+    --bento-backdrop-blur: 16px;
   }
 
   /* Winter Theme */
@@ -277,6 +373,17 @@
     --ring: 200 80% 75%;
     --neon-primary: #bae6fd; /* Light Blue */
     --neon-secondary: #ffffff; /* White */
+    
+    /* Nature Layout */
+    --bento-radius: 1.5rem;
+    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
+    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
+    --bento-backdrop-blur: 16px;
   }
 
   /* Vietnam Theme */
@@ -294,10 +401,18 @@
     --ring: 0 90% 55%;
     --neon-primary: #ef4444; /* Red */
     --neon-secondary: #fbbf24; /* Gold */
+    
+    /* Vietnam Layout */
+    --bento-radius: 0.5rem; /* 8px */
+    --bento-bg: rgba(120, 0, 0, 0.3); /* Dark red glass */
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 2px solid var(--neon-secondary); /* Gold */
+    --bento-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
   }
 }
-
-
 
 @keyframes shimmer {
   100% {
@@ -306,14 +421,20 @@
 }
 
 @utility bento-card {
-  @apply relative bg-black/40 backdrop-blur-md overflow-hidden;
-  border-top: 1px solid color-mix(in srgb, var(--neon-primary) 30%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--neon-secondary) 30%, transparent);
-  box-shadow: inset 0 0 20px color-mix(in srgb, var(--neon-primary) 5%, transparent), 0 8px 32px rgba(0,0,0,0.5);
-  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  @apply relative overflow-hidden;
+  border-radius: var(--bento-radius);
+  background-color: var(--bento-bg);
+  backdrop-filter: blur(var(--bento-backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--bento-backdrop-blur));
+  border-top: var(--bento-border-top);
+  border-bottom: var(--bento-border-bottom);
+  border: var(--bento-border-full);
+  box-shadow: var(--bento-shadow);
+  clip-path: var(--bento-clip-path);
   
   &::before {
     content: "";
+    display: var(--bento-corner-display);
     position: absolute;
     top: 0; left: 0; width: 1rem; height: 1rem;
     border-top: 2px solid var(--neon-primary);
@@ -322,6 +443,7 @@
   }
   &::after {
     content: "";
+    display: var(--bento-corner-display);
     position: absolute;
     bottom: 0; right: 0; width: 1rem; height: 1rem;
     border-bottom: 2px solid var(--neon-secondary);
@@ -335,8 +457,8 @@
 }
 
 @utility hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -357,5 +479,3 @@
 @utility neon-text-secondary {
   text-shadow: 0 0 10px color-mix(in srgb, var(--neon-secondary) 80%, transparent), 0 0 20px color-mix(in srgb, var(--neon-secondary) 40%, transparent);
 }
-
-
