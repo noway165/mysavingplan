@@ -69,9 +69,14 @@ export function useTransactions() {
     if (!user) return
     try {
       const txRef = doc(db, 'users', user.uid, 'transactions', id)
-      await updateDoc(txRef, data)
+      // Loại bỏ các trường undefined để tránh lỗi Firestore
+      const cleanedData = Object.fromEntries(
+        Object.entries(data).filter(([_, v]) => v !== undefined)
+      )
+      await updateDoc(txRef, cleanedData)
     } catch (error) {
       console.error("Error updating transaction:", error)
+      alert("Đã có lỗi xảy ra khi lưu: " + (error as Error).message)
     }
   }
 

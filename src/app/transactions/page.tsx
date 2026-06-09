@@ -87,7 +87,7 @@ export default function TransactionsPage() {
     setFormTitle(tx.title)
     setFormAmount(tx.amount.toLocaleString('en-US'))
     setFormCategory(tx.category)
-    setFormDate(tx.date)
+    setFormDate(tx.date || realTime.toLocaleDateString("vi-VN"))
     setFormTime(tx.time || "00:00")
     setFormIsImpulse(tx.isImpulse || false)
     setShowModal(true)
