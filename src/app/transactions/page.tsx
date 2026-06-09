@@ -197,7 +197,18 @@ export default function TransactionsPage() {
       await addTransaction(txData)
       setAiText("")
     } catch (err: any) {
-      setAiError(err.message)
+      let errMsg = err.message || "Lỗi khi phân tích bằng AI";
+      if (typeof errMsg === 'object') errMsg = JSON.stringify(errMsg);
+      
+      if (errMsg.includes('503') || errMsg.includes('high demand') || errMsg.includes('UNAVAILABLE')) {
+        errMsg = "Hệ thống AI hiện đang bị quá tải. Bạn vui lòng thử lại sau ít phút nhé!";
+      } else if (errMsg.includes('{')) {
+        try {
+          const parsed = JSON.parse(errMsg);
+          if (parsed.error?.message) errMsg = parsed.error.message;
+        } catch (e) {}
+      }
+      setAiError(errMsg)
     } finally {
       setAiLoading(false)
     }
