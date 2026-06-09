@@ -13,7 +13,7 @@ export function ThemeBackground() {
       {colorTheme === "orangered" && <FireBackground />}
       {colorTheme === "pastelpink" && <SakuraBackground />}
       {colorTheme === "slate" && <MeteorShowerBackground />}
-      {colorTheme === "whitesmoke" && <DynamicSmokeBackground />}
+      {colorTheme === "whitesmoke" && <HalloweenBackground />}
       {colorTheme === "default" && <CyberCircuitBackground />}
       {colorTheme === "spring" && <SpringBackground />}
       {colorTheme === "summer" && <SummerBackground />}
@@ -381,12 +381,130 @@ function MeteorShowerBackground() {
   )
 }
 
-function DynamicSmokeBackground() {
+function HalloweenBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    const bats: { x: number, y: number, size: number, speedX: number, speedY: number, flap: number, flapSpeed: number }[] = []
+    for (let i = 0; i < 15; i++) {
+      bats.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height * 0.7,
+        size: Math.random() * 20 + 10,
+        speedX: Math.random() * 2 - 1,
+        speedY: Math.random() * 1 - 0.5,
+        flap: Math.random() * Math.PI * 2,
+        flapSpeed: Math.random() * 0.1 + 0.1
+      })
+    }
+    
+    // Spooky fog particles
+    const fog: { x: number, y: number, size: number, speedX: number, opacity: number }[] = []
+    for (let i = 0; i < 20; i++) {
+      fog.push({
+        x: Math.random() * canvas.width,
+        y: canvas.height - Math.random() * 200,
+        size: Math.random() * 100 + 50,
+        speedX: Math.random() * 0.5 + 0.1,
+        opacity: Math.random() * 0.3 + 0.1
+      })
+    }
+
+    let animationFrameId: number;
+
+    const drawBat = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, flapOffset: number) => {
+      ctx.save()
+      ctx.translate(x, y)
+      ctx.fillStyle = '#000000'
+      ctx.beginPath()
+      // Body
+      ctx.ellipse(0, 0, size * 0.2, size * 0.4, 0, 0, Math.PI * 2)
+      ctx.fill()
+      
+      // Wings
+      const wingY = Math.sin(flapOffset) * size * 0.5
+      ctx.beginPath()
+      ctx.moveTo(0, -size * 0.2)
+      // Right wing
+      ctx.quadraticCurveTo(size, wingY - size * 0.5, size * 1.5, wingY)
+      ctx.quadraticCurveTo(size, wingY + size * 0.2, size * 0.5, wingY + size * 0.1)
+      ctx.quadraticCurveTo(size * 0.2, wingY + size * 0.3, 0, size * 0.2)
+      // Left wing
+      ctx.quadraticCurveTo(-size * 0.2, wingY + size * 0.3, -size * 0.5, wingY + size * 0.1)
+      ctx.quadraticCurveTo(-size, wingY + size * 0.2, -size * 1.5, wingY)
+      ctx.quadraticCurveTo(-size, wingY - size * 0.5, 0, -size * 0.2)
+      ctx.fill()
+      ctx.restore()
+    }
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      
+      // Update and draw bats
+      bats.forEach(b => {
+        b.x += b.speedX
+        b.y += b.speedY + Math.sin(b.flap) * 2
+        b.flap += b.flapSpeed
+        
+        if (b.x > canvas.width + b.size * 2) b.x = -b.size * 2
+        if (b.x < -b.size * 2) b.x = canvas.width + b.size * 2
+        if (b.y > canvas.height + b.size * 2) b.y = -b.size * 2
+        if (b.y < -b.size * 2) b.y = canvas.height + b.size * 2
+        
+        drawBat(ctx, b.x, b.y, b.size, b.flap)
+        
+        // Bat glow
+        const gradient = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.size * 2)
+        gradient.addColorStop(0, "rgba(249, 115, 22, 0.4)") // Orange glow
+        gradient.addColorStop(1, "rgba(249, 115, 22, 0)")
+        ctx.fillStyle = gradient
+        ctx.beginPath()
+        ctx.arc(b.x, b.y, b.size * 2, 0, Math.PI * 2)
+        ctx.fill()
+      })
+      
+      // Update and draw fog
+      fog.forEach(f => {
+        f.x += f.speedX
+        if (f.x > canvas.width + f.size) f.x = -f.size
+        
+        const gradient = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size)
+        gradient.addColorStop(0, `rgba(168, 85, 247, ${f.opacity})`) // Purple fog
+        gradient.addColorStop(1, `rgba(168, 85, 247, 0)`)
+        ctx.fillStyle = gradient
+        ctx.beginPath()
+        ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2)
+        ctx.fill()
+      })
+
+      animationFrameId = requestAnimationFrame(draw)
+    }
+
+    draw()
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      cancelAnimationFrame(animationFrameId)
+    }
+  }, [])
+
   return (
-    <div className="absolute inset-0 bg-[#0a0f18] overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-gradient-radial from-slate-400/10 to-transparent blur-[120px] animate-[pulse_10s_ease-in-out_infinite]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-gradient-radial from-white/10 to-transparent blur-[150px] animate-[pulse_15s_ease-in-out_infinite]" />
-      <div className="absolute top-1/2 left-1/2 w-[80%] h-[80%] -translate-x-1/2 -translate-y-1/2 bg-gradient-radial from-gray-500/5 to-transparent blur-[100px] animate-[pulse_20s_ease-in-out_infinite]" />
+    <div className="absolute inset-0 bg-gradient-to-b from-[#1e1b4b] to-[#4c1d95]">
+      <canvas ref={canvasRef} className="absolute inset-0 mix-blend-screen" />
     </div>
   )
 }
@@ -480,21 +598,26 @@ function SpringBackground() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext('2d')
     if (!ctx) return
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const spores: { x: number, y: number, radius: number, speedX: number, speedY: number, angle: number }[] = []
-    for (let i = 0; i < 60; i++) {
-      spores.push({
+    // 3 layers of particles
+    const particles: { x: number, y: number, size: number, speedY: number, speedX: number, color: string, sway: number }[] = []
+    
+    const colors = ['#ec4899', '#22c55e', '#fbbf24', '#ffffff'] // Pink, Green, Yellow, White
+    
+    for (let i = 0; i < 80; i++) {
+      particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 3 + 1,
-        speedX: Math.random() * 1 - 0.5,
-        speedY: Math.random() * -1 - 0.5,
-        angle: Math.random() * 360
+        size: Math.random() * 4 + 1,
+        speedY: Math.random() * -1 - 0.5, // Flowing upwards
+        speedX: Math.random() * 0.5 - 0.25,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        sway: Math.random() * Math.PI * 2
       })
     }
 
@@ -503,21 +626,37 @@ function SpringBackground() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      spores.forEach(s => {
-        s.x += s.speedX + Math.sin(s.angle) * 0.5
-        s.y += s.speedY
-        s.angle += 0.05
+      particles.forEach(p => {
+        p.x += p.speedX + Math.sin(p.sway) * 0.5
+        p.y += p.speedY
+        p.sway += 0.02
 
-        if (s.y < -10) {
-          s.y = canvas.height + 10
-          s.x = Math.random() * canvas.width
+        if (p.y < -10) {
+          p.y = canvas.height + 10
+          p.x = Math.random() * canvas.width
         }
 
         ctx.beginPath()
-        ctx.fillStyle = "rgba(236, 72, 153, 0.6)" // Pink
-        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2)
+        ctx.fillStyle = p.color
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fill()
+        
+        // Glow effect
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3)
+        // Convert hex to rgb for glow
+        let rgb = "255, 255, 255"
+        if (p.color === '#ec4899') rgb = "236, 72, 153"
+        if (p.color === '#22c55e') rgb = "34, 197, 94"
+        if (p.color === '#fbbf24') rgb = "251, 191, 36"
+        
+        gradient.addColorStop(0, `rgba(${rgb}, 0.6)`)
+        gradient.addColorStop(1, `rgba(${rgb}, 0)`)
+        ctx.fillStyle = gradient
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2)
         ctx.fill()
       })
+
       animationFrameId = requestAnimationFrame(draw)
     }
 
@@ -527,18 +666,18 @@ function SpringBackground() {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     return () => {
+      window.removeEventListener('resize', handleResize)
       cancelAnimationFrame(animationFrameId)
-      window.removeEventListener("resize", handleResize)
     }
   }, [])
 
   return (
     <div className="absolute inset-0 bg-gradient-to-br from-[#100c14] to-[#0a1510]">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-pink-900/10 via-transparent to-transparent" />
-      <canvas ref={canvasRef} className="absolute inset-0" />
+      <canvas ref={canvasRef} className="absolute inset-0 mix-blend-screen" />
     </div>
   )
 }
@@ -549,22 +688,29 @@ function SummerBackground() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext('2d')
     if (!ctx) return
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const fireflies: { x: number, y: number, size: number, vx: number, vy: number, life: number, phase: number }[] = []
-    for (let i = 0; i < 80; i++) {
+    // Foreground (large, fast, blurry), Middleground (medium), Background (small, slow, sharp)
+    const fireflies: { x: number, y: number, size: number, speedX: number, speedY: number, alpha: number, alphaChange: number, layer: number }[] = []
+    
+    for (let i = 0; i < 100; i++) {
+      const layer = Math.random() > 0.8 ? 1 : Math.random() > 0.4 ? 2 : 3 // 1: Fore, 2: Mid, 3: Back
+      const sizeMultiplier = layer === 1 ? 3 : layer === 2 ? 1.5 : 0.8
+      const speedMultiplier = layer === 1 ? 1.5 : layer === 2 ? 0.8 : 0.4
+      
       fireflies.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 2 + 1,
-        vx: Math.random() * 1 - 0.5,
-        vy: Math.random() * 1 - 0.5,
-        life: Math.random() * Math.PI * 2,
-        phase: Math.random() * 0.05 + 0.01
+        size: (Math.random() * 3 + 1) * sizeMultiplier,
+        speedX: (Math.random() * 1 - 0.5) * speedMultiplier,
+        speedY: (Math.random() * 1 - 0.5) * speedMultiplier,
+        alpha: Math.random(),
+        alphaChange: (Math.random() * 0.02 + 0.01) * (Math.random() > 0.5 ? 1 : -1),
+        layer: layer
       })
     }
 
@@ -574,27 +720,37 @@ function SummerBackground() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       fireflies.forEach(f => {
-        f.x += f.vx
-        f.y += f.vy
-        f.life += f.phase
+        f.x += f.speedX
+        f.y += f.speedY
+        f.alpha += f.alphaChange
+        
+        if (f.alpha <= 0.1 || f.alpha >= 1) f.alphaChange *= -1
+        if (f.x < 0 || f.x > canvas.width) f.speedX *= -1
+        if (f.y < 0 || f.y > canvas.height) f.speedY *= -1
 
-        if (f.x < 0 || f.x > canvas.width) f.vx *= -1
-        if (f.y < 0 || f.y > canvas.height) f.vy *= -1
-
-        const opacity = (Math.sin(f.life) + 1) / 2
+        // Apply blur to foreground to create depth of field
+        ctx.save()
+        if (f.layer === 1) {
+           ctx.filter = 'blur(4px)'
+        } else if (f.layer === 2) {
+           ctx.filter = 'blur(1px)'
+        }
         
         ctx.beginPath()
-        ctx.fillStyle = `rgba(234, 179, 8, ${opacity})` // Yellow
+        ctx.fillStyle = `rgba(234, 179, 8, ${f.alpha})` // Yellow
         ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2)
         ctx.fill()
         
         // Glow
-        const gradient = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size * 4)
-        gradient.addColorStop(0, `rgba(234, 179, 8, ${opacity * 0.3})`)
+        const gradient = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size * (f.layer === 1 ? 6 : 4))
+        gradient.addColorStop(0, `rgba(234, 179, 8, ${f.alpha * 0.5})`)
         gradient.addColorStop(1, "rgba(234, 179, 8, 0)")
         ctx.fillStyle = gradient
-        ctx.arc(f.x, f.y, f.size * 4, 0, Math.PI * 2)
+        ctx.beginPath()
+        ctx.arc(f.x, f.y, f.size * (f.layer === 1 ? 6 : 4), 0, Math.PI * 2)
         ctx.fill()
+        
+        ctx.restore()
       })
       animationFrameId = requestAnimationFrame(draw)
     }
@@ -605,17 +761,17 @@ function SummerBackground() {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     return () => {
+      window.removeEventListener('resize', handleResize)
       cancelAnimationFrame(animationFrameId)
-      window.removeEventListener("resize", handleResize)
     }
   }, [])
 
   return (
     <div className="absolute inset-0 bg-[#081218]">
-      <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/20 to-transparent" />
       <canvas ref={canvasRef} className="absolute inset-0 mix-blend-screen" />
     </div>
   )
@@ -627,26 +783,51 @@ function AutumnBackground() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext('2d')
     if (!ctx) return
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const leaves: { x: number, y: number, size: number, speedY: number, speedX: number, angle: number, spin: number, color: string }[] = []
-    const colors = ["#f97316", "#ea580c", "#ca8a04", "#b45309"]
+    const leaves: { x: number, y: number, size: number, speedY: number, speedX: number, rotX: number, rotY: number, rotZ: number, rotSpeedX: number, rotSpeedY: number, rotSpeedZ: number, color: string }[] = []
+    
+    const colors = ['#f97316', '#ea580c', '#c2410c', '#f59e0b', '#fbbf24'] // Orange, Dark Orange, Amber
     
     for (let i = 0; i < 40; i++) {
       leaves.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 8 + 4,
-        speedY: Math.random() * 1.5 + 0.5,
+        size: Math.random() * 15 + 10,
+        speedY: Math.random() * 1 + 1,
         speedX: Math.random() * 2 - 1,
-        angle: Math.random() * 360,
-        spin: Math.random() * 3 - 1.5,
+        rotX: Math.random() * Math.PI * 2,
+        rotY: Math.random() * Math.PI * 2,
+        rotZ: Math.random() * Math.PI * 2,
+        rotSpeedX: Math.random() * 0.05 + 0.02,
+        rotSpeedY: Math.random() * 0.05 + 0.02,
+        rotSpeedZ: Math.random() * 0.02 + 0.01,
         color: colors[Math.floor(Math.random() * colors.length)]
       })
+    }
+
+    const drawLeaf = (ctx: CanvasRenderingContext2D, size: number, color: string) => {
+      ctx.fillStyle = color
+      ctx.beginPath()
+      // A simple maple/autumn leaf shape using arcs and curves
+      ctx.moveTo(0, -size)
+      ctx.quadraticCurveTo(size * 0.5, -size * 0.5, size, 0)
+      ctx.quadraticCurveTo(size * 0.5, size * 0.5, 0, size)
+      ctx.quadraticCurveTo(-size * 0.5, size * 0.5, -size, 0)
+      ctx.quadraticCurveTo(-size * 0.5, -size * 0.5, 0, -size)
+      ctx.fill()
+      
+      // Stem
+      ctx.strokeStyle = 'rgba(0,0,0,0.2)'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.moveTo(0, size * 0.5)
+      ctx.lineTo(0, size * 1.5)
+      ctx.stroke()
     }
 
     let animationFrameId: number;
@@ -655,29 +836,37 @@ function AutumnBackground() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       leaves.forEach(l => {
-        ctx.save()
-        ctx.translate(l.x, l.y)
-        ctx.rotate(l.angle * Math.PI / 180)
-        
-        ctx.beginPath()
-        ctx.fillStyle = l.color
-        // draw simple leaf shape
-        ctx.moveTo(0, -l.size)
-        ctx.lineTo(l.size/2, 0)
-        ctx.lineTo(0, l.size)
-        ctx.lineTo(-l.size/2, 0)
-        ctx.fill()
-        
-        ctx.restore()
-
+        l.x += l.speedX
         l.y += l.speedY
-        l.x += l.speedX + Math.sin(l.angle * Math.PI / 180) * 0.5
-        l.angle += l.spin
+        l.rotX += l.rotSpeedX
+        l.rotY += l.rotSpeedY
+        l.rotZ += l.rotSpeedZ
+        
+        // Sway in wind
+        l.x += Math.sin(l.rotZ) * 1.5
 
-        if (l.y > canvas.height) {
-          l.y = -20
+        if (l.y > canvas.height + 30) {
+          l.y = -30
           l.x = Math.random() * canvas.width
         }
+
+        ctx.save()
+        ctx.translate(l.x, l.y)
+        
+        // 3D Rotation effect using scaling
+        const scaleX = Math.cos(l.rotY)
+        const scaleY = Math.cos(l.rotX)
+        
+        ctx.rotate(l.rotZ)
+        ctx.scale(scaleX, scaleY)
+        
+        // Ensure color isn't completely flat when facing away
+        const isBack = scaleX * scaleY < 0
+        ctx.globalAlpha = isBack ? 0.7 : 1.0
+        
+        drawLeaf(ctx, l.size, l.color)
+        
+        ctx.restore()
       })
       animationFrameId = requestAnimationFrame(draw)
     }
@@ -688,18 +877,18 @@ function AutumnBackground() {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     return () => {
+      window.removeEventListener('resize', handleResize)
       cancelAnimationFrame(animationFrameId)
-      window.removeEventListener("resize", handleResize)
     }
   }, [])
 
   return (
     <div className="absolute inset-0 bg-[#120a05]">
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-900/10 to-transparent" />
-      <canvas ref={canvasRef} className="absolute inset-0 opacity-60" />
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-900/20 to-transparent" />
+      <canvas ref={canvasRef} className="absolute inset-0 opacity-80" />
     </div>
   )
 }
@@ -710,20 +899,27 @@ function WinterBackground() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext('2d')
     if (!ctx) return
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const flakes: { x: number, y: number, radius: number, speed: number, wind: number }[] = []
-    for (let i = 0; i < 150; i++) {
-      flakes.push({
+    // Foreground (large, fast, blurry), Middleground (medium), Background (small, slow)
+    const snowflakes: { x: number, y: number, size: number, speedY: number, sway: number, layer: number }[] = []
+    
+    for (let i = 0; i < 200; i++) {
+      const layer = Math.random() > 0.9 ? 1 : Math.random() > 0.5 ? 2 : 3 // 1: Fore, 2: Mid, 3: Back
+      const sizeMultiplier = layer === 1 ? 4 : layer === 2 ? 2 : 1
+      const speedMultiplier = layer === 1 ? 2.5 : layer === 2 ? 1.2 : 0.5
+      
+      snowflakes.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 2 + 0.5,
-        speed: Math.random() * 1 + 0.5,
-        wind: Math.random() * 2 * Math.PI
+        size: (Math.random() * 2 + 1) * sizeMultiplier,
+        speedY: (Math.random() * 1 + 1) * speedMultiplier,
+        sway: Math.random() * Math.PI * 2,
+        layer: layer
       })
     }
 
@@ -731,21 +927,40 @@ function WinterBackground() {
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.fillStyle = "rgba(255, 255, 255, 0.8)"
+      
+      // Wind speed
+      const wind = Math.sin(Date.now() * 0.0005) * 2
 
-      flakes.forEach(f => {
-        ctx.beginPath()
-        ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2)
-        ctx.fill()
+      snowflakes.forEach(s => {
+        // Wind affects foreground more
+        const windEffect = s.layer === 1 ? wind * 2 : s.layer === 2 ? wind : wind * 0.5
         
-        f.y += f.speed
-        f.wind += 0.01
-        f.x += Math.sin(f.wind) * 0.5
+        s.x += Math.sin(s.sway) * 0.5 + windEffect
+        s.y += s.speedY
+        s.sway += 0.01
 
-        if (f.y > canvas.height) {
-          f.y = -5
-          f.x = Math.random() * canvas.width
+        if (s.y > canvas.height + 10) {
+          s.y = -10
+          s.x = Math.random() * canvas.width
         }
+        if (s.x > canvas.width + 10) s.x = -10
+        if (s.x < -10) s.x = canvas.width + 10
+
+        ctx.save()
+        if (s.layer === 1) {
+          ctx.filter = 'blur(3px)'
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
+        } else if (s.layer === 2) {
+          ctx.filter = 'blur(1px)'
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'
+        } else {
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.3)'
+        }
+
+        ctx.beginPath()
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.restore()
       })
       animationFrameId = requestAnimationFrame(draw)
     }
@@ -756,11 +971,11 @@ function WinterBackground() {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     return () => {
+      window.removeEventListener('resize', handleResize)
       cancelAnimationFrame(animationFrameId)
-      window.removeEventListener("resize", handleResize)
     }
   }, [])
 

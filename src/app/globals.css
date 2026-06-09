@@ -203,21 +203,21 @@
     --neon-secondary: #f87171; /* Red */
   }
 
-  /* White Smoke Theme */
+  /* Halloween Theme (formerly whitesmoke) */
   .theme-whitesmoke {
-    --primary: 0 0% 85%;
-    --primary-foreground: 0 0% 15%;
-    --ring: 0 0% 85%;
+    --primary: 270 90% 60%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 270 90% 60%;
   }
   .dark.theme-whitesmoke {
-    --background: 220 10% 6%;
-    --card: 220 10% 10%;
-    --border: 220 10% 16%;
-    --primary: 0 0% 96%;
-    --primary-foreground: 0 0% 10%;
-    --ring: 0 0% 96%;
-    --neon-primary: #f8fafc; /* White */
-    --neon-secondary: #94a3b8; /* Gray */
+    --background: 270 40% 6%;
+    --card: 270 40% 10%;
+    --border: 270 40% 16%;
+    --primary: 270 90% 65%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 270 90% 65%;
+    --neon-primary: #a855f7; /* Purple */
+    --neon-secondary: #f97316; /* Orange */
     
     /* Neumorphism Layout */
     --bento-radius: 1rem;
