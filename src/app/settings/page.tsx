@@ -42,7 +42,7 @@ export default function SettingsPage() {
               { id: 'orangered', name: 'Lò Rèn', color: 'bg-[#FF4500]' },
               { id: 'whitesmoke', name: 'Halloween', color: 'bg-[#a855f7]' },
               { id: 'amethyst', name: 'Ngân Hà', color: 'bg-[#9966CC]' },
-              { id: 'spring', name: 'Mùa Xuân', color: 'bg-[#ec4899]' },
+              { id: 'spring', name: 'Mùa Xuân (Tết)', color: 'bg-[#ec4899]' },
               { id: 'summer', name: 'Mùa Hè', color: 'bg-[#06b6d4]' },
               { id: 'autumn', name: 'Mùa Thu', color: 'bg-[#f97316]' },
               { id: 'winter', name: 'Mùa Đông', color: 'bg-[#bae6fd]' },

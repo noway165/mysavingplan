@@ -274,21 +274,21 @@
     --neon-secondary: #fb923c; /* Orange */
   }
 
-  /* Spring Theme */
+  /* Spring Theme (Tet) */
   .theme-spring {
-    --primary: 330 80% 60%;
+    --primary: 0 80% 60%;
     --primary-foreground: 0 0% 100%;
-    --ring: 330 80% 60%;
+    --ring: 0 80% 60%;
   }
   .dark.theme-spring {
-    --background: 330 30% 6%;
-    --card: 330 30% 10%;
-    --border: 330 30% 16%;
-    --primary: 330 80% 65%;
+    --background: 0 30% 6%;
+    --card: 0 30% 10%;
+    --border: 0 30% 16%;
+    --primary: 0 80% 65%;
     --primary-foreground: 0 0% 100%;
-    --ring: 330 80% 65%;
-    --neon-primary: #ec4899; /* Pink */
-    --neon-secondary: #22c55e; /* Green */
+    --ring: 0 80% 65%;
+    --neon-primary: #ef4444; /* Red */
+    --neon-secondary: #facc15; /* Yellow */
     
     /* Nature Layout */
     --bento-radius: 1.5rem;

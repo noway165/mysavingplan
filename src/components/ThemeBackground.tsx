@@ -477,7 +477,8 @@ function HalloweenBackground() {
         if (f.x > canvas.width + f.size) f.x = -f.size
         
         const gradient = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size)
-        gradient.addColorStop(0, `rgba(168, 85, 247, ${f.opacity})`) // Purple fog
+        // Reduce fog opacity to make it less blurry
+        gradient.addColorStop(0, `rgba(168, 85, 247, ${f.opacity * 0.3})`) 
         gradient.addColorStop(1, `rgba(168, 85, 247, 0)`)
         ctx.fillStyle = gradient
         ctx.beginPath()
@@ -604,20 +605,22 @@ function SpringBackground() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    // 3 layers of particles
-    const particles: { x: number, y: number, size: number, speedY: number, speedX: number, color: string, sway: number }[] = []
+    // 3 layers of petals/flowers
+    const particles: { x: number, y: number, size: number, speedY: number, speedX: number, color: string, sway: number, rotSpeed: number }[] = []
     
-    const colors = ['#ec4899', '#22c55e', '#fbbf24', '#ffffff'] // Pink, Green, Yellow, White
+    // Tet theme: Red, Gold/Yellow, Pink
+    const colors = ['#ef4444', '#facc15', '#fde047', '#fbcfe8', '#fecdd3'] 
     
     for (let i = 0; i < 80; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 4 + 1,
-        speedY: Math.random() * -1 - 0.5, // Flowing upwards
-        speedX: Math.random() * 0.5 - 0.25,
+        size: Math.random() * 4 + 2,
+        speedY: Math.random() * 1 + 0.5, // Falling gently
+        speedX: Math.random() * 1 - 0.5,
         color: colors[Math.floor(Math.random() * colors.length)],
-        sway: Math.random() * Math.PI * 2
+        sway: Math.random() * Math.PI * 2,
+        rotSpeed: Math.random() * 0.05 - 0.025
       })
     }
 
@@ -629,31 +632,37 @@ function SpringBackground() {
       particles.forEach(p => {
         p.x += p.speedX + Math.sin(p.sway) * 0.5
         p.y += p.speedY
-        p.sway += 0.02
+        p.sway += p.rotSpeed
 
-        if (p.y < -10) {
-          p.y = canvas.height + 10
+        if (p.y > canvas.height + 10) {
+          p.y = -10
           p.x = Math.random() * canvas.width
         }
 
+        ctx.save()
+        ctx.translate(p.x, p.y)
+        ctx.rotate(p.sway)
+        
         ctx.beginPath()
         ctx.fillStyle = p.color
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        
+        // Draw petal shape
+        ctx.moveTo(0, -p.size)
+        ctx.quadraticCurveTo(p.size, 0, 0, p.size)
+        ctx.quadraticCurveTo(-p.size, 0, 0, -p.size)
         ctx.fill()
         
-        // Glow effect
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3)
-        // Convert hex to rgb for glow
-        let rgb = "255, 255, 255"
-        if (p.color === '#ec4899') rgb = "236, 72, 153"
-        if (p.color === '#22c55e') rgb = "34, 197, 94"
-        if (p.color === '#fbbf24') rgb = "251, 191, 36"
+        ctx.restore()
         
-        gradient.addColorStop(0, `rgba(${rgb}, 0.6)`)
-        gradient.addColorStop(1, `rgba(${rgb}, 0)`)
+        // Very subtle glow to not overwhelm the screen
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2)
+        
+        // Simplified generic glow
+        gradient.addColorStop(0, `rgba(255, 255, 255, 0.2)`)
+        gradient.addColorStop(1, `rgba(255, 255, 255, 0)`)
         ctx.fillStyle = gradient
         ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2)
+        ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2)
         ctx.fill()
       })
 
@@ -675,8 +684,8 @@ function SpringBackground() {
   }, [])
 
   return (
-    <div className="absolute inset-0 bg-gradient-to-br from-[#100c14] to-[#0a1510]">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-pink-900/10 via-transparent to-transparent" />
+    <div className="absolute inset-0 bg-gradient-to-br from-[#1a0505] to-[#100c14]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-red-900/20 via-transparent to-transparent" />
       <canvas ref={canvasRef} className="absolute inset-0 mix-blend-screen" />
     </div>
   )
@@ -924,20 +933,22 @@ function WinterBackground() {
     }
 
     let animationFrameId: number;
+    let time = 0;
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       
-      // Wind speed
-      const wind = Math.sin(Date.now() * 0.0005) * 2
+      time += 0.005;
+      // Wind speed - smooth transition
+      const wind = Math.sin(time) * 1.2
 
       snowflakes.forEach(s => {
         // Wind affects foreground more
         const windEffect = s.layer === 1 ? wind * 2 : s.layer === 2 ? wind : wind * 0.5
         
-        s.x += Math.sin(s.sway) * 0.5 + windEffect
+        s.x += Math.sin(s.sway) * 0.3 + windEffect
         s.y += s.speedY
-        s.sway += 0.01
+        s.sway += 0.015
 
         if (s.y > canvas.height + 10) {
           s.y = -10
