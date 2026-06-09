@@ -36,37 +36,59 @@ function MatrixBackground() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~"
-    const fontSize = 14
-    const columns = canvas.width / fontSize
+    // Katakana + Latin + Digits for authenticity
+    const chars = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('')
+    const fontSize = 16
+    const columns = Math.floor(canvas.width / fontSize) + 1
+    
+    // Array to store current Y position (in rows) for each column
     const drops: number[] = []
-
     for (let x = 0; x < columns; x++) {
-      drops[x] = 1
+      drops[x] = Math.random() * -100 // Start above screen with random offset
     }
 
     let animationFrameId: number;
+    let lastDrawTime = 0;
 
-    const draw = () => {
-      ctx.fillStyle = "rgba(10, 10, 26, 0.1)"
+    const draw = (timestamp: number) => {
+      animationFrameId = requestAnimationFrame(draw)
+      if (timestamp - lastDrawTime < 50) return // Limit to ~20 FPS for Matrix effect
+      lastDrawTime = timestamp
+
+      // Create trailing effect using semi-transparent black
+      ctx.fillStyle = "rgba(0, 5, 0, 0.15)"
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      ctx.fillStyle = "#4ade80"
       ctx.font = `${fontSize}px monospace`
+      ctx.textAlign = 'center'
 
       for (let i = 0; i < drops.length; i++) {
-        const text = letters[Math.floor(Math.random() * letters.length)]
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize)
+        // Only draw if within reasonable bounds to save performance
+        if (drops[i] > -1) {
+          const text = chars[Math.floor(Math.random() * chars.length)]
+          
+          // Previous character is bright green (drawn over next frame as tail)
+          ctx.fillStyle = "#22c55e"
+          ctx.shadowBlur = 0
+          ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fontSize + fontSize/2, (drops[i] - 1) * fontSize)
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          // Head of the drop is white, glowing
+          ctx.fillStyle = "#ffffff"
+          ctx.shadowBlur = 8
+          ctx.shadowColor = "#4ade80"
+          ctx.fillText(text, i * fontSize + fontSize/2, drops[i] * fontSize)
+        }
+
+        // Reset drop to top randomly after it crosses screen
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.98) {
           drops[i] = 0
         }
+        
         drops[i]++
       }
-      animationFrameId = requestAnimationFrame(draw)
     }
 
-    draw()
+    animationFrameId = requestAnimationFrame(draw)
 
     const handleResize = () => {
       canvas.width = window.innerWidth
@@ -80,7 +102,12 @@ function MatrixBackground() {
     }
   }, [])
 
-  return <canvas ref={canvasRef} className="absolute inset-0 opacity-40 mix-blend-screen" />
+  return (
+    <div className="absolute inset-0 bg-[#000500]">
+      <div className="absolute inset-0 bg-gradient-to-b from-green-900/10 to-transparent" />
+      <canvas ref={canvasRef} className="absolute inset-0 mix-blend-screen" />
+    </div>
+  )
 }
 
 function GalaxyBackground() {
@@ -95,58 +122,119 @@ function GalaxyBackground() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const stars: { x: number, y: number, radius: number, angle: number, dist: number, speed: number, color: string }[] = []
-    const colors = ['#ffffff', '#fdf4ff', '#e879f9', '#38bdf8', '#818cf8']
+    // Logarithmic Spiral Galaxy
+    const stars: { x: number, y: number, size: number, angle: number, dist: number, baseDist: number, color: string, alpha: number }[] = []
+    const colors = ['#ffffff', '#fdf4ff', '#fbcfe8', '#a78bfa', '#60a5fa'] // White, pinkish, purple, blue
     
-    for (let i = 0; i < 400; i++) {
-      const dist = Math.random() * (canvas.width > canvas.height ? canvas.width : canvas.height)
+    const numStars = 800
+    const arms = 3
+    const armSpread = 0.5
+    const maxRadius = Math.max(canvas.width, canvas.height) * 0.8
+    
+    for (let i = 0; i < numStars; i++) {
+      // Golden ratio spiral distribution
+      const dist = Math.pow(Math.random(), 2) * maxRadius // More stars near center
+      const armIndex = i % arms
+      const baseAngle = (armIndex * Math.PI * 2) / arms
+      
+      // Logarithmic spiral angle offset
+      const spiralAngle = dist * 0.005 
+      
+      // Add random spread around the arm
+      const spread = (Math.random() - 0.5) * armSpread * (1 + dist * 0.01)
+      
+      const angle = baseAngle + spiralAngle + spread
+
       stars.push({
-        x: 0,
-        y: 0,
-        radius: Math.random() * 2 + (dist < 100 ? 1 : 0),
-        angle: Math.random() * Math.PI * 2,
+        x: 0, y: 0,
+        size: Math.random() * 1.5 + (dist < 50 ? 1 : 0),
+        angle: angle,
         dist: dist,
-        speed: (Math.random() * 0.002 + 0.001) * (dist < 200 ? 1.5 : 0.5),
-        color: colors[Math.floor(Math.random() * colors.length)]
+        baseDist: dist,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: Math.random() * 0.5 + 0.5
       })
     }
 
+    const meteors: { x: number, y: number, length: number, speed: number, angle: number, active: boolean }[] = []
+    for(let i=0; i<2; i++) {
+       meteors.push({ x: 0, y: 0, length: 0, speed: 0, angle: 0, active: false })
+    }
+
     let animationFrameId: number;
+    let rotation = 0;
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       const centerX = canvas.width / 2
       const centerY = canvas.height / 2
+      
+      rotation -= 0.0005 // Global rotation
+
+      // Draw Center Glow / Black hole
+      const centerGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 150)
+      centerGlow.addColorStop(0, "rgba(255, 255, 255, 1)")
+      centerGlow.addColorStop(0.1, "rgba(232, 121, 249, 0.8)") // Fuchsia
+      centerGlow.addColorStop(0.4, "rgba(56, 189, 248, 0.2)") // Sky blue
+      centerGlow.addColorStop(1, "rgba(0, 0, 0, 0)")
+      
+      ctx.fillStyle = centerGlow
+      ctx.beginPath()
+      ctx.arc(centerX, centerY, 150, 0, Math.PI * 2)
+      ctx.fill()
 
       stars.forEach(star => {
-        star.angle += star.speed
+        // Individual star rotation based on distance (Keplerian-ish)
+        const currentAngle = star.angle + rotation * (1 + 100/(star.dist+10))
         
-        // Spiral effect
-        const currentDist = star.dist + Math.sin(star.angle * 3) * 20
-
-        star.x = centerX + Math.cos(star.angle) * currentDist
-        star.y = centerY + Math.sin(star.angle) * currentDist
+        star.x = centerX + Math.cos(currentAngle) * star.dist
+        star.y = centerY + Math.sin(currentAngle) * star.dist * 0.6 // Tilt the galaxy slightly (elliptical)
 
         ctx.beginPath()
         ctx.fillStyle = star.color
         
-        // Closer to center = brighter
-        ctx.globalAlpha = Math.max(0.1, 1 - (currentDist / (canvas.width / 1.5)))
+        // Stars twinkle
+        const alpha = star.alpha * (0.5 + Math.sin(Date.now() * 0.001 + star.dist) * 0.5)
+        ctx.globalAlpha = Math.max(0.1, alpha * (1 - star.dist / maxRadius))
         
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2)
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2)
         ctx.fill()
+      })
+      
+      // Meteors
+      ctx.globalAlpha = 1.0
+      meteors.forEach(m => {
+        if (!m.active && Math.random() < 0.005) {
+          m.active = true
+          m.x = Math.random() * canvas.width
+          m.y = -50
+          m.length = Math.random() * 100 + 50
+          m.speed = Math.random() * 15 + 10
+          m.angle = Math.PI / 4 + (Math.random() * 0.2 - 0.1)
+        }
         
-        // Occasional twinkle
-        if (Math.random() < 0.01) {
-          const g = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.radius * 4)
-          g.addColorStop(0, "rgba(255,255,255,0.8)")
-          g.addColorStop(1, "rgba(255,255,255,0)")
-          ctx.fillStyle = g
-          ctx.arc(star.x, star.y, star.radius * 4, 0, Math.PI * 2)
-          ctx.fill()
+        if (m.active) {
+          m.x += Math.cos(m.angle) * m.speed
+          m.y += Math.sin(m.angle) * m.speed
+          
+          const grad = ctx.createLinearGradient(m.x, m.y, m.x - Math.cos(m.angle) * m.length, m.y - Math.sin(m.angle) * m.length)
+          grad.addColorStop(0, "rgba(255, 255, 255, 1)")
+          grad.addColorStop(1, "rgba(56, 189, 248, 0)")
+          
+          ctx.beginPath()
+          ctx.strokeStyle = grad
+          ctx.lineWidth = 2
+          ctx.moveTo(m.x, m.y)
+          ctx.lineTo(m.x - Math.cos(m.angle) * m.length, m.y - Math.sin(m.angle) * m.length)
+          ctx.stroke()
+          
+          if (m.y > canvas.height + m.length || m.x > canvas.width + m.length) {
+            m.active = false
+          }
         }
       })
+
       ctx.globalAlpha = 1.0;
       animationFrameId = requestAnimationFrame(draw)
     }
@@ -166,10 +254,9 @@ function GalaxyBackground() {
   }, [])
 
   return (
-    <div className="absolute inset-0 bg-[#090514]">
-      {/* Huge Nebulas */}
-      <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-fuchsia-900/20 blur-[120px] mix-blend-screen animate-[pulse_8s_ease-in-out_infinite]" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-blue-900/20 blur-[150px] mix-blend-screen animate-[pulse_10s_ease-in-out_infinite_reverse]" />
+    <div className="absolute inset-0 bg-[#04010a]">
+      {/* Background Deep Space */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/20 via-[#04010a] to-[#04010a]" />
       <canvas ref={canvasRef} className="absolute inset-0" />
     </div>
   )
@@ -187,48 +274,100 @@ function FireBackground() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const particles: { x: number, y: number, size: number, speedY: number, speedX: number, life: number, maxLife: number }[] = []
+    // Multi-layer fire and sparks
+    const particles: { x: number, y: number, size: number, speedY: number, speedX: number, life: number, maxLife: number, type: 'flame' | 'spark' | 'smoke' }[] = []
 
-    const createParticle = () => {
+    const createParticle = (type: 'flame' | 'spark' | 'smoke') => {
+      let x = Math.random() * canvas.width;
+      // Concentrate flames in the middle bottom
+      if (type === 'flame') {
+         x = canvas.width/2 + (Math.random() - 0.5) * canvas.width * 0.8;
+      }
+      
       particles.push({
-        x: Math.random() * canvas.width,
-        y: canvas.height + 10,
-        size: Math.random() * 4 + 1,
-        speedY: Math.random() * -3 - 1,
+        x,
+        y: canvas.height + (type === 'spark' ? 10 : 50),
+        size: type === 'flame' ? Math.random() * 40 + 20 : type === 'smoke' ? Math.random() * 60 + 40 : Math.random() * 3 + 1,
+        speedY: type === 'spark' ? Math.random() * -5 - 2 : Math.random() * -2 - 1,
         speedX: Math.random() * 2 - 1,
         life: 0,
-        maxLife: Math.random() * 100 + 50
+        maxLife: type === 'spark' ? Math.random() * 100 + 50 : Math.random() * 80 + 40,
+        type
       })
     }
 
     let animationFrameId: number;
 
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      // Create trailing blur effect for flames
+      ctx.fillStyle = "rgba(10, 5, 5, 0.3)"
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      if (Math.random() < 0.3) createParticle()
+      // Add new particles
+      for(let i=0; i<3; i++) createParticle('flame');
+      if (Math.random() < 0.4) createParticle('smoke');
+      if (Math.random() < 0.6) createParticle('spark');
+
+      // Sort so smoke is behind, then flame, then sparks
+      particles.sort((a, b) => {
+         const getZ = (t: string) => t === 'smoke' ? 0 : t === 'flame' ? 1 : 2;
+         return getZ(a.type) - getZ(b.type);
+      })
+
+      ctx.globalCompositeOperation = 'lighter'
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i]
-        p.x += p.speedX
+        
+        // Sway effect
+        p.x += p.speedX + Math.sin(p.life * 0.05) * (p.type === 'smoke' ? 2 : 0.5)
         p.y += p.speedY
         p.life++
+        
+        // Shrink flames and smoke
+        if (p.type !== 'spark') {
+           p.size *= 0.96;
+        }
 
-        const opacity = 1 - (p.life / p.maxLife)
+        const opacity = Math.max(0, 1 - (p.life / p.maxLife))
         
         ctx.beginPath()
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size)
-        gradient.addColorStop(0, `rgba(255, 200, 0, ${opacity})`)
-        gradient.addColorStop(1, `rgba(255, 50, 0, 0)`)
-        
-        ctx.fillStyle = gradient
-        ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2)
-        ctx.fill()
+        if (p.type === 'flame') {
+           const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Math.max(0.1, p.size))
+           // Colors from white -> yellow -> orange -> red -> dark
+           const progress = p.life / p.maxLife;
+           if (progress < 0.2) {
+             gradient.addColorStop(0, `rgba(255, 255, 255, ${opacity})`)
+             gradient.addColorStop(0.5, `rgba(255, 200, 0, ${opacity * 0.8})`)
+           } else if (progress < 0.5) {
+             gradient.addColorStop(0, `rgba(255, 150, 0, ${opacity})`)
+           } else {
+             gradient.addColorStop(0, `rgba(255, 50, 0, ${opacity})`)
+           }
+           gradient.addColorStop(1, `rgba(255, 0, 0, 0)`)
+           ctx.fillStyle = gradient
+           ctx.arc(p.x, p.y, Math.max(0.1, p.size), 0, Math.PI * 2)
+           ctx.fill()
+        } else if (p.type === 'spark') {
+           ctx.fillStyle = `rgba(255, 200, 50, ${opacity})`
+           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+           ctx.fill()
+        } else if (p.type === 'smoke') {
+           ctx.globalCompositeOperation = 'source-over'
+           const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Math.max(0.1, p.size))
+           gradient.addColorStop(0, `rgba(50, 20, 20, ${opacity * 0.2})`)
+           gradient.addColorStop(1, `rgba(0, 0, 0, 0)`)
+           ctx.fillStyle = gradient
+           ctx.arc(p.x, p.y, Math.max(0.1, p.size), 0, Math.PI * 2)
+           ctx.fill()
+           ctx.globalCompositeOperation = 'lighter'
+        }
 
         if (p.life >= p.maxLife || p.size <= 0.2) {
           particles.splice(i, 1)
         }
       }
+      ctx.globalCompositeOperation = 'source-over'
       animationFrameId = requestAnimationFrame(draw)
     }
 
@@ -247,9 +386,9 @@ function FireBackground() {
   }, [])
 
   return (
-    <div className="absolute inset-0 bg-[#0a0505]">
-      <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-gradient-to-t from-red-900/20 to-transparent" />
-      <canvas ref={canvasRef} className="absolute inset-0 opacity-80 mix-blend-screen" />
+    <div className="absolute inset-0 bg-[#0a0202]">
+      <canvas ref={canvasRef} className="absolute inset-0" />
+      <div className="absolute inset-0 bg-gradient-to-t from-orange-950/40 via-transparent to-transparent pointer-events-none" />
     </div>
   )
 }
@@ -343,47 +482,92 @@ function MeteorShowerBackground() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const meteors: { x: number, y: number, length: number, speed: number, opacity: number }[] = []
+    const meteors: { x: number, y: number, length: number, speed: number, opacity: number, thickness: number, color: string }[] = []
+    const stars: { x: number, y: number, size: number, opacity: number, speed: number }[] = []
+
+    // Pre-fill static stars
+    for(let i=0; i<200; i++) {
+       stars.push({
+         x: Math.random() * canvas.width,
+         y: Math.random() * canvas.height,
+         size: Math.random() * 1.5,
+         opacity: Math.random(),
+         speed: Math.random() * 0.02
+       })
+    }
+
+    const colors = ['#38bdf8', '#818cf8', '#c084fc', '#f472b6', '#ffffff']
 
     const createMeteor = () => {
       meteors.push({
-        x: Math.random() * canvas.width * 1.5,
-        y: -50,
-        length: Math.random() * 100 + 50,
-        speed: Math.random() * 15 + 10,
-        opacity: Math.random() * 0.8 + 0.2
+        x: Math.random() * canvas.width * 2, // Allow spawning further right to cross screen
+        y: -100,
+        length: Math.random() * 300 + 100, // Much longer trails
+        speed: Math.random() * 20 + 20, // Very fast
+        opacity: 1,
+        thickness: Math.random() * 2 + 1,
+        color: colors[Math.floor(Math.random() * colors.length)]
       })
     }
 
     let animationFrameId: number;
 
     const draw = () => {
-      ctx.fillStyle = "rgba(10, 15, 24, 0.3)" // Trail effect
+      // Dark deep space background
+      ctx.fillStyle = "#020617" 
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      if (Math.random() < 0.1) createMeteor()
+      // Draw stars
+      stars.forEach(s => {
+         s.opacity += s.speed
+         if (s.opacity > 1 || s.opacity < 0) s.speed *= -1
+         ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.opacity) * 0.8})`
+         ctx.beginPath()
+         ctx.arc(s.x, s.y, s.size, 0, Math.PI*2)
+         ctx.fill()
+      })
+
+      ctx.globalCompositeOperation = 'screen'
+
+      if (Math.random() < 0.05) createMeteor() // More frequent
 
       for (let i = meteors.length - 1; i >= 0; i--) {
         const m = meteors[i]
         
         ctx.beginPath()
-        const gradient = ctx.createLinearGradient(m.x, m.y, m.x - m.length, m.y + m.length)
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${m.opacity})`)
-        gradient.addColorStop(1, `rgba(148, 163, 184, 0)`)
+        // Bright glowing head
+        const headGradient = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.thickness * 4)
+        headGradient.addColorStop(0, "#ffffff")
+        headGradient.addColorStop(0.2, m.color)
+        headGradient.addColorStop(1, "rgba(0,0,0,0)")
         
-        ctx.strokeStyle = gradient
-        ctx.lineWidth = 2
+        ctx.fillStyle = headGradient
+        ctx.arc(m.x, m.y, m.thickness * 4, 0, Math.PI*2)
+        ctx.fill()
+
+        // Long tail
+        const tailGradient = ctx.createLinearGradient(m.x, m.y, m.x - m.length, m.y + m.length)
+        tailGradient.addColorStop(0, m.color)
+        tailGradient.addColorStop(1, `rgba(0,0,0,0)`)
+        
+        ctx.strokeStyle = tailGradient
+        ctx.lineWidth = m.thickness
+        ctx.lineCap = "round"
+        ctx.beginPath()
         ctx.moveTo(m.x, m.y)
         ctx.lineTo(m.x - m.length, m.y + m.length)
         ctx.stroke()
 
         m.x -= m.speed
         m.y += m.speed
+        m.opacity -= 0.01
 
-        if (m.y > canvas.height + m.length) {
+        if (m.y > canvas.height + m.length || m.opacity <= 0) {
           meteors.splice(i, 1)
         }
       }
+      
+      ctx.globalCompositeOperation = 'source-over'
       animationFrameId = requestAnimationFrame(draw)
     }
 
@@ -402,7 +586,8 @@ function MeteorShowerBackground() {
   }, [])
 
   return (
-    <div className="absolute inset-0 bg-[#0a0f18]">
+    <div className="absolute inset-0 bg-[#020617]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent pointer-events-none" />
       <canvas ref={canvasRef} className="absolute inset-0" />
     </div>
   )
@@ -563,50 +748,87 @@ function CyberCircuitBackground() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const particles: { x: number, y: number, vx: number, vy: number, life: number, maxLife: number }[] = []
+    // Cyberpunk circuitry nodes and paths
+    const particles: { x: number, y: number, vx: number, vy: number, life: number, maxLife: number, trail: {x:number, y:number}[] }[] = []
     
+    const gridSize = 40; // Circuit grid size
+
+    const snapToGrid = (val: number) => Math.round(val / gridSize) * gridSize;
+
     const createParticle = () => {
       const isHorizontal = Math.random() > 0.5
+      const speed = 2
       particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: isHorizontal ? (Math.random() > 0.5 ? 2 : -2) : 0,
-        vy: !isHorizontal ? (Math.random() > 0.5 ? 2 : -2) : 0,
+        x: snapToGrid(Math.random() * canvas.width),
+        y: snapToGrid(Math.random() * canvas.height),
+        vx: isHorizontal ? (Math.random() > 0.5 ? speed : -speed) : 0,
+        vy: !isHorizontal ? (Math.random() > 0.5 ? speed : -speed) : 0,
         life: 0,
-        maxLife: Math.random() * 100 + 50
+        maxLife: Math.random() * 200 + 100,
+        trail: []
       })
     }
 
     let animationFrameId: number;
 
     const draw = () => {
-      ctx.fillStyle = "rgba(10, 10, 10, 0.1)"
+      // Trail fade effect
+      ctx.fillStyle = "rgba(10, 10, 15, 0.1)"
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      if (Math.random() < 0.2) createParticle()
+      if (Math.random() < 0.1) createParticle()
+
+      ctx.lineCap = "square"
+      ctx.lineJoin = "miter"
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i]
         
-        ctx.fillStyle = `rgba(251, 191, 36, ${1 - p.life / p.maxLife})` // Amber glow
-        ctx.fillRect(p.x, p.y, 2, 2)
+        // Track trail
+        p.trail.push({x: p.x, y: p.y})
+        if (p.trail.length > 50) p.trail.shift() // Limit trail length
+
+        // Draw trail
+        if (p.trail.length > 1) {
+           ctx.beginPath()
+           ctx.moveTo(p.trail[0].x, p.trail[0].y)
+           for (let j=1; j<p.trail.length; j++) {
+             ctx.lineTo(p.trail[j].x, p.trail[j].y)
+           }
+           ctx.strokeStyle = `rgba(251, 191, 36, ${Math.max(0, 1 - p.life / p.maxLife)})` // Amber
+           ctx.lineWidth = 2
+           ctx.stroke()
+        }
+
+        // Draw node head
+        ctx.fillStyle = "#ffffff"
+        ctx.shadowBlur = 10
+        ctx.shadowColor = "#fbbf24"
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, 3, 0, Math.PI*2)
+        ctx.fill()
+        ctx.shadowBlur = 0
         
-        // 5% chance to change direction 90 degrees
-        if (Math.random() < 0.05) {
-          if (p.vx !== 0) {
-            p.vy = Math.random() > 0.5 ? 2 : -2
-            p.vx = 0
-          } else {
-            p.vx = Math.random() > 0.5 ? 2 : -2
-            p.vy = 0
-          }
+        // Change direction on grid intersections
+        if (p.x % gridSize === 0 && p.y % gridSize === 0) {
+           // 20% chance to turn 90 degrees
+           if (Math.random() < 0.2) {
+             const speed = 2
+             if (p.vx !== 0) {
+               p.vy = Math.random() > 0.5 ? speed : -speed
+               p.vx = 0
+             } else {
+               p.vx = Math.random() > 0.5 ? speed : -speed
+               p.vy = 0
+             }
+           }
         }
 
         p.x += p.vx
         p.y += p.vy
         p.life++
 
-        if (p.life >= p.maxLife) {
+        if (p.life >= p.maxLife || p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) {
           particles.splice(i, 1)
         }
       }
@@ -628,8 +850,10 @@ function CyberCircuitBackground() {
   }, [])
 
   return (
-    <div className="absolute inset-0 bg-[#0a0a0a]">
-      <canvas ref={canvasRef} className="absolute inset-0 opacity-70" />
+    <div className="absolute inset-0 bg-[#0a0a0f]">
+      {/* Circuit grid background overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
+      <canvas ref={canvasRef} className="absolute inset-0 opacity-80 mix-blend-screen" />
     </div>
   )
 }
@@ -646,28 +870,39 @@ function SpringBackground() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    // 5-petal flowers
-    const flowers: { x: number, y: number, size: number, speedY: number, speedX: number, color: string, sway: number, rotSpeed: number }[] = []
+    // 5-petal flowers with better bezier curves
+    const flowers: { x: number, y: number, size: number, speedY: number, speedX: number, color: string, sway: number, rotSpeed: number, type: 'apricot' | 'peach' }[] = []
     
-    // Tet theme: Red, Gold/Yellow, Pink
-    const colors = ['#facc15', '#fde047', '#fbcfe8', '#fecdd3', '#fda4af'] 
-    
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 30; i++) {
+      const type = Math.random() > 0.5 ? 'apricot' : 'peach';
       flowers.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 8 + 4,
+        size: Math.random() * 8 + 6,
         speedY: Math.random() * 1.5 + 0.5,
         speedX: Math.random() * 1.5 - 0.75,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        color: type === 'apricot' ? '#fbbf24' : '#fbcfe8', // Gold vs Pink
         sway: Math.random() * Math.PI * 2,
-        rotSpeed: Math.random() * 0.05 - 0.025
+        rotSpeed: Math.random() * 0.05 - 0.025,
+        type
       })
+    }
+
+    // Glowing lanterns
+    const lanterns: { x: number, y: number, size: number, sway: number, swaySpeed: number }[] = []
+    for(let i=0; i<5; i++) {
+       lanterns.push({
+          x: (i + 0.5) * (canvas.width / 5) + (Math.random()*50 - 25),
+          y: Math.random() * canvas.height * 0.4 + 50,
+          size: Math.random() * 15 + 20,
+          sway: Math.random() * Math.PI * 2,
+          swaySpeed: Math.random() * 0.02 + 0.01
+       })
     }
 
     // Gold dust
     const dust: { x: number, y: number, size: number, speedY: number, sway: number }[] = []
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 50; i++) {
       dust.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -679,23 +914,86 @@ function SpringBackground() {
 
     let animationFrameId: number;
 
-    const drawFlower = (ctx: CanvasRenderingContext2D, size: number, color: string) => {
+    const drawFlower = (ctx: CanvasRenderingContext2D, size: number, color: string, type: string) => {
       ctx.fillStyle = color
       for (let i = 0; i < 5; i++) {
         ctx.beginPath()
         ctx.rotate((Math.PI * 2) / 5)
-        ctx.ellipse(0, size, size * 0.5, size, 0, 0, Math.PI * 2)
+        
+        // Beautiful petal shape
+        ctx.moveTo(0, 0)
+        ctx.bezierCurveTo(size*1.5, size*0.5, size*1.5, -size*0.5, 0, 0)
         ctx.fill()
       }
       // Center
-      ctx.fillStyle = '#ea580c' // Orange center
+      ctx.fillStyle = type === 'apricot' ? '#ea580c' : '#be123c' // Dark orange or dark red center
       ctx.beginPath()
-      ctx.arc(0, 0, size * 0.4, 0, Math.PI * 2)
+      ctx.arc(0, 0, size * 0.3, 0, Math.PI * 2)
       ctx.fill()
+      
+      // Stamen dots
+      ctx.fillStyle = '#ffffff'
+      for(let i=0; i<5; i++) {
+        ctx.beginPath()
+        ctx.rotate((Math.PI * 2) / 5)
+        ctx.arc(size*0.4, 0, 1, 0, Math.PI * 2)
+        ctx.fill()
+      }
+    }
+
+    const drawLantern = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, sway: number) => {
+      ctx.save()
+      ctx.translate(x, y)
+      // Pendulum sway from an invisible string above
+      ctx.rotate(Math.sin(sway) * 0.1)
+
+      // Glow
+      const glow = ctx.createRadialGradient(0, 0, size*0.5, 0, 0, size*3)
+      glow.addColorStop(0, "rgba(239, 68, 68, 0.4)") // Red glow
+      glow.addColorStop(1, "rgba(239, 68, 68, 0)")
+      ctx.fillStyle = glow
+      ctx.fillRect(-size*3, -size*3, size*6, size*6)
+
+      // Lantern body
+      ctx.fillStyle = "#ef4444" // Red
+      ctx.beginPath()
+      ctx.ellipse(0, 0, size*0.8, size, 0, 0, Math.PI*2)
+      ctx.fill()
+      
+      // Lines
+      ctx.strokeStyle = "rgba(127, 29, 29, 0.5)"
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.ellipse(0, 0, size*0.4, size, 0, 0, Math.PI*2)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.moveTo(0, -size)
+      ctx.lineTo(0, size)
+      ctx.stroke()
+
+      // Top and bottom caps (Gold)
+      ctx.fillStyle = "#fbbf24"
+      ctx.fillRect(-size*0.4, -size-size*0.1, size*0.8, size*0.2)
+      ctx.fillRect(-size*0.4, size-size*0.1, size*0.8, size*0.2)
+
+      // Tassel
+      ctx.strokeStyle = "#fbbf24"
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.moveTo(0, size+size*0.1)
+      ctx.lineTo(0, size+size*0.8)
+      ctx.stroke()
+
+      ctx.restore()
     }
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      lanterns.forEach(l => {
+         l.sway += l.swaySpeed
+         drawLantern(ctx, l.x, l.y, l.size, l.sway)
+      })
 
       dust.forEach(d => {
         d.y += d.speedY
@@ -724,7 +1022,7 @@ function SpringBackground() {
         ctx.save()
         ctx.translate(p.x, p.y)
         ctx.rotate(p.sway)
-        drawFlower(ctx, p.size, p.color)
+        drawFlower(ctx, p.size, p.color, p.type)
         ctx.restore()
       })
 
@@ -746,7 +1044,7 @@ function SpringBackground() {
   }, [])
 
   return (
-    <div className="absolute inset-0 bg-gradient-to-b from-[#450a0a] to-[#7f1d1d]">
+    <div className="absolute inset-0 bg-gradient-to-b from-[#2a0606] to-[#450a0a]">
       <canvas ref={canvasRef} className="absolute inset-0" />
     </div>
   )

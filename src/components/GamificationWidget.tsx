@@ -28,8 +28,8 @@ export function GamificationWidget({ transactions }: { transactions: any[] }) {
             {rank === 'Gold' ? <ShieldCheck size={24} /> : rank === 'Silver' ? <Shield size={24} /> : <ShieldAlert size={24} />}
           </div>
           <div>
-            <div className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-wider">Hạng Kỷ Luật</div>
-            <div className="text-lg font-bold text-white">{rank} - Lvl {level}</div>
+            <div className="text-[10px] md:text-xs font-bold text-muted-foreground uppercase tracking-wider">Hạng Kỷ Luật</div>
+            <div className="text-lg font-bold text-foreground">{rank} - Lvl {level}</div>
           </div>
         </div>
         
@@ -41,10 +41,10 @@ export function GamificationWidget({ transactions }: { transactions: any[] }) {
 
       <div className="space-y-2 relative z-10 mt-2">
         <div className="flex justify-between text-xs font-bold">
-          <span className="text-white/60">Kinh nghiệm (XP)</span>
-          <span className="text-white/90">{xp} / {xpForNextLevel}</span>
+          <span className="text-foreground/60">Kinh nghiệm (XP)</span>
+          <span className="text-foreground/90">{xp} / {xpForNextLevel}</span>
         </div>
-        <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-white/10 shadow-inner">
+        <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-border/50 shadow-inner">
           <div 
             className="h-full bg-gradient-to-r from-neon-primary to-purple-500 transition-all duration-1000 ease-out shadow-[0_0_10px_color-mix(in_srgb,var(--neon-primary)_50%,transparent)]" 
             style={{ width: `${progressPercent}%` }}

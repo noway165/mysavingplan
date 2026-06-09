@@ -204,7 +204,7 @@ export default function GoalsPage() {
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className={`h-10 w-10 rounded-xl ${goal.color} flex items-center justify-center text-white shadow-sm`}>
+                  <div className={`h-10 w-10 rounded-xl ${goal.color} flex items-center justify-center text-foreground shadow-sm`}>
                     <Target size={20} />
                   </div>
                   <div>
@@ -418,7 +418,7 @@ export default function GoalsPage() {
               <button
                 type="submit"
                 disabled={submitting || !amount}
-                className={`w-full py-3 rounded-xl text-white font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${showDepositModal ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-destructive hover:bg-destructive/90'}`}
+                className={`w-full py-3 rounded-xl text-foreground font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${showDepositModal ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-destructive hover:bg-destructive/90'}`}
               >
                 {submitting ? t('saving') : (showDepositModal ? t('confirm_deposit') : t('confirm_withdraw'))}
               </button>

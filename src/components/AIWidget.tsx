@@ -80,10 +80,10 @@ export function AIWidget({ transactions }: { transactions: any[] }) {
           <div className="w-8 h-8">
             <AIRubik size={32} isAnalyzing={true} />
           </div>
-          <h2 className="font-bold text-sm uppercase tracking-widest text-white/80 font-serif">AI Insights</h2>
+          <h2 className="font-bold text-sm uppercase tracking-widest text-foreground/80 font-serif">AI Insights</h2>
         </div>
 
-        <p className="text-sm text-white/70 leading-relaxed relative z-10 font-medium">
+        <p className="text-sm text-foreground/70 leading-relaxed relative z-10 font-medium">
           {insight}
         </p>
       </div>

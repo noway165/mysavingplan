@@ -574,7 +574,7 @@ export default function TransactionsPage() {
             <div className="flex flex-col sm:flex-row gap-4 w-full">
               <button 
                 onClick={handleCancelImpulse}
-                className="flex-1 py-4 rounded-2xl bg-emerald-500 text-white font-bold text-lg hover:bg-emerald-600 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:scale-105"
+                className="flex-1 py-4 rounded-2xl bg-emerald-500 text-foreground font-bold text-lg hover:bg-emerald-600 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:scale-105"
               >
                 HỦY MUA & NHẬN +20 XP
               </button>

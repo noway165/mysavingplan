@@ -52,30 +52,30 @@ export default function GamificationPage() {
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Stats Card */}
-        <div className="rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 p-8 shadow-sm text-white relative overflow-hidden group">
+        <div className="rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 p-8 shadow-sm text-foreground relative overflow-hidden group">
           <div className="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform duration-500">
             <Flame size={200} />
           </div>
           <div className="relative z-10">
-            <div className="flex items-center gap-2 font-medium text-white/90 mb-2">
+            <div className="flex items-center gap-2 font-medium text-foreground/90 mb-2">
               <Flame size={20} /> Hoạt động của bạn
             </div>
             <div className="text-6xl font-bold mb-2">{totalTransactions} <span className="text-2xl font-semibold opacity-80">giao dịch</span></div>
-            <p className="text-white/80">{goals.length} mục tiêu đã tạo &bull; {completedGoals} đã hoàn thành</p>
+            <p className="text-foreground/80">{goals.length} mục tiêu đã tạo &bull; {completedGoals} đã hoàn thành</p>
           </div>
           
           <div className="relative z-10 mt-8 grid grid-cols-3 gap-4">
             <div className="bg-white/20 rounded-xl p-3 text-center">
               <div className="text-2xl font-bold">{unlockedCount}</div>
-              <div className="text-xs text-white/80">Huy hiệu</div>
+              <div className="text-xs text-foreground/80">Huy hiệu</div>
             </div>
             <div className="bg-white/20 rounded-xl p-3 text-center">
               <div className="text-2xl font-bold">{xp}</div>
-              <div className="text-xs text-white/80">Tổng XP</div>
+              <div className="text-xs text-foreground/80">Tổng XP</div>
             </div>
             <div className="bg-white/20 rounded-xl p-3 text-center">
               <div className="text-2xl font-bold">Lv.{level}</div>
-              <div className="text-xs text-white/80">Cấp độ</div>
+              <div className="text-xs text-foreground/80">Cấp độ</div>
             </div>
           </div>
         </div>

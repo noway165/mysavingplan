@@ -73,7 +73,7 @@ export function GoalCelebration({ goalName, isOpen, onClose }: GoalCelebrationPr
               {/* Close Button */}
               <button 
                 onClick={onClose}
-                className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                className="absolute top-4 right-4 p-2 rounded-full bg-muted/80 hover:bg-white/20 text-foreground transition-colors"
               >
                 <X size={20} />
               </button>
@@ -97,15 +97,15 @@ export function GoalCelebration({ goalName, isOpen, onClose }: GoalCelebrationPr
                 </div>
               </motion.div>
 
-              <h2 className="text-3xl font-black text-white font-playfair tracking-wide mb-2 drop-shadow-lg">Tuyệt vời!</h2>
-              <p className="text-lg text-white/90 mb-6 font-medium">
+              <h2 className="text-3xl font-black text-foreground font-playfair tracking-wide mb-2 drop-shadow-lg">Tuyệt vời!</h2>
+              <p className="text-lg text-foreground/90 mb-6 font-medium">
                 Bạn đã hoàn thành mục tiêu<br/>
                 <span className="text-yellow-400 font-bold text-xl block mt-1">{goalName}</span>
               </p>
               
               <button 
                 onClick={onClose}
-                className="px-8 py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 text-white font-bold shadow-lg shadow-yellow-500/30 hover:scale-105 active:scale-95 transition-all w-full"
+                className="px-8 py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 text-foreground font-bold shadow-lg shadow-yellow-500/30 hover:scale-105 active:scale-95 transition-all w-full"
               >
                 Nhận phần thưởng
               </button>

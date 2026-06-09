@@ -108,8 +108,8 @@ export default function AIInsightsPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 h-[calc(100vh-8rem)] flex flex-col">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white font-playfair drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">J.A.R.V.I.S Insights</h1>
-          <p className="text-white/50 mt-1 font-mono text-sm tracking-wider uppercase">Trung tâm Phân tích Dữ liệu</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground font-playfair drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">J.A.R.V.I.S Insights</h1>
+          <p className="text-muted-foreground mt-1 font-mono text-sm tracking-wider uppercase">Trung tâm Phân tích Dữ liệu</p>
         </div>
         <div className="flex items-center gap-3">
           <PageClock />
@@ -126,9 +126,9 @@ export default function AIInsightsPage() {
               <div className="h-10 w-10 rounded-lg bg-neon-primary/10 flex items-center justify-center text-neon-primary shadow-[0_0_15px_color-mix(in_srgb,var(--neon-primary)_30%,transparent)]">
                 <TrendingDown size={20} />
               </div>
-              <h3 className="font-semibold text-white font-mono uppercase tracking-wider text-sm">Cơ hội tiết kiệm</h3>
+              <h3 className="font-semibold text-foreground font-mono uppercase tracking-wider text-sm">Cơ hội tiết kiệm</h3>
             </div>
-            <p className="text-sm text-white/70 mb-3">
+            <p className="text-sm text-foreground/70 mb-3">
               {balance > 0 
                 ? `Hệ thống ghi nhận bạn đang dư ${formatMoney(balance)}. Hãy chuyển số tiền này vào Quỹ Dự Phòng hoặc Đầu tư ngay!`
                 : `Tháng này bạn đang thâm hụt ${formatMoney(Math.abs(balance))}. Tạm thời không có dư dả để tiết kiệm.`}
@@ -156,9 +156,9 @@ export default function AIInsightsPage() {
               <div className="h-10 w-10 rounded-lg bg-neon-secondary/10 flex items-center justify-center text-neon-secondary shadow-[0_0_15px_color-mix(in_srgb,var(--neon-secondary)_30%,transparent)] animate-pulse">
                 <AlertTriangle size={20} />
               </div>
-              <h3 className="font-semibold text-white font-mono uppercase tracking-wider text-sm">Cảnh báo chi tiêu</h3>
+              <h3 className="font-semibold text-foreground font-mono uppercase tracking-wider text-sm">Cảnh báo chi tiêu</h3>
             </div>
-            <p className="text-sm text-white/70 mb-3">
+            <p className="text-sm text-foreground/70 mb-3">
               {highestCategoryAmount > 0
                 ? `Danh mục "${highestCategory}" đang ngốn nhiều tiền nhất của bạn (${formatMoney(highestCategoryAmount)}). Hãy kiểm soát lại!`
                 : `Chưa có dữ liệu chi tiêu tháng này. Tốt lắm, cứ giữ vậy nhé!`}
@@ -179,9 +179,9 @@ export default function AIInsightsPage() {
               <div className="h-10 w-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                 <TrendingUp size={20} />
               </div>
-              <h3 className="font-semibold text-white font-mono uppercase tracking-wider text-sm">Đầu tư tiềm năng</h3>
+              <h3 className="font-semibold text-foreground font-mono uppercase tracking-wider text-sm">Đầu tư tiềm năng</h3>
             </div>
-            <p className="text-sm text-white/70 mb-3">
+            <p className="text-sm text-foreground/70 mb-3">
               {balance >= 5000000 
                 ? `Với số dư ${formatMoney(balance)}, bạn đủ điều kiện tham gia các quỹ ETF hoặc gửi tiết kiệm dài hạn. Lãi suất dự kiến: 5-7%/năm.`
                 : `Số dư nhàn rỗi dưới 5 triệu. Hãy tích lũy thêm trước khi nghĩ đến các kênh đầu tư lớn.`}
@@ -205,7 +205,7 @@ export default function AIInsightsPage() {
                 <Cpu size={20} />
               </div>
               <div>
-                <h2 className="font-semibold text-white font-mono uppercase tracking-widest text-sm">Hệ Thống Trí Tuệ Nhân Tạo</h2>
+                <h2 className="font-semibold text-foreground font-mono uppercase tracking-widest text-sm">Hệ Thống Trí Tuệ Nhân Tạo</h2>
                 <div className="text-xs font-medium text-neon-primary flex items-center gap-1 font-mono">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-primary opacity-75"></span>

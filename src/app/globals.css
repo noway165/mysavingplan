@@ -103,7 +103,7 @@
     --neon-secondary: #fe0979;
   }
 
-  /* Pastel Pink Theme */
+      /* Pastel Pink Theme */
   .theme-pastelpink {
     --primary: 340 85% 75%;
     --primary-foreground: 340 90% 15%;
@@ -111,8 +111,8 @@
   }
   .dark.theme-pastelpink {
     --background: 340 30% 6%;
-    --card: 340 30% 10%;
-    --border: 340 30% 16%;
+    --card: 340 40% 12%;
+    --border: 340 30% 20%;
     --primary: 340 85% 80%;
     --primary-foreground: 340 90% 15%;
     --ring: 340 85% 80%;
@@ -121,11 +121,11 @@
     
     /* Nature Layout */
     --bento-radius: 1.5rem;
-    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-bg: rgba(60, 20, 40, 0.5);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
-    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-border-full: 1px solid rgba(255, 182, 193, 0.2);
+    --bento-shadow: 0 8px 32px rgba(255, 182, 193, 0.1);
     --bento-clip-path: none;
     --bento-corner-display: none;
     --bento-backdrop-blur: 16px;
@@ -139,20 +139,20 @@
   }
   .dark.theme-slate {
     --background: 210 30% 6%;
-    --card: 210 30% 10%;
-    --border: 210 30% 16%;
-    --primary: 210 13% 60%;
+    --card: 210 40% 12%;
+    --border: 210 30% 20%;
+    --primary: 210 50% 60%;
     --primary-foreground: 210 40% 10%;
-    --ring: 210 13% 60%;
+    --ring: 210 50% 60%;
     --neon-primary: #94a3b8; /* Slate */
     --neon-secondary: #38bdf8; /* Sky Blue */
     
     /* Neumorphism Layout */
     --bento-radius: 1rem;
-    --bento-bg: rgba(255, 255, 255, 0.05);
+    --bento-bg: rgba(15, 23, 42, 0.6);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px solid rgba(255, 255, 255, 0.15);
+    --bento-border-full: 1px solid rgba(56, 189, 248, 0.2);
     --bento-shadow: -5px -5px 15px rgba(255,255,255,0.02), 5px 5px 15px rgba(0,0,0,0.5);
     --bento-clip-path: none;
     --bento-corner-display: none;
@@ -165,9 +165,9 @@
     --ring: 120 61% 50%;
   }
   .dark.theme-limegreen {
-    --background: 120 30% 6%;
-    --card: 120 30% 10%;
-    --border: 120 30% 16%;
+    --background: 120 30% 4%;
+    --card: 120 40% 8%;
+    --border: 120 50% 15%;
     --primary: 120 61% 40%;
     --primary-foreground: 120 100% 98%;
     --ring: 120 61% 40%;
@@ -176,14 +176,14 @@
     
     /* Matrix Layout */
     --bento-radius: 0px;
-    --bento-bg: rgba(0, 0, 0, 0.8);
+    --bento-bg: rgba(5, 20, 5, 0.7);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px dashed var(--neon-primary);
-    --bento-shadow: 0 0 10px rgba(74, 222, 128, 0.1);
+    --bento-border-full: 1px dashed rgba(74, 222, 128, 0.5);
+    --bento-shadow: 0 0 15px rgba(74, 222, 128, 0.15);
     --bento-clip-path: none;
     --bento-corner-display: none;
-    --font-main: "Courier New", Courier, monospace;
+    --font-main: Courier New, Courier, monospace;
   }
 
   /* Orange Red Theme */
@@ -194,13 +194,23 @@
   }
   .dark.theme-orangered {
     --background: 16 30% 6%;
-    --card: 16 30% 10%;
-    --border: 16 30% 16%;
+    --card: 16 40% 12%;
+    --border: 16 40% 20%;
     --primary: 16 100% 55%;
     --primary-foreground: 0 0% 100%;
     --ring: 16 100% 55%;
     --neon-primary: #fb923c; /* Orange */
     --neon-secondary: #f87171; /* Red */
+    
+    /* Neumorphism Layout */
+    --bento-radius: 1rem;
+    --bento-bg: rgba(60, 20, 10, 0.6);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(251, 146, 60, 0.2);
+    --bento-shadow: -5px -5px 15px rgba(255,255,255,0.02), 5px 5px 15px rgba(0,0,0,0.5);
+    --bento-clip-path: none;
+    --bento-corner-display: none;
   }
 
   /* Halloween Theme (formerly whitesmoke) */
@@ -211,8 +221,8 @@
   }
   .dark.theme-whitesmoke {
     --background: 270 40% 6%;
-    --card: 270 40% 10%;
-    --border: 270 40% 16%;
+    --card: 270 50% 12%;
+    --border: 270 50% 20%;
     --primary: 270 90% 65%;
     --primary-foreground: 0 0% 100%;
     --ring: 270 90% 65%;
@@ -221,10 +231,10 @@
     
     /* Neumorphism Layout */
     --bento-radius: 1rem;
-    --bento-bg: rgba(255, 255, 255, 0.05);
+    --bento-bg: rgba(40, 15, 60, 0.6);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px solid rgba(255, 255, 255, 0.15);
+    --bento-border-full: 1px solid rgba(168, 85, 247, 0.3);
     --bento-shadow: -5px -5px 15px rgba(255,255,255,0.02), 5px 5px 15px rgba(0,0,0,0.5);
     --bento-clip-path: none;
     --bento-corner-display: none;
@@ -238,8 +248,8 @@
   }
   .dark.theme-amethyst {
     --background: 270 30% 6%;
-    --card: 270 30% 10%;
-    --border: 270 30% 16%;
+    --card: 270 40% 12%;
+    --border: 270 40% 20%;
     --primary: 270 50% 65%;
     --primary-foreground: 0 0% 100%;
     --ring: 270 50% 65%;
@@ -248,10 +258,10 @@
     
     /* Neumorphism Layout */
     --bento-radius: 1rem;
-    --bento-bg: rgba(255, 255, 255, 0.05);
+    --bento-bg: rgba(30, 10, 50, 0.6);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px solid rgba(255, 255, 255, 0.15);
+    --bento-border-full: 1px solid rgba(167, 139, 250, 0.2);
     --bento-shadow: -5px -5px 15px rgba(255,255,255,0.02), 5px 5px 15px rgba(0,0,0,0.5);
     --bento-clip-path: none;
     --bento-corner-display: none;
@@ -264,14 +274,24 @@
     --ring: 40 100% 50%;
   }
   .dark.theme-amber {
-    --background: 40 30% 6%;
-    --card: 40 30% 10%;
-    --border: 40 30% 16%;
+    --background: 40 30% 5%;
+    --card: 40 40% 10%;
+    --border: 40 40% 18%;
     --primary: 40 100% 55%;
     --primary-foreground: 0 0% 10%;
     --ring: 40 100% 55%;
     --neon-primary: #fbbf24; /* Amber */
     --neon-secondary: #fb923c; /* Orange */
+    
+    /* JARVIS Layout */
+    --bento-radius: 0.5rem;
+    --bento-bg: rgba(30, 20, 0, 0.5);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1px solid rgba(251, 191, 36, 0.2);
+    --bento-shadow: 0 8px 32px rgba(251, 191, 36, 0.05);
+    --bento-clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+    --bento-corner-display: block;
   }
 
   /* Spring Theme (Tet) */
@@ -282,21 +302,21 @@
   }
   .dark.theme-spring {
     --background: 0 30% 6%;
-    --card: 0 30% 10%;
-    --border: 0 30% 16%;
-    --primary: 0 80% 65%;
-    --primary-foreground: 0 0% 100%;
-    --ring: 0 80% 65%;
+    --card: 0 40% 12%;
+    --border: 0 40% 20%;
+    --primary: 45 100% 50%; /* Gold for Tết */
+    --primary-foreground: 0 0% 10%;
+    --ring: 45 100% 50%;
     --neon-primary: #ef4444; /* Red */
     --neon-secondary: #facc15; /* Yellow */
     
     /* Nature Layout */
     --bento-radius: 1.5rem;
-    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-bg: rgba(80, 15, 15, 0.5);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
-    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-border-full: 1px solid rgba(250, 204, 21, 0.3);
+    --bento-shadow: 0 8px 32px rgba(239, 68, 68, 0.2);
     --bento-clip-path: none;
     --bento-corner-display: none;
     --bento-backdrop-blur: 16px;
@@ -310,8 +330,8 @@
   }
   .dark.theme-summer {
     --background: 190 40% 6%;
-    --card: 190 40% 10%;
-    --border: 190 40% 16%;
+    --card: 190 50% 12%;
+    --border: 190 50% 20%;
     --primary: 190 90% 50%;
     --primary-foreground: 0 0% 100%;
     --ring: 190 90% 50%;
@@ -320,11 +340,11 @@
     
     /* Nature Layout */
     --bento-radius: 1.5rem;
-    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-bg: rgba(0, 40, 50, 0.5);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
-    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-border-full: 1px solid rgba(6, 182, 212, 0.2);
+    --bento-shadow: 0 8px 32px rgba(6, 182, 212, 0.1);
     --bento-clip-path: none;
     --bento-corner-display: none;
     --bento-backdrop-blur: 16px;
@@ -338,8 +358,8 @@
   }
   .dark.theme-autumn {
     --background: 25 40% 6%;
-    --card: 25 40% 10%;
-    --border: 25 40% 16%;
+    --card: 25 50% 12%;
+    --border: 25 50% 20%;
     --primary: 25 95% 55%;
     --primary-foreground: 0 0% 100%;
     --ring: 25 95% 55%;
@@ -348,11 +368,11 @@
     
     /* Nature Layout */
     --bento-radius: 1.5rem;
-    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-bg: rgba(60, 25, 0, 0.5);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
-    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-border-full: 1px solid rgba(249, 115, 22, 0.2);
+    --bento-shadow: 0 8px 32px rgba(249, 115, 22, 0.1);
     --bento-clip-path: none;
     --bento-corner-display: none;
     --bento-backdrop-blur: 16px;
@@ -366,8 +386,8 @@
   }
   .dark.theme-winter {
     --background: 200 40% 6%;
-    --card: 200 40% 10%;
-    --border: 200 40% 16%;
+    --card: 200 50% 12%;
+    --border: 200 50% 20%;
     --primary: 200 80% 75%;
     --primary-foreground: 200 90% 15%;
     --ring: 200 80% 75%;
@@ -376,11 +396,11 @@
     
     /* Nature Layout */
     --bento-radius: 1.5rem;
-    --bento-bg: rgba(255, 255, 255, 0.03);
+    --bento-bg: rgba(15, 30, 45, 0.6);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px solid rgba(255, 255, 255, 0.1);
-    --bento-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --bento-border-full: 1px solid rgba(186, 230, 253, 0.2);
+    --bento-shadow: 0 8px 32px rgba(186, 230, 253, 0.1);
     --bento-clip-path: none;
     --bento-corner-display: none;
     --bento-backdrop-blur: 16px;
@@ -394,24 +414,26 @@
   }
   .dark.theme-vietnam {
     --background: 0 40% 6%;
-    --card: 0 40% 10%;
-    --border: 0 40% 16%;
-    --primary: 0 90% 55%;
-    --primary-foreground: 0 0% 100%;
-    --ring: 0 90% 55%;
+    --card: 0 50% 14%;
+    --border: 0 50% 20%;
+    --primary: 45 100% 50%; /* Gold */
+    --primary-foreground: 0 0% 10%;
+    --ring: 45 100% 50%;
     --neon-primary: #ef4444; /* Red */
     --neon-secondary: #fbbf24; /* Gold */
     
     /* Vietnam Layout */
-    --bento-radius: 0.5rem; /* 8px */
-    --bento-bg: rgba(120, 0, 0, 0.3); /* Dark red glass */
+    --bento-radius: 0.5rem;
+    --bento-bg: rgba(100, 10, 10, 0.6);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 2px solid var(--neon-secondary); /* Gold */
-    --bento-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+    --bento-border-full: 2px solid rgba(251, 191, 36, 0.6);
+    --bento-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
     --bento-clip-path: none;
     --bento-corner-display: none;
   }
+
+
 }
 
 @keyframes shimmer {
@@ -420,40 +442,44 @@
   }
 }
 
-@utility bento-card {
+@utility theme-card {
   @apply relative overflow-hidden;
-  border-radius: var(--bento-radius);
-  background-color: var(--bento-bg);
-  backdrop-filter: blur(var(--bento-backdrop-blur));
-  -webkit-backdrop-filter: blur(var(--bento-backdrop-blur));
-  border-top: var(--bento-border-top);
-  border-bottom: var(--bento-border-bottom);
-  border: var(--bento-border-full);
-  box-shadow: var(--bento-shadow);
-  clip-path: var(--bento-clip-path);
+  border-radius: var(--bento-radius, 1rem);
+  background-color: var(--bento-bg, rgba(0, 0, 0, 0.4));
+  backdrop-filter: blur(var(--bento-backdrop-blur, 16px));
+  -webkit-backdrop-filter: blur(var(--bento-backdrop-blur, 16px));
+  border-top: var(--bento-border-top, none);
+  border-bottom: var(--bento-border-bottom, none);
+  border: var(--bento-border-full, 1px solid rgba(255, 255, 255, 0.1));
+  box-shadow: var(--bento-shadow, 0 8px 32px rgba(0,0,0,0.3));
+  clip-path: var(--bento-clip-path, none);
   
   &::before {
     content: "";
-    display: var(--bento-corner-display);
+    display: var(--bento-corner-display, none);
     position: absolute;
     top: 0; left: 0; width: 1rem; height: 1rem;
-    border-top: 2px solid var(--neon-primary);
-    border-left: 2px solid var(--neon-primary);
+    border-top: 2px solid var(--neon-primary, #fff);
+    border-left: 2px solid var(--neon-primary, #fff);
     pointer-events: none;
   }
   &::after {
     content: "";
-    display: var(--bento-corner-display);
+    display: var(--bento-corner-display, none);
     position: absolute;
     bottom: 0; right: 0; width: 1rem; height: 1rem;
-    border-bottom: 2px solid var(--neon-secondary);
-    border-right: 2px solid var(--neon-secondary);
+    border-bottom: 2px solid var(--neon-secondary, #fff);
+    border-right: 2px solid var(--neon-secondary, #fff);
     pointer-events: none;
   }
 }
 
+@utility bento-card {
+  @apply theme-card;
+}
+
 @utility bento-card-inner {
-  @apply bg-white/5 backdrop-blur-md rounded-2xl border border-white/5;
+  @apply theme-card;
 }
 
 @utility hide-scrollbar {
@@ -465,11 +491,15 @@
 }
 
 @utility bg-glass {
-  @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  @apply theme-card;
+}
+
+@utility bg-card {
+  @apply theme-card;
 }
 
 @utility bg-glass-card {
-  @apply bg-black/40 backdrop-blur-md border border-white/5 shadow-xl;
+  @apply theme-card;
 }
 
 @utility neon-text-primary {
@@ -479,3 +509,4 @@
 @utility neon-text-secondary {
   text-shadow: 0 0 10px color-mix(in srgb, var(--neon-secondary) 80%, transparent), 0 0 20px color-mix(in srgb, var(--neon-secondary) 40%, transparent);
 }
+
