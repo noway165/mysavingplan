@@ -4,11 +4,16 @@ import { useState, useMemo, useEffect, useRef } from "react"
 import { Sparkles, ArrowRight, TrendingDown, TrendingUp, AlertTriangle, Send, Cpu } from "lucide-react"
 import { PageClock } from "@/components/PageClock"
 import { useTransactions } from "@/hooks/useTransactions"
+import { useBuckets } from "@/hooks/useBuckets"
 import { AIRubik } from "@/components/AIRubik"
+import { useRouter } from "next/navigation"
 
 export default function AIInsightsPage() {
   const { transactions } = useTransactions()
+  const { allocateLeftover } = useBuckets()
+  const router = useRouter()
   const chatEndRef = useRef<HTMLDivElement>(null)
+  const [allocated, setAllocated] = useState(false)
 
   // Tính toán dữ liệu thực tế
   const { totalIncome, totalExpense, balance, highestCategory, highestCategoryAmount } = useMemo(() => {
@@ -129,8 +134,18 @@ export default function AIInsightsPage() {
                 : `Tháng này bạn đang thâm hụt ${formatMoney(Math.abs(balance))}. Tạm thời không có dư dả để tiết kiệm.`}
             </p>
             {balance > 0 && (
-              <button className="text-sm font-semibold text-[#00f2fe] flex items-center gap-1 hover:gap-2 transition-all">
-                Thực hiện ngay <ArrowRight size={16} />
+              <button 
+                onClick={() => {
+                  if (!allocated) {
+                    allocateLeftover(balance);
+                    setAllocated(true);
+                    alert(`✅ Đã phân bổ tự động ${formatMoney(balance)} vào các Quỹ thành công!`);
+                  }
+                }}
+                disabled={allocated}
+                className={`text-sm font-semibold flex items-center gap-1 transition-all ${allocated ? 'text-emerald-500 cursor-not-allowed' : 'text-[#00f2fe] hover:gap-2'}`}
+              >
+                {allocated ? "Đã phân bổ" : "Thực hiện ngay"} {!allocated && <ArrowRight size={16} />}
               </button>
             )}
           </div>
@@ -148,6 +163,14 @@ export default function AIInsightsPage() {
                 ? `Danh mục "${highestCategory}" đang ngốn nhiều tiền nhất của bạn (${formatMoney(highestCategoryAmount)}). Hãy kiểm soát lại!`
                 : `Chưa có dữ liệu chi tiêu tháng này. Tốt lắm, cứ giữ vậy nhé!`}
             </p>
+            {highestCategoryAmount > 0 && (
+              <button 
+                onClick={() => router.push('/transactions')}
+                className="text-sm font-semibold text-[#fe0979] flex items-center gap-1 hover:gap-2 transition-all"
+              >
+                Xem chi tiết <ArrowRight size={16} />
+              </button>
+            )}
           </div>
           
           <div className="hud-panel p-5 border border-emerald-500/30 hover:border-emerald-500 transition-colors relative">
@@ -163,6 +186,12 @@ export default function AIInsightsPage() {
                 ? `Với số dư ${formatMoney(balance)}, bạn đủ điều kiện tham gia các quỹ ETF hoặc gửi tiết kiệm dài hạn. Lãi suất dự kiến: 5-7%/năm.`
                 : `Số dư nhàn rỗi dưới 5 triệu. Hãy tích lũy thêm trước khi nghĩ đến các kênh đầu tư lớn.`}
             </p>
+            <button 
+              onClick={() => router.push('/goals')}
+              className="text-sm font-semibold text-emerald-400 flex items-center gap-1 hover:gap-2 transition-all"
+            >
+              Lên mục tiêu ngay <ArrowRight size={16} />
+            </button>
           </div>
         </div>
 
