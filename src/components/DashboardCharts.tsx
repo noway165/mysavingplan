@@ -107,11 +107,11 @@ export function DashboardCharts({ transactions }: Props) {
           <Tooltip 
             contentStyle={{ 
               borderRadius: '16px', 
-              border: '1px solid rgba(255,255,255,0.1)', 
+              border: '1px solid var(--neon-secondary)', 
               background: 'rgba(0,0,0,0.6)',
               backdropFilter: 'blur(10px)',
               color: '#fff',
-              boxShadow: '0 8px 32px 0 rgba(0,0,0,0.5)',
+              boxShadow: '0 8px 32px 0 color-mix(in srgb, var(--neon-primary) 20%, transparent)',
               fontSize: '13px'
             }}
             itemStyle={{ color: '#fff' }}
@@ -126,19 +126,19 @@ export function DashboardCharts({ transactions }: Props) {
           <Line 
             type="monotone"
             dataKey="income" 
-            stroke="#facc15" 
+            stroke="color-mix(in srgb, var(--neon-primary) 40%, white)" 
             strokeWidth={4}
             dot={false}
-            activeDot={{ r: 6, fill: '#00f2fe', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-income)' }}
+            activeDot={{ r: 6, fill: 'var(--neon-primary)', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-income)' }}
             style={{ filter: 'url(#glow-income)' }}
           />
           <Line 
             type="monotone"
             dataKey="expense" 
-            stroke="#ffffff" 
+            stroke="color-mix(in srgb, var(--neon-secondary) 40%, white)" 
             strokeWidth={4}
             dot={false}
-            activeDot={{ r: 6, fill: '#fe0979', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-expense)' }}
+            activeDot={{ r: 6, fill: 'var(--neon-secondary)', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-expense)' }}
             style={{ filter: 'url(#glow-expense)' }}
           />
         </LineChart>
