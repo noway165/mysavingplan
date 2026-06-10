@@ -56,7 +56,7 @@ export function AIWidget({ transactions }: { transactions: any[] }) {
     if (maxCat === "Mua sắm" || maxCat === "Giải trí" || maxCat === "Ăn uống") {
       return (
         <>
-          Cảnh báo: Bạn đã đốt <span className="text-neon-secondary font-bold">{percent}%</span> chi tiêu tuần này ({formatCurrency(maxVal)}) vào <span className="font-bold">{maxCat}</span>. Hãy kìm hãm lại trong những ngày tới để không bị rớt Hạng kỷ luật nhé!
+          Cảnh báo: Bạn đã đốt <span className="text-foreground font-bold">{percent}%</span> chi tiêu tuần này ({formatCurrency(maxVal)}) vào <span className="font-bold">{maxCat}</span>. Hãy kìm hãm lại trong những ngày tới để không bị rớt Hạng kỷ luật nhé!
         </>
       )
     }
@@ -76,19 +76,19 @@ export function AIWidget({ transactions }: { transactions: any[] }) {
       </div>
       
       <div>
-        <div className="flex items-center gap-3 text-neon-secondary mb-3 relative z-10">
+        <div className="flex items-center gap-3 text-foreground mb-3 relative z-10">
           <div className="w-8 h-8">
             <AIRubik size={32} isAnalyzing={true} />
           </div>
           <h2 className="font-bold text-sm uppercase tracking-widest text-foreground/80 font-serif">AI Insights</h2>
         </div>
 
-        <p className="text-sm text-foreground/70 leading-relaxed relative z-10 font-medium">
+        <p className="text-sm text-foreground leading-relaxed relative z-10 font-medium">
           {insight}
         </p>
       </div>
 
-      <Link href="/insights" className="mt-4 flex items-center gap-1 text-xs font-bold text-neon-primary cursor-pointer hover:underline relative z-10 w-fit">
+      <Link href="/insights" className="mt-4 flex items-center gap-1 text-xs font-bold text-foreground cursor-pointer hover:underline relative z-10 w-fit">
         Xem chi tiết báo cáo <ArrowRight size={14} />
       </Link>
     </div>

@@ -73,7 +73,7 @@ export function DashboardCharts({ transactions }: Props) {
     .slice(-7)
 
   const gridColor = theme === 'dark' ? '#374151' : '#f3f4f6'
-  const textColor = theme === 'dark' ? '#9ca3af' : '#6b7280'
+  const textColor = theme === 'dark' ? 'rgba(255,255,255,0.85)' : '#4b5563'
 
   return (
     <div className="h-[320px] sm:h-[350px] w-full mt-4">
@@ -126,7 +126,7 @@ export function DashboardCharts({ transactions }: Props) {
           <Line 
             type="monotone"
             dataKey="income" 
-            stroke="var(--neon-primary)" 
+            stroke="#facc15" 
             strokeWidth={4}
             dot={false}
             activeDot={{ r: 6, fill: '#00f2fe', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-income)' }}
@@ -135,7 +135,7 @@ export function DashboardCharts({ transactions }: Props) {
           <Line 
             type="monotone"
             dataKey="expense" 
-            stroke="var(--neon-secondary)" 
+            stroke="#ffffff" 
             strokeWidth={4}
             dot={false}
             activeDot={{ r: 6, fill: '#fe0979', stroke: '#fff', strokeWidth: 2, filter: 'url(#glow-expense)' }}
