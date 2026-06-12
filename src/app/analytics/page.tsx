@@ -84,7 +84,7 @@ export default function AnalyticsPage() {
 
     // Flatten category data for LineChart
     const lineChartData = finalChartData.map(data => {
-      const result: any = { month: data.month, income: data.income, expense: data.expense, savings: Math.max(0, data.savings) }
+      const result: any = { month: data.month, income: data.income, expense: data.expense, savings: data.savings }
       topCategories.forEach(cat => {
         result[cat] = data.categories[cat] || 0
       })
