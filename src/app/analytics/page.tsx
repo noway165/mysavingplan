@@ -43,7 +43,13 @@ export default function AnalyticsPage() {
     let bestMonthSavings = -Infinity;
 
     transactions.forEach(tx => {
-      const txDate = new Date(tx.date)
+      let txDate = new Date(tx.date)
+      if (tx.date.includes('/')) {
+        const parts = tx.date.split('/')
+        if (parts.length === 3) {
+          txDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T00:00:00`)
+        }
+      }
       if (isAfter(txDate, startDate) || txDate.getTime() === startDate.getTime()) {
         const monthKey = format(txDate, 'MMM yyyy')
         if (monthsData[monthKey]) {
