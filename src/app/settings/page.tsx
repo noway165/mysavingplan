@@ -2,7 +2,8 @@
 
 import { useSettings, Theme, Currency } from "@/context/SettingsContext"
 import { Locale } from "@/lib/i18n"
-import { Moon, Sun, Globe, DollarSign, Palette } from "lucide-react"
+import { Moon, Sun, Globe, DollarSign, Palette, User, Wallet, Trophy, Sparkles, ChevronRight } from "lucide-react"
+import Link from "next/link"
 import { PageClock } from "@/components/PageClock"
 
 export default function SettingsPage() {
@@ -22,6 +23,60 @@ export default function SettingsPage() {
 
       <div className="bg-card rounded-2xl shadow-sm border border-border divide-y divide-border">
         
+        
+        {/* App Modules */}
+        <div className="p-6">
+          <div className="mb-4">
+            <h3 className="font-semibold text-foreground text-lg">Mở rộng & Công cụ</h3>
+            <p className="text-muted-foreground text-sm">Truy cập nhanh các tính năng phân tích và hồ sơ.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Link href="/profile" className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-background/50 hover:bg-white/5 transition-colors group">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500"><User size={20}/></div>
+                <div>
+                  <div className="font-semibold text-foreground group-hover:text-neon-primary transition-colors">Hồ sơ cá nhân</div>
+                  <div className="text-xs text-muted-foreground">Quản lý thông tin</div>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-muted-foreground group-hover:text-neon-primary transition-colors" />
+            </Link>
+            
+            <Link href="/budget" className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-background/50 hover:bg-white/5 transition-colors group">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500"><Wallet size={20}/></div>
+                <div>
+                  <div className="font-semibold text-foreground group-hover:text-neon-primary transition-colors">Ngân sách</div>
+                  <div className="text-xs text-muted-foreground">Kiểm soát chi tiêu</div>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-muted-foreground group-hover:text-neon-primary transition-colors" />
+            </Link>
+
+            <Link href="/gamification" className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-background/50 hover:bg-white/5 transition-colors group">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500"><Trophy size={20}/></div>
+                <div>
+                  <div className="font-semibold text-foreground group-hover:text-neon-primary transition-colors">Thành tựu</div>
+                  <div className="text-xs text-muted-foreground">Cấp độ & Huy hiệu</div>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-muted-foreground group-hover:text-neon-primary transition-colors" />
+            </Link>
+
+            <Link href="/insights" className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-background/50 hover:bg-white/5 transition-colors group">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-purple-500/10 text-purple-500"><Sparkles size={20}/></div>
+                <div>
+                  <div className="font-semibold text-foreground group-hover:text-neon-primary transition-colors">AI J.A.R.V.I.S</div>
+                  <div className="text-xs text-muted-foreground">Tư vấn thông minh</div>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-muted-foreground group-hover:text-neon-primary transition-colors" />
+            </Link>
+          </div>
+        </div>
+
         {/* Color Settings */}
         <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -37,9 +92,10 @@ export default function SettingsPage() {
             {([
               { id: 'default', name: 'Mặc định', color: 'bg-amber-500' },
               { id: 'pastelpink', name: 'Hoa Anh Đào', color: 'bg-[#FFC0CB]' },
-              { id: 'slate', name: 'Mưa Sao Băng', color: 'bg-slate-500' },
-              { id: 'limegreen', name: 'Ma Trận', color: 'bg-[#32CD32]' },
-              { id: 'orangered', name: 'Lò Rèn', color: 'bg-[#FF4500]' },
+
+              { id: 'worldcup', name: 'World Cup', color: 'bg-[#10b981]' },
+                { id: 'limegreen', name: 'Ma Trận', color: 'bg-[#32CD32]' },
+
               { id: 'whitesmoke', name: 'Halloween', color: 'bg-[#a855f7]' },
               { id: 'amethyst', name: 'Ngân Hà', color: 'bg-[#9966CC]' },
               { id: 'spring', name: 'Mùa Xuân (Tết)', color: 'bg-[#ec4899]' },

@@ -10,9 +10,9 @@ export function ThemeBackground() {
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {colorTheme === "limegreen" && <MatrixBackground />}
       {colorTheme === "amethyst" && <GalaxyBackground />}
-      {colorTheme === "orangered" && <FireBackground />}
+      {colorTheme === "worldcup" && <WorldCupBackground />}
       {colorTheme === "pastelpink" && <SakuraBackground />}
-      {colorTheme === "slate" && <MeteorShowerBackground />}
+      
       {colorTheme === "whitesmoke" && <HalloweenBackground />}
       {colorTheme === "default" && <CyberCircuitBackground />}
       {colorTheme === "spring" && <SpringBackground />}
@@ -1449,4 +1449,38 @@ function VietnamBackground() {
   }, [])
 
   return <canvas ref={canvasRef} className="absolute inset-0" />
+}
+
+
+function WorldCupBackground() {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-[#064e3b]">
+      {/* Stadium spotlight glow */}
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#10b981]/20 rounded-full blur-[120px]" />
+      <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-[#facc15]/20 rounded-full blur-[120px]" />
+      
+      {/* Falling confetti */}
+      {Array.from({ length: 50 }).map((_, i) => {
+        const isGold = i % 2 === 0
+        const style = {
+          left: `${Math.random() * 100}%`,
+          top: `-${Math.random() * 20 + 10}%`,
+          animationDuration: `${Math.random() * 4 + 4}s`,
+          animationDelay: `${Math.random() * 5}s`,
+          width: `${Math.random() * 8 + 6}px`,
+          height: `${Math.random() * 12 + 8}px`,
+          backgroundColor: isGold ? '#facc15' : '#10b981',
+          transform: `rotate(${Math.random() * 360}deg)`,
+          opacity: Math.random() * 0.7 + 0.3
+        }
+        return (
+          <div 
+            key={i} 
+            className="absolute rounded-sm animate-fall-spin shadow-[0_0_8px_currentColor]" 
+            style={style} 
+          />
+        )
+      })}
+    </div>
+  )
 }

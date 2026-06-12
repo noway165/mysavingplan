@@ -132,11 +132,7 @@
   }
 
   /* Slate Theme */
-  .theme-slate {
-    --primary: 210 13% 50%;
-    --primary-foreground: 210 40% 98%;
-    --ring: 210 13% 50%;
-  }
+  
   .dark.theme-slate {
     --background: 210 30% 6%;
     --card: 210 40% 12%;
@@ -187,11 +183,7 @@
   }
 
   /* Orange Red Theme */
-  .theme-orangered {
-    --primary: 16 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --ring: 16 100% 50%;
-  }
+  
   .dark.theme-orangered {
     --background: 16 30% 6%;
     --card: 16 40% 12%;
@@ -510,3 +502,38 @@
   text-shadow: 0 0 10px color-mix(in srgb, var(--neon-secondary) 80%, transparent), 0 0 20px color-mix(in srgb, var(--neon-secondary) 40%, transparent);
 }
 
+
+
+.theme-worldcup {
+  --background: 140 50% 10%;
+  --foreground: 0 0% 98%;
+  --card: 140 40% 12%;
+  --card-foreground: 0 0% 98%;
+  --popover: 140 40% 12%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 45 93% 47%;
+  --primary-foreground: 140 50% 10%;
+  --secondary: 140 40% 20%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 140 40% 20%;
+  --muted-foreground: 140 20% 65%;
+  --accent: 140 40% 20%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 45 93% 47%;
+  --input: 140 40% 20%;
+  --ring: 45 93% 47%;
+  --neon-primary: #10b981;
+  --neon-secondary: #facc15;
+  --canvas-bg: #064e3b;
+  --bento-border-full: 2px solid color-mix(in srgb, var(--neon-secondary) 80%, transparent);
+}
+
+@keyframes fall-spin {
+  0% { transform: translateY(-100px) rotate(0deg); }
+  100% { transform: translateY(110vh) rotate(720deg); }
+}
+.animate-fall-spin {
+  animation: fall-spin linear infinite;
+}

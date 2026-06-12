@@ -14,15 +14,11 @@ export function Sidebar() {
   const { user, signOut } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const navigation = [
+    const navigation = [
     { name: t('dashboard'), href: "/", icon: Home },
     { name: t('transactions'), href: "/transactions", icon: PieChart },
     { name: t('goals'), href: "/goals", icon: Target },
     { name: t('planner'), href: "/plan", icon: Map },
-    { name: t('budget'), href: "/budget", icon: Wallet },
-    { name: t('gamification'), href: "/gamification", icon: Trophy },
-    { name: t('ai_insights'), href: "/insights", icon: Sparkles },
-    { name: t('profile'), href: "/profile", icon: UserIcon },
     { name: t('settings'), href: "/settings", icon: Settings },
   ]
 
