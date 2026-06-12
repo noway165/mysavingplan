@@ -16,7 +16,6 @@ export function Sidebar() {
 
     const navigation = [
     { name: t('dashboard'), href: "/", icon: Home },
-    { name: t('analytics'), href: "/analytics", icon: Activity },
     { name: t('transactions'), href: "/transactions", icon: PieChart },
     { name: t('goals'), href: "/goals", icon: Target },
     { name: t('planner'), href: "/plan", icon: Map },
