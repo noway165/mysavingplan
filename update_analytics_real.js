@@ -1,4 +1,72 @@
-"use client"
+const fs = require('fs');
+
+// 1. Update i18n.ts
+const i18nPath = 'E:/my-savings-plan/src/lib/i18n.ts';
+let i18nContent = fs.readFileSync(i18nPath, 'utf8');
+
+const newKeys = `
+  // Analytics
+  analytics_title: string
+  analytics_desc: string
+  avg_savings_rate: string
+  of_income_saved: string
+  total_saved_timeframe: string
+  across_categories: string
+  best_month: string
+  saved_amount: string
+  income_vs_expense: string
+  category_trend: string
+  health_score: string
+  health_good: string
+  ai_insights_label: string
+  back: string`;
+
+i18nContent = i18nContent.replace(/back: string/, newKeys);
+
+const newVi = `
+    // Analytics
+    analytics_title: "Phân tích Chi tiêu",
+    analytics_desc: "Mô hình, xu hướng và AI tư vấn",
+    avg_savings_rate: "Tỷ lệ tiết kiệm TB",
+    of_income_saved: "thu nhập được tiết kiệm",
+    total_saved_timeframe: "Tổng tiết kiệm",
+    across_categories: "mọi danh mục",
+    best_month: "Tháng tốt nhất",
+    saved_amount: "đã tiết kiệm",
+    income_vs_expense: "Thu nhập vs Chi tiêu vs Tiết kiệm",
+    category_trend: "Xu hướng Chi tiêu Danh mục",
+    health_score: "Điểm Sức khỏe Tài chính",
+    health_good: "Tốt — Tiếp tục phát huy!",
+    ai_insights_label: "AI Tư vấn & Nhận định",
+    back: "Quay lại"`;
+
+i18nContent = i18nContent.replace(/back: "Quay lại"/, newVi);
+
+const newEn = `
+    // Analytics
+    analytics_title: "Spending Analytics",
+    analytics_desc: "Patterns, trends, and AI insights",
+    avg_savings_rate: "Avg. Savings Rate",
+    of_income_saved: "of income saved monthly",
+    total_saved_timeframe: "Total Saved",
+    across_categories: "across all categories",
+    best_month: "Best Month",
+    saved_amount: "saved",
+    income_vs_expense: "Income vs Expenses vs Savings",
+    category_trend: "Category Spending Trend",
+    health_score: "Financial Health Score",
+    health_good: "Good — Keep it up!",
+    ai_insights_label: "AI Insights",
+    back: "Back"`;
+
+i18nContent = i18nContent.replace(/back: "Back"/, newEn);
+
+fs.writeFileSync(i18nPath, i18nContent);
+console.log("i18n updated successfully.");
+
+// 2. Update analytics/page.tsx
+const analyticsPath = 'E:/my-savings-plan/src/app/analytics/page.tsx';
+const newAnalyticsContent = `"use client"
 
 import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
@@ -18,11 +86,11 @@ export default function AnalyticsPage() {
   const [timeframe, setTimeframe] = useState<3 | 6>(6)
 
   // 1. Process Real Data
-  const { chartData, topCategories, kpis, radarData, totalScore, insights } = useMemo(() => {
+  const { chartData, topCategories, kpis, radarData, insights } = useMemo(() => {
     const now = new Date()
     const monthsData: Record<string, any> = {}
     
-    // Initialize last `timeframe` months
+    // Initialize last \`timeframe\` months
     for (let i = timeframe - 1; i >= 0; i--) {
       const d = subMonths(now, i)
       const monthKey = format(d, 'MMM yyyy')
@@ -132,12 +200,12 @@ export default function AnalyticsPage() {
       if (currentRate > lastRate) {
         insights.push({
           type: 'positive',
-          text: `Tỷ lệ tiết kiệm của bạn tăng ${Math.round(currentRate - lastRate)}% so với tháng trước. Tuyệt vời!`
+          text: \`Tỷ lệ tiết kiệm của bạn tăng \${Math.round(currentRate - lastRate)}% so với tháng trước. Tuyệt vời!\`
         })
       } else if (currentRate < lastRate && currentRate >= 0) {
         insights.push({
           type: 'warning',
-          text: `Tỷ lệ tiết kiệm giảm ${Math.round(lastRate - currentRate)}% so với tháng trước. Hãy chú ý chi tiêu.`
+          text: \`Tỷ lệ tiết kiệm giảm \${Math.round(lastRate - currentRate)}% so với tháng trước. Hãy chú ý chi tiêu.\`
         })
       }
 
@@ -148,7 +216,7 @@ export default function AnalyticsPage() {
         if (currentCatExp > lastCatExp * 1.5 && lastCatExp > 0) {
           insights.push({
             type: 'alert',
-            text: `Chi tiêu cho ${topCat} tăng vọt ${Math.round(((currentCatExp - lastCatExp)/lastCatExp)*100)}% trong tháng này. Bạn nên đặt giới hạn ngân sách.`
+            text: \`Chi tiêu cho \${topCat} tăng vọt \${Math.round(((currentCatExp - lastCatExp)/lastCatExp)*100)}% trong tháng này. Bạn nên đặt giới hạn ngân sách.\`
           })
         }
       }
@@ -157,12 +225,12 @@ export default function AnalyticsPage() {
     if (totalSavingsPeriod < 0) {
       insights.push({
         type: 'alert',
-        text: `Cảnh báo: Tổng dòng tiền đang âm. Bạn đang tiêu lẹm vào tiền tiết kiệm cũ!`
+        text: \`Cảnh báo: Tổng dòng tiền đang âm. Bạn đang tiêu lẹm vào tiền tiết kiệm cũ!\`
       })
     } else if (totalSavingsPeriod > 0) {
       insights.push({
         type: 'idea',
-        text: `Với đà tiết kiệm này, bạn có thể đạt được các mục tiêu tài chính sớm hơn dự kiến.`
+        text: \`Với đà tiết kiệm này, bạn có thể đạt được các mục tiêu tài chính sớm hơn dự kiến.\`
       })
     }
 
@@ -209,13 +277,13 @@ export default function AnalyticsPage() {
           <div className="bg-background/40 border border-border rounded-lg p-1 flex">
             <button 
               onClick={() => setTimeframe(3)}
-              className={`px-4 py-1 text-sm rounded-md transition-colors ${timeframe === 3 ? 'bg-primary text-primary-foreground shadow-md' : 'text-foreground hover:bg-white/5'}`}
+              className={\`px-4 py-1 text-sm rounded-md transition-colors \${timeframe === 3 ? 'bg-primary text-primary-foreground shadow-md' : 'text-foreground hover:bg-white/5'}\`}
             >
               3m
             </button>
             <button 
               onClick={() => setTimeframe(6)}
-              className={`px-4 py-1 text-sm rounded-md transition-colors ${timeframe === 6 ? 'bg-primary text-primary-foreground shadow-md' : 'text-foreground hover:bg-white/5'}`}
+              className={\`px-4 py-1 text-sm rounded-md transition-colors \${timeframe === 6 ? 'bg-primary text-primary-foreground shadow-md' : 'text-foreground hover:bg-white/5'}\`}
             >
               6m
             </button>
@@ -228,14 +296,14 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-glass-card p-6 rounded-2xl border border-border/50 shadow-lg">
           <p className="text-sm text-muted-foreground font-medium mb-2">{t('avg_savings_rate') || 'Avg. Savings Rate'}</p>
-          <p className={`text-4xl font-bold drop-shadow-[0_0_10px_rgba(16,185,129,0.3)] mb-1 ${kpis.avgSavingsRate < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+          <p className={\`text-4xl font-bold drop-shadow-[0_0_10px_rgba(16,185,129,0.3)] mb-1 \${kpis.avgSavingsRate < 0 ? 'text-rose-400' : 'text-emerald-400'}\`}>
             {kpis.avgSavingsRate}%
           </p>
           <p className="text-xs text-muted-foreground">{t('of_income_saved') || 'of income saved monthly'}</p>
         </div>
         <div className="bg-glass-card p-6 rounded-2xl border border-border/50 shadow-lg">
           <p className="text-sm text-muted-foreground font-medium mb-2">{t('total_saved_timeframe') || 'Total Saved'} ({timeframe}m)</p>
-          <p className={`text-3xl sm:text-4xl font-bold drop-shadow-[0_0_10px_rgba(6,182,212,0.3)] mb-1 ${kpis.totalSaved < 0 ? 'text-rose-400' : 'text-cyan-400'}`}>
+          <p className={\`text-3xl sm:text-4xl font-bold drop-shadow-[0_0_10px_rgba(6,182,212,0.3)] mb-1 \${kpis.totalSaved < 0 ? 'text-rose-400' : 'text-cyan-400'}\`}>
             {formatCurrency(kpis.totalSaved)}
           </p>
           <p className="text-xs text-muted-foreground">{t('across_categories') || 'across all categories'}</p>
@@ -300,7 +368,7 @@ export default function AnalyticsPage() {
             </ResponsiveContainer>
           </div>
           <div className="text-center mt-2">
-            <p className="text-4xl font-bold text-emerald-400">{totalScore}<span className="text-xl text-muted-foreground font-normal">/100</span></p>
+            <p className="text-4xl font-bold text-emerald-400">{kpis.totalScore}<span className="text-xl text-muted-foreground font-normal">/100</span></p>
             <p className="text-sm text-muted-foreground mt-1">{t('health_good') || 'Good — Keep it up!'}</p>
           </div>
         </div>
@@ -313,24 +381,24 @@ export default function AnalyticsPage() {
           
           {insights.map((insight, idx) => (
             <div key={idx} className="bg-glass-card p-4 rounded-xl border border-border/50 hover:bg-white/5 transition-colors flex gap-4 items-start group">
-              <div className={`p-2 rounded-lg shrink-0 mt-1 ${
+              <div className={\`p-2 rounded-lg shrink-0 mt-1 \${
                 insight.type === 'positive' ? 'bg-emerald-500/10 text-emerald-400' :
                 insight.type === 'alert' ? 'bg-rose-500/10 text-rose-400' :
                 insight.type === 'warning' ? 'bg-amber-500/10 text-amber-400' :
                 'bg-purple-500/10 text-purple-400'
-              }`}>
+              }\`}>
                 {insight.type === 'positive' && <TrendingUp size={20} />}
                 {insight.type === 'warning' && <TrendingDown size={20} />}
                 {insight.type === 'alert' && <AlertTriangle size={20} />}
                 {insight.type === 'idea' && <Lightbulb size={20} />}
               </div>
               <div>
-                <p className={`transition-colors ${
+                <p className={\`transition-colors \${
                   insight.type === 'positive' ? 'text-foreground group-hover:text-emerald-300' :
                   insight.type === 'alert' ? 'text-foreground group-hover:text-rose-300' :
                   insight.type === 'warning' ? 'text-foreground group-hover:text-amber-300' :
                   'text-foreground group-hover:text-purple-300'
-                }`}>
+                }\`}>
                   {insight.text}
                 </p>
               </div>
@@ -342,3 +410,7 @@ export default function AnalyticsPage() {
     </div>
   )
 }
+`
+
+fs.writeFileSync(analyticsPath, newAnalyticsContent);
+console.log("Analytics page updated with real data and translations.");

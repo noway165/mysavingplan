@@ -141,6 +141,21 @@ export type TranslationKeys = {
   on_track: string
   at_risk: string
   strategy_desc: string
+  
+  // Analytics
+  analytics_title: string
+  analytics_desc: string
+  avg_savings_rate: string
+  of_income_saved: string
+  total_saved_timeframe: string
+  across_categories: string
+  best_month: string
+  saved_amount: string
+  income_vs_expense: string
+  category_trend: string
+  health_score: string
+  health_good: string
+  ai_insights_label: string
   back: string
 }
 
@@ -278,6 +293,21 @@ export const translations: Record<Locale, TranslationKeys> = {
     on_track: "Đúng tiến độ",
     at_risk: "Nguy cơ trễ hạn",
     strategy_desc: "Phân bổ dòng tiền nhàn rỗi theo chiến lược",
+    
+    // Analytics
+    analytics_title: "Phân tích Chi tiêu",
+    analytics_desc: "Mô hình, xu hướng và AI tư vấn",
+    avg_savings_rate: "Tỷ lệ tiết kiệm TB",
+    of_income_saved: "thu nhập được tiết kiệm",
+    total_saved_timeframe: "Tổng tiết kiệm",
+    across_categories: "mọi danh mục",
+    best_month: "Tháng tốt nhất",
+    saved_amount: "đã tiết kiệm",
+    income_vs_expense: "Thu nhập vs Chi tiêu vs Tiết kiệm",
+    category_trend: "Xu hướng Chi tiêu Danh mục",
+    health_score: "Điểm Sức khỏe Tài chính",
+    health_good: "Tốt — Tiếp tục phát huy!",
+    ai_insights_label: "AI Tư vấn & Nhận định",
     back: "Quay lại"
   },
   en: {
@@ -413,6 +443,21 @@ export const translations: Record<Locale, TranslationKeys> = {
     on_track: "On Track",
     at_risk: "At Risk",
     strategy_desc: "Allocate free cashflow using strategy",
+    
+    // Analytics
+    analytics_title: "Spending Analytics",
+    analytics_desc: "Patterns, trends, and AI insights",
+    avg_savings_rate: "Avg. Savings Rate",
+    of_income_saved: "of income saved monthly",
+    total_saved_timeframe: "Total Saved",
+    across_categories: "across all categories",
+    best_month: "Best Month",
+    saved_amount: "saved",
+    income_vs_expense: "Income vs Expenses vs Savings",
+    category_trend: "Category Spending Trend",
+    health_score: "Financial Health Score",
+    health_good: "Good — Keep it up!",
+    ai_insights_label: "AI Insights",
     back: "Back"
   }
 }
