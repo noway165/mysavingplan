@@ -7,7 +7,7 @@ import { useGoals } from "@/hooks/useGoals"
 import { useTransactions } from "@/hooks/useTransactions"
 import { useSettings } from "@/context/SettingsContext"
 import { PageClock } from "@/components/PageClock"
-import { TiltWrapper } from "@/components/TiltWrapper"
+
 
 export default function PlannerPage() {
   const { t, formatCurrency } = useSettings()
@@ -105,7 +105,7 @@ export default function PlannerPage() {
         {/* Left Column: Cashflow & Strategy */}
         <div className="lg:col-span-1 space-y-6 overflow-y-auto pr-2 custom-scrollbar">
           {/* Cashflow Card */}
-          <TiltWrapper className="bg-glass-card p-6 rounded-2xl border border-border/50 shadow-2xl relative overflow-hidden group">
+          <div className="bg-glass-card p-6 rounded-2xl border border-border/50 shadow-2xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-32 h-32 bg-neon-primary/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700" />
             <h2 className="font-bold text-sm uppercase tracking-widest text-foreground/80 font-serif mb-4 flex items-center gap-2">
               <Activity size={16} className="text-neon-primary" /> {t('cashflow_analysis') || 'Phân tích dòng tiền'}
@@ -127,10 +127,10 @@ export default function PlannerPage() {
                 </p>
               </div>
             </div>
-          </TiltWrapper>
+          </div>
 
           {/* Strategy Selection */}
-          <TiltWrapper className="bg-glass-card p-6 rounded-2xl border border-border/50 shadow-2xl relative overflow-hidden group">
+          <div className="bg-glass-card p-6 rounded-2xl border border-border/50 shadow-2xl relative overflow-hidden group">
              <h2 className="font-bold text-sm uppercase tracking-widest text-foreground/80 font-serif mb-4 flex items-center gap-2">
               <Wallet size={16} className="text-neon-secondary" /> {t('savings_strategy') || 'Chiến lược tiết kiệm'}
             </h2>
@@ -177,12 +177,12 @@ export default function PlannerPage() {
                 <div className="h-full bg-amber-500" style={{ width: `${strategy === '50_30_20' ? 30 : strategy==='aggressive'?20: (100-customRate)/2}%` }} title="Wants" />
               </div>
             </div>
-          </TiltWrapper>
+          </div>
         </div>
 
         {/* Right Column: Goal Projection */}
         <div className="lg:col-span-2 space-y-6 overflow-y-auto pr-2 custom-scrollbar">
-          <TiltWrapper className="bg-glass-card p-6 rounded-2xl border border-border/50 shadow-2xl min-h-full">
+          <div className="bg-glass-card p-6 rounded-2xl border border-border/50 shadow-2xl min-h-full">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-bold text-sm uppercase tracking-widest text-foreground/80 font-serif flex items-center gap-2">
                 <Target size={16} className="text-neon-primary" /> {t('goal_projection') || 'Dự phóng Mục tiêu'}
@@ -278,7 +278,7 @@ export default function PlannerPage() {
                 ))}
               </div>
             )}
-          </TiltWrapper>
+          </div>
         </div>
 
       </div>
