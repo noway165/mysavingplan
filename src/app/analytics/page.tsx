@@ -101,9 +101,9 @@ export default function AnalyticsPage() {
     }
 
     // Health Score (Approximated from real data)
-    let scoreSavings = Math.min(100, Math.max(0, avgSavingsRate * 2.5)) // 40% savings = 100
-    let scoreBudget = totalIncomePeriod > 0 && totalSavingsPeriod >= 0 ? 80 : 40
-    let scoreIncome = finalChartData.length > 1 && finalChartData[finalChartData.length-1].income >= finalChartData[0].income ? 85 : 60
+    let scoreSavings = Math.round(Math.min(100, Math.max(0, avgSavingsRate * 2.5))) || 0
+    let scoreBudget = (totalIncomePeriod > 0 && totalSavingsPeriod >= 0) ? 80 : 40
+    let scoreIncome = (finalChartData.length > 1 && finalChartData[finalChartData.length-1].income >= finalChartData[0].income) ? 85 : 60
     
     // Provide some baseline if there is no data
     if (transactions.length === 0) {
@@ -111,14 +111,14 @@ export default function AnalyticsPage() {
     }
 
     const radarData = [
-      { subject: 'Savings Rate', A: scoreSavings, fullMark: 100 },
-      { subject: 'Budget Control', A: scoreBudget, fullMark: 100 },
-      { subject: 'Goal Progress', A: transactions.length > 0 ? 75 : 0, fullMark: 100 },
-      { subject: 'Discipline', A: transactions.length > 0 ? 80 : 0, fullMark: 100 },
-      { subject: 'Income Growth', A: scoreIncome, fullMark: 100 },
+      { subject: t('avg_savings_rate') || 'Savings Rate', A: scoreSavings, fullMark: 100 },
+      { subject: 'Ngân sách', A: scoreBudget, fullMark: 100 },
+      { subject: 'Mục tiêu', A: transactions.length > 0 ? 75 : 0, fullMark: 100 },
+      { subject: 'Kỷ luật', A: transactions.length > 0 ? 80 : 0, fullMark: 100 },
+      { subject: 'Thu nhập', A: scoreIncome, fullMark: 100 },
     ]
 
-    const totalScore = Math.round((scoreSavings + scoreBudget + (transactions.length > 0 ? 75 : 0) + (transactions.length > 0 ? 80 : 0) + scoreIncome) / 5)
+    const totalScore = Math.round((scoreSavings + scoreBudget + (transactions.length > 0 ? 75 : 0) + (transactions.length > 0 ? 80 : 0) + scoreIncome) / 5) || 0
 
     // AI Insights Generator
     const insights = []
@@ -259,7 +259,10 @@ export default function AnalyticsPage() {
                 <XAxis dataKey="month" stroke="rgba(255,255,255,0.5)" tick={{fill: 'rgba(255,255,255,0.5)', fontSize: 12}} />
                 <YAxis stroke="rgba(255,255,255,0.5)" tick={{fill: 'rgba(255,255,255,0.5)', fontSize: 12}} width={80} tickFormatter={(value) => formatCurrency(value)} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="savings" name="Savings" fill="#0ea5e9" radius={[4, 4, 0, 0]} maxBarSize={30} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }} />
+                <Bar dataKey="income" name="Thu nhập" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={30} />
+                <Bar dataKey="expense" name="Chi tiêu" fill="#ef4444" radius={[4, 4, 0, 0]} maxBarSize={30} />
+                <Bar dataKey="savings" name="Tiết kiệm" fill="#0ea5e9" radius={[4, 4, 0, 0]} maxBarSize={30} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -295,7 +298,8 @@ export default function AnalyticsPage() {
               <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
                 <PolarGrid stroke="rgba(255,255,255,0.1)" />
                 <PolarAngleAxis dataKey="subject" tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }} />
-                <Radar name="Score" dataKey="A" stroke="#10b981" fill="#10b981" fillOpacity={0.2} />
+                <PolarRadiusAxis domain={[0, 100]} angle={30} tick={false} axisLine={false} />
+                <Radar name="Score" dataKey="A" stroke="#10b981" fill="#10b981" fillOpacity={0.4} />
               </RadarChart>
             </ResponsiveContainer>
           </div>
