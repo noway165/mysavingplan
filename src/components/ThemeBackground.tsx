@@ -1454,29 +1454,36 @@ function VietnamBackground() {
 
 function WorldCupBackground() {
   return (
-    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-[#064e3b]">
-      {/* Stadium spotlight glow */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#10b981]/20 rounded-full blur-[120px]" />
-      <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-[#facc15]/20 rounded-full blur-[120px]" />
+    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-[#090314]">
+      {/* WC 2026 Retro-Futuristic Glows */}
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-[#ec4899]/10 rounded-full blur-[150px]" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#0ea5e9]/10 rounded-full blur-[150px]" />
+      <div className="absolute top-[20%] right-[10%] w-[40%] h-[40%] bg-[#8b5cf6]/10 rounded-full blur-[120px]" />
+      <div className="absolute bottom-[20%] left-[10%] w-[30%] h-[30%] bg-[#22c55e]/10 rounded-full blur-[100px]" />
       
-      {/* Falling confetti */}
-      {Array.from({ length: 50 }).map((_, i) => {
-        const isGold = i % 2 === 0
+      {/* Floating geometric shapes (WC 2026 style) */}
+      {Array.from({ length: 20 }).map((_, i) => {
+        const colors = ['#ec4899', '#0ea5e9', '#8b5cf6', '#22c55e', '#f97316'];
+        const color = colors[i % colors.length];
         const style = {
           left: `${Math.random() * 100}%`,
           top: `-${Math.random() * 20 + 10}%`,
-          animationDuration: `${Math.random() * 4 + 4}s`,
-          animationDelay: `${Math.random() * 5}s`,
-          width: `${Math.random() * 8 + 6}px`,
-          height: `${Math.random() * 12 + 8}px`,
-          backgroundColor: isGold ? '#facc15' : '#10b981',
+          animationDuration: `${Math.random() * 10 + 10}s`,
+          animationDelay: `${Math.random() * 10}s`,
+          width: `${Math.random() * 30 + 10}px`,
+          height: `${Math.random() * 30 + 10}px`,
+          borderColor: color,
+          borderWidth: '2px',
+          borderStyle: 'solid',
+          backgroundColor: 'transparent',
+          borderRadius: i % 3 === 0 ? '50%' : '4px',
           transform: `rotate(${Math.random() * 360}deg)`,
-          opacity: Math.random() * 0.7 + 0.3
+          opacity: Math.random() * 0.4 + 0.1
         }
         return (
           <div 
             key={i} 
-            className="absolute rounded-sm animate-fall-spin shadow-[0_0_8px_currentColor]" 
+            className="absolute animate-fall-spin shadow-[0_0_15px_currentColor]" 
             style={style} 
           />
         )

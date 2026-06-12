@@ -3,6 +3,7 @@ export type Locale = 'vi' | 'en'
 export type TranslationKeys = {
   // Sidebar
   dashboard: string
+  analytics: string
   transactions: string
   goals: string
   budget: string
@@ -146,6 +147,7 @@ export type TranslationKeys = {
 export const translations: Record<Locale, TranslationKeys> = {
   vi: {
     dashboard: "Tổng quan",
+    analytics: "Phân tích",
     transactions: "Thu / Chi",
     goals: "Mục tiêu",
     budget: "Ngân sách",
@@ -280,6 +282,7 @@ export const translations: Record<Locale, TranslationKeys> = {
   },
   en: {
     dashboard: "Dashboard",
+    analytics: "Analytics",
     transactions: "Transactions",
     goals: "Goals",
     budget: "Budget",

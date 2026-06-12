@@ -505,28 +505,28 @@
 
 
 .theme-worldcup {
-  --background: 140 50% 10%;
+  --background: 280 50% 5%; /* Very dark neon purple/black */
   --foreground: 0 0% 98%;
-  --card: 140 40% 12%;
+  --card: 280 40% 8%;
   --card-foreground: 0 0% 98%;
-  --popover: 140 40% 12%;
+  --popover: 280 40% 8%;
   --popover-foreground: 0 0% 98%;
-  --primary: 45 93% 47%;
-  --primary-foreground: 140 50% 10%;
-  --secondary: 140 40% 20%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 140 40% 20%;
-  --muted-foreground: 140 20% 65%;
-  --accent: 140 40% 20%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62% 30%;
+  --primary: 199 89% 48%; /* Neon cyan */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 326 78% 60%; /* Neon magenta/pink */
+  --secondary-foreground: 0 0% 100%;
+  --muted: 280 30% 15%;
+  --muted-foreground: 280 20% 70%;
+  --accent: 142 71% 45%; /* Neon green */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
-  --border: 45 93% 47%;
-  --input: 140 40% 20%;
-  --ring: 45 93% 47%;
-  --neon-primary: #10b981;
-  --neon-secondary: #facc15;
-  --canvas-bg: #064e3b;
+  --border: 326 78% 60%;
+  --input: 280 30% 15%;
+  --ring: 199 89% 48%;
+  --neon-primary: #ec4899; /* Pink */
+  --neon-secondary: #0ea5e9; /* Cyan */
+  --canvas-bg: #090314;
   --bento-border-full: 2px solid color-mix(in srgb, var(--neon-secondary) 80%, transparent);
 }
 

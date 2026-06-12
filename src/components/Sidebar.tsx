@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Target, PieChart, Sparkles, Trophy, Settings, User as UserIcon, LogOut, Wallet, Menu, Map } from "lucide-react"
+import { Home, Target, PieChart, Sparkles, Trophy, Settings, User as UserIcon, LogOut, Wallet, Menu, Map, Activity } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/context/SettingsContext"
 import { useAuth } from "@/components/AuthProvider"
@@ -16,6 +16,7 @@ export function Sidebar() {
 
     const navigation = [
     { name: t('dashboard'), href: "/", icon: Home },
+    { name: t('analytics'), href: "/analytics", icon: Activity },
     { name: t('transactions'), href: "/transactions", icon: PieChart },
     { name: t('goals'), href: "/goals", icon: Target },
     { name: t('planner'), href: "/plan", icon: Map },
