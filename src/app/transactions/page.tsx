@@ -76,6 +76,14 @@ export default function TransactionsPage() {
     setFormTime(now.toTimeString().substring(0, 5))
   }
 
+  const toYMD = (dateStr: string) => {
+    if (dateStr && dateStr.includes('/')) {
+      const parts = dateStr.split('/')
+      if (parts.length === 3) return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`
+    }
+    return dateStr
+  }
+
   const openAddModal = () => {
     resetForm()
     setShowModal(true)
@@ -87,7 +95,7 @@ export default function TransactionsPage() {
     setFormTitle(tx.title)
     setFormAmount(tx.amount.toLocaleString('en-US'))
     setFormCategory(tx.category)
-    setFormDate(tx.date || realTime.toLocaleDateString("vi-VN"))
+    setFormDate(toYMD(tx.date) || realTime.toISOString().split('T')[0])
     setFormTime(tx.time || "00:00")
     setFormIsImpulse(tx.isImpulse || false)
     setShowModal(true)
@@ -119,7 +127,7 @@ export default function TransactionsPage() {
       amount: amountNum,
       type: formType,
       category: formCategory,
-      date: editingId ? formDate : realTime.toLocaleDateString("vi-VN"),
+      date: formDate,
       time: editingId ? formTime : realTime.toTimeString().substring(0, 5),
       isImpulse: formIsImpulse
     }
@@ -231,7 +239,7 @@ export default function TransactionsPage() {
         try {
           const parts = t.date.split('/')
           if (parts.length === 3) {
-            const txDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`)
+            const txDate = new Date(`${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}T00:00:00`)
             
             if (filterPeriod === "week") {
               if (txDate < currentWeekStart) return false

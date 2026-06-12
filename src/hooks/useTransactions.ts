@@ -23,6 +23,17 @@ export function useTransactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
 
+  const normalizeDateForDB = (dateStr: string) => {
+    if (!dateStr) return new Date().toLocaleDateString("vi-VN");
+    if (dateStr.includes('-')) {
+      const parts = dateStr.split('-')
+      if (parts[0].length === 4) { // YYYY-MM-DD
+        return `${parts[2]}/${parts[1]}/${parts[0]}`
+      }
+    }
+    return dateStr
+  }
+
   useEffect(() => {
     if (!user) {
       setTransactions([])
@@ -36,10 +47,14 @@ export function useTransactions() {
     )
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Transaction[]
+      const data = snapshot.docs.map(doc => {
+        const d = doc.data()
+        return {
+          id: doc.id,
+          ...d,
+          date: normalizeDateForDB(d.date as string)
+        }
+      }) as Transaction[]
       setTransactions(data)
       setLoading(false)
     })
@@ -49,8 +64,9 @@ export function useTransactions() {
 
   const addTransaction = async (data: Omit<Transaction, "id" | "createdAt">) => {
     if (!user) return
+    const normalizedData = { ...data, date: normalizeDateForDB(data.date) }
     await addDoc(collection(db, "users", user.uid, "transactions"), {
-      ...data,
+      ...normalizedData,
       createdAt: serverTimestamp()
     })
   }
@@ -73,6 +89,9 @@ export function useTransactions() {
       const cleanedData = Object.fromEntries(
         Object.entries(data).filter(([_, v]) => v !== undefined)
       )
+      if (cleanedData.date) {
+        cleanedData.date = normalizeDateForDB(cleanedData.date as string)
+      }
       await updateDoc(txRef, cleanedData)
     } catch (error) {
       console.error("Error updating transaction:", error)

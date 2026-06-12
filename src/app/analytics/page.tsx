@@ -47,7 +47,7 @@ export default function AnalyticsPage() {
       if (tx.date.includes('/')) {
         const parts = tx.date.split('/')
         if (parts.length === 3) {
-          txDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T00:00:00`)
+          txDate = new Date(`${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}T00:00:00`)
         }
       }
       if (isAfter(txDate, startDate) || txDate.getTime() === startDate.getTime()) {
