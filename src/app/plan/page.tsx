@@ -211,7 +211,7 @@ export default function PlannerPage() {
               <div className="mb-6 p-4 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-start gap-3">
                 <AlertTriangle className="text-amber-400 shrink-0 mt-0.5" size={18} />
                 <p className="text-sm font-bold text-amber-200 leading-relaxed">
-                  Cảnh báo: Bạn đang cần tiết kiệm <span className="text-white">{formatCurrency(totalRequired)}/tháng</span> để kịp thời hạn tất cả mục tiêu, nhưng Ngân quỹ Tiết kiệm (theo chiến lược) chỉ có <span className="text-white">{formatCurrency(allocation.savings)}</span>. Sẽ có mục tiêu bị trễ hạn!
+                  Cảnh báo: Bạn đang cần <span className="text-white">{formatCurrency(totalRequired)}/tháng</span> để theo kịp tiến độ mục tiêu. Tuy nhiên, với thu nhập hiện tại và chiến lược bạn đang chọn, bạn chỉ phân bổ <span className="text-white">{formatCurrency(allocation.savings)}/tháng</span> cho việc tiết kiệm. Các mục tiêu sẽ bị trễ hạn!
                 </p>
               </div>
             )}
@@ -273,7 +273,7 @@ export default function PlannerPage() {
                       </div>
                       
                       <div className="text-xs text-foreground/50 flex items-center gap-1">
-                        Chiếm <span className="text-foreground font-bold">{((goal.requiredPerMonth / Math.max(1, allocation.savings)) * 100).toFixed(0)}%</span> quỹ tiết kiệm
+                        Cần <span className="text-foreground font-bold">{((goal.requiredPerMonth / Math.max(1, allocation.savings)) * 100).toFixed(0)}%</span> NS tiết kiệm
                       </div>
                     </div>
                   </motion.div>
