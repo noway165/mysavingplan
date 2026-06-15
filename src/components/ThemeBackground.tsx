@@ -1532,55 +1532,41 @@ function WorldCupBackground() {
 }
 
 function PortugalBackground() {
-  const SoccerBall = ({ color, className, style }: any) => (
-    <svg viewBox="0 0 512 512" fill={color} className={className} style={style}>
-      <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zM358.5 391.2l-64.8-199-139 53.6-14.7 136.2 218.5 9.2zm-289-72L106 182.8l105-121 48 116.4-189.5 141zm238.4-239L393 189l-75 147.6-136.6-46 126.5-210.4zm76 270.8L281 334l22.6-111 138-16.7-57.7 144.5zM177.3 358L106.8 244l136-104.5 56.6 124L177.3 358z"/>
-    </svg>
-  );
-
-  const TrophyIcon = ({ color, className, style }: any) => (
-    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
-      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-      <path d="M4 22h16"></path>
-      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+  const ShieldIcon = ({ color, className, style }: any) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
     </svg>
   );
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-[#1A0505]">
-      {/* Portugal Colors Gradients */}
-      <div className="absolute top-[-30%] left-[-20%] w-[80%] h-[80%] bg-[#FF0000]/15 rounded-full blur-[150px]" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-[#006600]/15 rounded-full blur-[180px]" />
-      <div className="absolute top-[20%] right-[10%] w-[50%] h-[50%] bg-[#FFD700]/10 rounded-full blur-[120px]" />
+    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-[#0A0304]">
+      {/* Rich, subtle gradients */}
+      <div className="absolute top-0 left-0 w-full h-[60%] bg-gradient-to-b from-[#8A1538]/30 to-transparent" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-[#004F36]/15 rounded-full blur-[150px]" />
+      <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] bg-[#D8B257]/15 rounded-full blur-[150px]" />
       
-      {/* Huge subtle "PORTUGAL" watermark in the center */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] text-white font-black text-[20vw] select-none tracking-tighter">
-        PORTUGAL
+      {/* Geometric lines reflecting modern sports design */}
+      <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(45deg, #D8B257 1px, transparent 1px)', backgroundSize: '100px 100px' }} />
+      
+      {/* Huge subtle watermark */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.015] text-[#D8B257] font-serif italic font-black text-[20vw] select-none tracking-widest">
+        SELEÇÃO
       </div>
-      
-      {/* Floating elements */}
-      {Array.from({ length: 25 }).map((_, i) => {
-        const colors = ['#FF0000', '#006600', '#FFD700', '#FFFFFF'];
+
+      {/* Floating elegant elements */}
+      {Array.from({ length: 15 }).map((_, i) => {
+        const colors = ['#E50024', '#004F36', '#D8B257', '#FFFFFF'];
         const color = colors[i % colors.length];
         
-        let type = 'ball';
-        if (i % 5 === 1) type = 'cr7';
-        if (i % 5 === 2) type = 'trophy';
-        if (i % 5 === 3) type = '26';
-        if (i % 5 === 4) type = 'portugal';
-
         const style = {
           left: `${Math.random() * 100}%`,
           top: `-${Math.random() * 20 + 10}%`,
-          animationDuration: `${Math.random() * 15 + 15}s`,
+          animationDuration: `${Math.random() * 25 + 20}s`,
           animationDelay: `${Math.random() * 10}s`,
-          width: `${Math.random() * 40 + 20}px`,
-          height: `${Math.random() * 40 + 20}px`,
+          width: `${Math.random() * 25 + 15}px`,
+          height: `${Math.random() * 25 + 15}px`,
           transform: `rotate(${Math.random() * 360}deg)`,
-          opacity: Math.random() * 0.3 + 0.1,
+          opacity: Math.random() * 0.15 + 0.05,
           filter: `drop-shadow(0 0 10px ${color})`
         }
         
@@ -1590,21 +1576,17 @@ function PortugalBackground() {
             className="absolute animate-fall-spin" 
             style={style}
           >
-            {type === 'ball' && <SoccerBall color={color} className="w-full h-full" />}
-            {type === 'trophy' && <TrophyIcon color={color} className="w-full h-full" />}
-            {type === '26' && (
-              <span className="font-bold flex items-center justify-center w-full h-full" style={{ color, fontSize: style.width }}>
-                26
-              </span>
-            )}
-            {type === 'cr7' && (
-              <span className="font-black italic flex items-center justify-center w-full h-full" style={{ color, fontSize: style.width }}>
-                CR7
-              </span>
-            )}
-            {type === 'portugal' && (
-              <span className="font-bold flex items-center justify-center w-full h-full" style={{ color, fontSize: parseFloat(style.width)*0.4 + 'px' }}>
-                POR
+            {i % 3 === 0 ? (
+              <ShieldIcon color={color} className="w-full h-full" />
+            ) : i % 3 === 1 ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" className="w-full h-full">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                <path d="M2 12h20" />
+              </svg>
+            ) : (
+              <span className="font-bold font-serif flex items-center justify-center w-full h-full" style={{ color, fontSize: style.width }}>
+                7
               </span>
             )}
           </div>

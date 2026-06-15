@@ -539,25 +539,25 @@
 }
 
 .theme-portugal {
-  --background: 0 100% 4%; /* Very dark red/black */
+  --background: 351 30% 4%;
   --foreground: 0 0% 98%;
-  --card: 0 80% 6%;
+  --card: 351 20% 6%;
   --card-foreground: 0 0% 98%;
-  --popover: 0 80% 6%;
+  --popover: 351 20% 6%;
   --popover-foreground: 0 0% 98%;
-  --primary: 0 100% 50%; /* Portugal Red */
+  --primary: 351 100% 45%; /* #E50024 */
   --primary-foreground: 0 0% 100%;
-  --secondary: 120 100% 20%; /* Portugal Green */
+  --secondary: 44 65% 59%; /* #D8B257 */
   --secondary-foreground: 0 0% 100%;
-  --muted: 0 50% 15%;
-  --muted-foreground: 0 20% 70%;
-  --accent: 51 100% 50%; /* Gold */
+  --muted: 351 20% 15%;
+  --muted-foreground: 0 10% 65%;
+  --accent: 161 100% 15%; /* #004F36 */
   --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
-  --border: 51 100% 50%;
-  --input: 0 50% 15%;
-  --ring: 51 100% 50%;
-  --neon-primary: #FF0000;
-  --neon-secondary: #006600;
+  --border: 44 65% 59%;
+  --input: 351 20% 15%;
+  --ring: 351 100% 45%;
+  --neon-primary: #E50024;
+  --neon-secondary: #D8B257;
 }
