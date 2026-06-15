@@ -1459,6 +1459,17 @@ function WorldCupBackground() {
     </svg>
   );
 
+  const TrophyIcon = ({ color, className, style }: any) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
+      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+      <path d="M4 22h16"></path>
+      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+    </svg>
+  );
+
   return (
     <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-[#1E002B]">
       {/* WC 2026 Core Brand Gradients */}
@@ -1473,10 +1484,15 @@ function WorldCupBackground() {
       </div>
       
       {/* Floating WC elements */}
-      {Array.from({ length: 15 }).map((_, i) => {
+      {Array.from({ length: 25 }).map((_, i) => {
         const colors = ['#E40046', '#00E5FF', '#00FF87', '#FFFFFF', '#4A00B4'];
         const color = colors[i % colors.length];
-        const isBall = i % 2 === 0;
+        
+        let type = 'ball';
+        if (i % 4 === 1) type = '26';
+        if (i % 4 === 2) type = 'trophy';
+        if (i % 4 === 3) type = 'fifa';
+
         const style = {
           left: `${Math.random() * 100}%`,
           top: `-${Math.random() * 20 + 10}%`,
@@ -1495,11 +1511,16 @@ function WorldCupBackground() {
             className="absolute animate-fall-spin" 
             style={style}
           >
-            {isBall ? (
-              <SoccerBall color={color} className="w-full h-full" />
-            ) : (
+            {type === 'ball' && <SoccerBall color={color} className="w-full h-full" />}
+            {type === 'trophy' && <TrophyIcon color={color} className="w-full h-full" />}
+            {type === '26' && (
               <span className="font-bold flex items-center justify-center w-full h-full" style={{ color, fontSize: style.width }}>
                 26
+              </span>
+            )}
+            {type === 'fifa' && (
+              <span className="font-black italic flex items-center justify-center w-full h-full" style={{ color, fontSize: parseFloat(style.width)*0.6 + 'px', transform: 'rotate(-10deg)' }}>
+                FIFA
               </span>
             )}
           </div>

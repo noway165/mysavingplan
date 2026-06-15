@@ -79,7 +79,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const html = document.documentElement
     
     // Remove old classes
-    html.classList.remove("dark", "theme-peachpuff", "theme-pastelpink", "theme-slate", "theme-limegreen", "theme-orangered", "theme-whitesmoke", "theme-amethyst", "theme-spring", "theme-summer", "theme-autumn", "theme-winter", "theme-vietnam")
+    html.classList.remove("dark", "theme-peachpuff", "theme-pastelpink", "theme-slate", "theme-limegreen", "theme-orangered", "theme-whitesmoke", "theme-amethyst", "theme-spring", "theme-summer", "theme-autumn", "theme-winter", "theme-vietnam", "theme-worldcup")
     
     // Always add dark mode
     html.classList.add("dark")
