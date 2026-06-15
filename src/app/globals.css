@@ -537,3 +537,27 @@
 .animate-fall-spin {
   animation: fall-spin linear infinite;
 }
+
+.theme-portugal {
+  --background: 0 100% 4%; /* Very dark red/black */
+  --foreground: 0 0% 98%;
+  --card: 0 80% 6%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 80% 6%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 100% 50%; /* Portugal Red */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 120 100% 20%; /* Portugal Green */
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 50% 15%;
+  --muted-foreground: 0 20% 70%;
+  --accent: 51 100% 50%; /* Gold */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 51 100% 50%;
+  --input: 0 50% 15%;
+  --ring: 51 100% 50%;
+  --neon-primary: #FF0000;
+  --neon-secondary: #006600;
+}

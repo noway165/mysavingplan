@@ -94,6 +94,7 @@ export default function SettingsPage() {
               { id: 'pastelpink', name: 'Hoa Anh Đào', color: 'bg-[#FFC0CB]' },
 
               { id: 'worldcup', name: 'World Cup', color: 'bg-[#10b981]' },
+              { id: 'portugal', name: 'Portugal WC 26', color: 'bg-[#FF0000]' },
                 { id: 'limegreen', name: 'Ma Trận', color: 'bg-[#32CD32]' },
 
               { id: 'whitesmoke', name: 'Halloween', color: 'bg-[#a855f7]' },
