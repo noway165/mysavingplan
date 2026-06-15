@@ -16,24 +16,26 @@ export default function PlannerPage() {
   const [strategy, setStrategy] = useState<'50_30_20' | 'aggressive' | 'custom'>('50_30_20')
   const [customRate, setCustomRate] = useState(30)
 
-  // 1. Cashflow Analysis (Based on this month's transactions for simplicity)
   const cashflow = useMemo(() => {
     const now = new Date()
     const thisMonthTx = transactions.filter(tx => {
-      const txDate = new Date(tx.date)
+      let txDate = new Date(tx.date)
+      if (tx.date.includes('/')) {
+        const parts = tx.date.split('/')
+        if (parts.length === 3) {
+          txDate = new Date(`${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}T00:00:00`)
+        }
+      }
       return txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear()
     })
     
     const income = thisMonthTx.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) || 0
     const expense = thisMonthTx.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0) || 0
-    // If no income this month, use a fallback to make UI work for demo
-    const baseIncome = income > 0 ? income : 15000000; 
-    const baseExpense = income > 0 ? expense : 8000000;
     
     return {
-      income: baseIncome,
-      expense: baseExpense,
-      free: baseIncome - baseExpense
+      income: income,
+      expense: expense,
+      free: income - expense
     }
   }, [transactions])
 
