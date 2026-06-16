@@ -1587,6 +1587,6 @@ function PortugalBackground() {
 
 function ClassicBackground() {
   return (
-    <div className="absolute inset-0 bg-[#f8fafc] pointer-events-none" />
+    <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-black/90 pointer-events-none" />
   )
 }

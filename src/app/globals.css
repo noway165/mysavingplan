@@ -83,34 +83,24 @@
   
 
   
-  /* Classic Light Theme */
-  :root.theme-classic, .theme-classic {
-    --background: 0 0% 98%;
-    --foreground: 0 0% 9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+  
+  /* Classic Dark Emerald Theme */
+  .dark.theme-classic {
+    --background: 220 40% 6%;
+    --card: 220 50% 12%;
+    --border: 160 50% 20%;
     --primary: 160 84% 39%; /* Emerald Green */
     --primary-foreground: 0 0% 100%;
-    --secondary: 160 20% 90%;
-    --secondary-foreground: 160 84% 39%;
-    --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 160 20% 90%;
-    --accent-foreground: 160 84% 39%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
     --ring: 160 84% 39%;
     
-    --neon-primary: #10b981;
-    --neon-secondary: #34d399;
+    --neon-primary: #10b981; /* Emerald */
+    --neon-secondary: #34d399; /* Light Emerald */
 
     --bento-radius: 1.5rem;
-    --bento-bg: #ffffff;
+    --bento-bg: rgba(6, 78, 59, 0.2);
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1px solid #e5e7eb;
+    --bento-border-full: 1.5px solid color-mix(in srgb, var(--neon-primary) 50%, transparent);
   }
 
   .dark {
