@@ -1587,10 +1587,6 @@ function PortugalBackground() {
 
 function ClassicBackground() {
   return (
-    <div className="absolute inset-0 pointer-events-none">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#020617]" />
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-blue-600/10 blur-[120px]" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-cyan-500/10 blur-[120px]" />
-    </div>
+    <div className="absolute inset-0 bg-[#f8fafc] pointer-events-none" />
   )
 }

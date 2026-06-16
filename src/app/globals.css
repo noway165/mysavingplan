@@ -80,22 +80,37 @@
   }
 
   
-  .dark.theme-classic {
-    --background: 220 40% 6%;
-    --card: 220 50% 12%;
-    --border: 210 100% 60%;
-    --primary: 210 100% 60%;
+  
+
+  
+  /* Classic Light Theme */
+  :root.theme-classic, .theme-classic {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --primary: 160 84% 39%; /* Emerald Green */
     --primary-foreground: 0 0% 100%;
-    --ring: 210 100% 60%;
-    --neon-primary: #3b82f6; /* AI Blue */
-    --neon-secondary: #06b6d4; /* AI Cyan */
+    --secondary: 160 20% 90%;
+    --secondary-foreground: 160 84% 39%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 160 20% 90%;
+    --accent-foreground: 160 84% 39%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 160 84% 39%;
     
-    /* Modern AI Layout */
+    --neon-primary: #10b981;
+    --neon-secondary: #34d399;
+
     --bento-radius: 1.5rem;
-    --bento-bg: rgba(15, 25, 45, 0.6);
+    --bento-bg: #ffffff;
     --bento-border-top: none;
     --bento-border-bottom: none;
-    --bento-border-full: 1.5px solid color-mix(in srgb, var(--neon-secondary) 50%, transparent);
+    --bento-border-full: 1px solid #e5e7eb;
   }
 
   .dark {

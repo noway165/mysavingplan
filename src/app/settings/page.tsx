@@ -90,7 +90,7 @@ export default function SettingsPage() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full mt-4 sm:mt-0">
             {([
-              { id: 'classic', name: 'Nguyên Bản', color: 'bg-blue-500' },
+              { id: 'classic', name: 'Nguyên Bản', color: 'bg-emerald-500' },
               { id: 'default', name: 'Công Nghệ', color: 'bg-amber-500' },
               { id: 'pastelpink', name: 'Hoa Anh Đào', color: 'bg-[#FFC0CB]' },
 
