@@ -91,7 +91,7 @@ export default function SettingsPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full mt-4 sm:mt-0">
             {([
               { id: 'classic', name: 'Nguyên Bản', color: 'bg-zinc-800' },
-              { id: 'default', name: 'Mặc định', color: 'bg-amber-500' },
+              { id: 'default', name: 'Công Nghệ', color: 'bg-amber-500' },
               { id: 'pastelpink', name: 'Hoa Anh Đào', color: 'bg-[#FFC0CB]' },
 
               { id: 'worldcup', name: 'World Cup', color: 'bg-[#10b981]' },
