@@ -528,31 +528,7 @@
 
 
 
-.theme-worldcup {
-  --background: 280 50% 5%; /* Very dark neon purple/black */
-  --foreground: 0 0% 98%;
-  --card: 280 40% 8%;
-  --card-foreground: 0 0% 98%;
-  --popover: 280 40% 8%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 199 89% 48%; /* Neon cyan */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 326 78% 60%; /* Neon magenta/pink */
-  --secondary-foreground: 0 0% 100%;
-  --muted: 280 30% 15%;
-  --muted-foreground: 280 20% 70%;
-  --accent: 142 71% 45%; /* Neon green */
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 326 78% 60%;
-  --input: 280 30% 15%;
-  --ring: 199 89% 48%;
-  --neon-primary: #ec4899; /* Pink */
-  --neon-secondary: #0ea5e9; /* Cyan */
-  --canvas-bg: #090314;
-  --bento-border-full: 2px solid color-mix(in srgb, var(--neon-secondary) 80%, transparent);
-}
+
 
 @keyframes fall-spin {
   0% { transform: translateY(-100px) rotate(0deg); }
