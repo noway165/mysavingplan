@@ -12,6 +12,7 @@ export function ThemeBackground() {
       {colorTheme === "amethyst" && <GalaxyBackground />}
       {colorTheme === "worldcup" && <WorldCupBackground />}
       {colorTheme === "portugal" && <PortugalBackground />}
+      {colorTheme === "classic" && <ClassicBackground />}
       {colorTheme === "pastelpink" && <SakuraBackground />}
       
       {colorTheme === "whitesmoke" && <HalloweenBackground />}
@@ -1581,5 +1582,11 @@ function PortugalBackground() {
         )
       })}
     </div>
+  )
+}
+
+function ClassicBackground() {
+  return (
+    <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-black/90 pointer-events-none" />
   )
 }

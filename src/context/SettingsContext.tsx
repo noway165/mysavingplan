@@ -8,7 +8,7 @@ import { Locale, TranslationKeys, t as i18n_t } from "@/lib/i18n"
 import { doc as firestoreDoc, getDoc as firestoreGetDoc, setDoc as firestoreSetDoc } from "firebase/firestore"
 
 export type Theme = "light" | "dark"
-export type ColorTheme = "default" | "pastelpink" | "worldcup" | "limegreen" | "whitesmoke" | "amethyst" | "spring" | "summer" | "autumn" | "winter" | "vietnam" | "portugal"
+export type ColorTheme = "default" | "pastelpink" | "worldcup" | "limegreen" | "whitesmoke" | "amethyst" | "spring" | "summer" | "autumn" | "winter" | "vietnam" | "portugal" | "classic"
 export type Currency = "VND" | "USD" | "EUR"
 
 type SettingsContextType = {
