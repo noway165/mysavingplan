@@ -79,6 +79,25 @@
     --bento-backdrop-blur: 12px;
   }
 
+  
+  .dark.theme-classic {
+    --background: 220 40% 6%;
+    --card: 220 50% 12%;
+    --border: 210 100% 60%;
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 210 100% 60%;
+    --neon-primary: #3b82f6; /* AI Blue */
+    --neon-secondary: #06b6d4; /* AI Cyan */
+    
+    /* Modern AI Layout */
+    --bento-radius: 1.5rem;
+    --bento-bg: rgba(15, 25, 45, 0.6);
+    --bento-border-top: none;
+    --bento-border-bottom: none;
+    --bento-border-full: 1.5px solid color-mix(in srgb, var(--neon-secondary) 50%, transparent);
+  }
+
   .dark {
     --background: 240 45% 7%;
     --foreground: 0 0% 100%;
