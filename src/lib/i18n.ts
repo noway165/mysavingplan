@@ -137,6 +137,7 @@ export type TranslationKeys = {
   wants: string
   savings: string
   goal_projection: string
+  daily_plan: string
   monthly_required: string
   on_track: string
   at_risk: string
@@ -289,6 +290,7 @@ export const translations: Record<Locale, TranslationKeys> = {
     wants: "Giải trí",
     savings: "Tiết kiệm",
     goal_projection: "Dự phóng Mục tiêu",
+    daily_plan: "Kế hoạch Hàng ngày",
     monthly_required: "Cần tiết kiệm / tháng",
     on_track: "Đúng tiến độ",
     at_risk: "Nguy cơ trễ hạn",
@@ -439,6 +441,7 @@ export const translations: Record<Locale, TranslationKeys> = {
     wants: "Wants",
     savings: "Savings",
     goal_projection: "Goal Projection",
+    daily_plan: "Daily Plan",
     monthly_required: "Required / month",
     on_track: "On Track",
     at_risk: "At Risk",
