@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Map, TrendingUp, AlertTriangle, CheckCircle2, ChevronRight, Activity, Wallet, Target, CalendarDays, ShoppingBag, Coffee, PiggyBank } from "lucide-react"
 import { useGoals } from "@/hooks/useGoals"
@@ -15,6 +15,34 @@ export default function PlannerPage() {
   const { transactions, loading: loadingTx } = useTransactions()
   const [strategy, setStrategy] = useState<'50_30_20' | 'aggressive' | 'custom'>('50_30_20')
   const [customRate, setCustomRate] = useState(30)
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedStrategy = localStorage.getItem('savings_strategy');
+      if (savedStrategy === '50_30_20' || savedStrategy === 'aggressive' || savedStrategy === 'custom') {
+        setStrategy(savedStrategy);
+      }
+      const savedRate = localStorage.getItem('savings_custom_rate');
+      if (savedRate && !isNaN(Number(savedRate))) {
+        setCustomRate(Number(savedRate));
+      }
+    }
+  }, []);
+
+  const handleStrategyChange = (newStrategy: '50_30_20' | 'aggressive' | 'custom') => {
+    setStrategy(newStrategy);
+    if (typeof window !== "undefined") {
+      localStorage.setItem('savings_strategy', newStrategy);
+    }
+  };
+
+  const handleCustomRateChange = (val: number) => {
+    setCustomRate(val);
+    if (typeof window !== "undefined") {
+      localStorage.setItem('savings_custom_rate', val.toString());
+    }
+  };
+
 
   const cashflow = useMemo(() => {
     const now = new Date()
@@ -138,21 +166,21 @@ export default function PlannerPage() {
             </h2>
             <div className="space-y-3 relative z-10">
               <button 
-                onClick={() => setStrategy('50_30_20')}
+                onClick={() => handleStrategyChange('50_30_20')}
                 className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${strategy === '50_30_20' ? 'border-neon-secondary bg-neon-secondary/20 shadow-[0_0_15px_color-mix(in_srgb,var(--neon-secondary)_30%,transparent)]' : 'border-border/50 bg-background/30 hover:bg-white/5'}`}
               >
                 <div className="font-bold text-foreground">50/30/20 Rule</div>
                 <div className="text-xs text-foreground/60 mt-1">20% Savings, 50% Needs, 30% Wants</div>
               </button>
               <button 
-                onClick={() => setStrategy('aggressive')}
+                onClick={() => handleStrategyChange('aggressive')}
                 className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${strategy === 'aggressive' ? 'border-neon-secondary bg-neon-secondary/20 shadow-[0_0_15px_color-mix(in_srgb,var(--neon-secondary)_30%,transparent)]' : 'border-border/50 bg-background/30 hover:bg-white/5'}`}
               >
                 <div className="font-bold text-foreground">Aggressive (40%)</div>
                 <div className="text-xs text-foreground/60 mt-1">Focus strictly on saving quickly</div>
               </button>
               <button 
-                onClick={() => setStrategy('custom')}
+                onClick={() => handleStrategyChange('custom')}
                 className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${strategy === 'custom' ? 'border-neon-secondary bg-neon-secondary/20 shadow-[0_0_15px_color-mix(in_srgb,var(--neon-secondary)_30%,transparent)]' : 'border-border/50 bg-background/30 hover:bg-white/5'}`}
               >
                 <div className="flex justify-between items-center">
@@ -161,7 +189,7 @@ export default function PlannerPage() {
                 {strategy === 'custom' && (
                   <input 
                     type="range" min="5" max="80" step="5" 
-                    value={customRate} onChange={(e) => setCustomRate(Number(e.target.value))}
+                    value={customRate} onChange={(e) => handleCustomRateChange(Number(e.target.value))}
                     className="w-full mt-3 accent-neon-secondary"
                   />
                 )}
