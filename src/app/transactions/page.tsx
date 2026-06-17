@@ -261,6 +261,17 @@ export default function TransactionsPage() {
     })
   }, [transactions, activeTab, searchQuery, filterPeriod, customStartDate, customEndDate])
 
+  const { filteredIncome, filteredExpense } = useMemo(() => {
+    let inc = 0;
+    let exp = 0;
+    filteredTransactions.forEach(t => {
+      if (t.type === 'income') inc += t.amount;
+      else if (t.type === 'expense') exp += t.amount;
+    });
+    return { filteredIncome: inc, filteredExpense: exp };
+  }, [filteredTransactions]);
+
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -392,7 +403,29 @@ export default function TransactionsPage() {
           </div>
         </div>
         
-        <div className="divide-y divide-border">
+        
+          {/* Summary for Filtered Period */}
+          <div className="bg-muted/30 border border-border rounded-xl p-4 mb-4 grid grid-cols-2 gap-4">
+            <div>
+              <div className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">
+                {filterPeriod === 'all' ? 'TỔNG THU' : 'THU TRONG KỲ'}
+              </div>
+              <div className="text-emerald-500 font-bold text-lg">
+                +{formatCurrency(filteredIncome)}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">
+                {filterPeriod === 'all' ? 'TỔNG CHI' : 'CHI TRONG KỲ'}
+              </div>
+              <div className="text-destructive font-bold text-lg">
+                -{formatCurrency(filteredExpense)}
+              </div>
+            </div>
+          </div>
+          
+          <div className="divide-y divide-border">
+
           {filteredTransactions.length > 0 ? (
             filteredTransactions.map((tx, index) => (
               <motion.div 
