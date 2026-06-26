@@ -14,6 +14,7 @@ import { TiltWrapper } from "@/components/TiltWrapper"
 import { GamificationWidget } from "@/components/GamificationWidget"
 import { BucketsWidget } from "@/components/BucketsWidget"
 import { AIWidget } from "@/components/AIWidget"
+import { DashboardInsights } from "@/components/DashboardInsights"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -146,6 +147,15 @@ export default function Home() {
       {/* BUCKETS ALLOCATION ROW */}
       <div className="mt-8">
         <BucketsWidget balance={balance} />
+      </div>
+
+      {/* AI INSIGHTS ROW */}
+      <div className="mt-8">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="h-5 w-1 rounded-full bg-gradient-to-b from-neon-primary to-neon-secondary"></div>
+          <h2 className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">AI Insights</h2>
+        </div>
+        <DashboardInsights transactions={transactions} balance={balance} />
       </div>
 
       {/* BOTTOM: Recent Transactions */}
