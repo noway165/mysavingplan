@@ -76,11 +76,11 @@ export default function Home() {
 
         {/* TOP ROW: Glassmorphism Control Panel */}
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center border-l-4 border-l-neon-primary">
+          <div className="bg-glass-card gradient-border shimmer-effect rounded-2xl p-4 flex flex-col justify-center border-l-4 border-l-neon-primary">
             <div className="text-[10px] md:text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Số dư hiện tại</div>
             <div className="text-xl md:text-2xl font-bold tracking-tight text-foreground neon-text-cyan">{formatCurrency(balance)}</div>
           </div>
-          <div className="bg-glass-card rounded-2xl p-4 flex flex-col justify-center border-l-4 border-l-purple-500">
+          <div className="bg-glass-card gradient-border shimmer-effect rounded-2xl p-4 flex flex-col justify-center border-l-4 border-l-purple-500">
             <div className="text-[10px] md:text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Đã tiết kiệm</div>
             <div className="text-xl md:text-2xl font-bold tracking-tight text-foreground">{formatCurrency(totalSaved)}</div>
           </div>
@@ -151,10 +151,10 @@ export default function Home() {
 
       {/* AI INSIGHTS ROW */}
       <div className="mt-8">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="h-5 w-1 rounded-full bg-gradient-to-b from-neon-primary to-neon-secondary"></div>
-          <h2 className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">AI Insights</h2>
-        </div>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-5 w-1 rounded-full bg-gradient-to-b from-neon-primary to-neon-secondary"></div>
+            <h2 className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">AI Insights</h2>
+          </div>
         <DashboardInsights transactions={transactions} balance={balance} />
       </div>
 
@@ -162,7 +162,7 @@ export default function Home() {
       <div>
         <div className="bento-card p-5 md:p-8">
           <div className="flex items-center justify-between mb-4 md:mb-6">
-            <h2 className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">Giao dịch gần đây</h2>
+            <h2 className="text-xs md:text-sm font-bold uppercase tracking-widest gradient-text-glow">Giao dịch gần đây</h2>
             <Link href="/transactions" className="text-sm font-semibold text-muted-foreground hover:text-foreground flex items-center transition-colors">
               Tất cả <ChevronRight size={16} className="ml-1" />
             </Link>
