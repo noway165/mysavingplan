@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Space_Mono, Orbitron, Oswald } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
 import { MainLayout } from "@/components/MainLayout";
@@ -7,6 +7,9 @@ import { SettingsProvider } from "@/context/SettingsContext";
 
 const inter = Inter({ subsets: ["latin", "vietnamese"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], variable: "--font-playfair" });
+const spaceMono = Space_Mono({ subsets: ["latin", "vietnamese"], weight: ["400", "700"], variable: "--font-space-mono" });
+const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" });
+const oswald = Oswald({ subsets: ["latin", "vietnamese"], variable: "--font-oswald" });
 
 export const metadata: Metadata = {
   title: "MySavingsPlan",
@@ -27,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" suppressHydrationWarning>
-      <body className={`${inter.variable} ${playfair.variable} font-sans bg-background text-foreground`}>
+      <body className={`${inter.variable} ${playfair.variable} ${spaceMono.variable} ${orbitron.variable} ${oswald.variable} font-sans bg-background text-foreground`}>
         <AuthProvider>
           <SettingsProvider>
             <MainLayout>{children}</MainLayout>

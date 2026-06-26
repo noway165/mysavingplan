@@ -4,6 +4,7 @@ import { Sidebar } from "@/components/Sidebar"
 import { useAuth } from "@/components/AuthProvider"
 import { LoginScreen } from "@/components/LoginScreen"
 import { ThemeBackground } from "@/components/ThemeBackground"
+import { ThemeDecorations } from "@/components/ThemeDecorations"
 
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
@@ -24,6 +25,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen w-full relative bg-background text-foreground transition-colors duration-500 selection:bg-primary/30">
       {/* Nền động tương ứng với Chủ đề (Theme) */}
       <ThemeBackground />
+      <ThemeDecorations />
 
       {/* Main content area */}
       <main className="relative z-10 h-full overflow-y-auto overflow-x-hidden p-4 pb-28 sm:p-6 sm:pl-28 lg:p-8 lg:pl-32 pt-6 scroll-smooth">
